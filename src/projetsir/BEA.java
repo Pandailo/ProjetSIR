@@ -163,6 +163,7 @@ public class BEA
                 int val2=0;
                 int val3=0;
                 int valT=0;
+                int tmp=0;
                 int[][] tab3=new int[nbA][nbA+2];
                 int[][] tableau_BEA=new int[nbA][nbA];
                 //init tab3
@@ -178,7 +179,7 @@ public class BEA
                 }
                 for(int i=2;i<nbA+1;i++)
                 {
-                    max=0;
+                    
                     for(int j=0;j<nbA+1;j++)
                     {
                         val1=0;//Comparaison avec colonne de gauche (bond)
@@ -186,8 +187,8 @@ public class BEA
                         val3=0;//Comparaison entre les deux collones de base
                         valT=0;//Valeur du cont
                         emp=0;//emplacement retenu
-
-                       //max temporaire
+                        tmp=0;
+                        max=0;//max temporaire
                         //Calcul des bonds
                         for(int k=0;k<nbA;k++)
                         {
@@ -210,12 +211,18 @@ public class BEA
                     //Assignation de la colonne à sa place dans le tableau BEA final
                     for(int j =0;j<nbA;j++)
                     {
-                        
+                        tmp=emp;
+                        if(emp==1)
+                        {
+                            emp--;
+                        }
+                        else if(emp==nbA+1)
+                            emp--;
                         System.out.println("Emp :"+emp);      
-                        tableau_BEA[emp][j]=tab3[i][j];
+                        tableau_BEA[j][emp]=tab3[i][j];
                         System.out.print(""+tab3[i][j]);
                     }
-                    System.out.println("OK");
+                    System.out.println("");
                 }
 		return tab2;
 	}
