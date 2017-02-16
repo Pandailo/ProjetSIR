@@ -185,6 +185,8 @@ public class BEA
                         val2=0;
                         val3=0;
                         valT=0;
+                        emp=0;
+                        max=0;
                         for(int k=0;k<nbA;k++)
                         {
                             val1+=tab3[k][j]*tab2[k][i];
