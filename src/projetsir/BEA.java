@@ -156,15 +156,16 @@ public class BEA
                         }
                     }
                 }
-                //CULCULER DES PLACEMENTS
-                int colT=0;
+                //CULCULE DES PLACEMENTS
                 int emp=0;
                 int max=0;
                 int val1=0;
                 int val2=0;
                 int val3=0;
                 int valT=0;
+                int tmp=0;
                 int[][] tab3=new int[nbA][nbA+2];
+                int[][] tableau_BEA=new int[nbA][nbA];
                 //init tab3
                 for(int i=0;i<tab2.length;i++)
                 {
@@ -181,12 +182,14 @@ public class BEA
                     
                     for(int j=0;j<nbA+1;j++)
                     {
-                        val1=0;
-                        val2=0;
-                        val3=0;
-                        valT=0;
-                        emp=0;
-                        max=0;
+                        val1=0;//Comparaison avec colonne de gauche (bond)
+                        val2=0;//Comparaison avec colonne de droite
+                        val3=0;//Comparaison entre les deux collones de base
+                        valT=0;//Valeur du cont
+                        emp=0;//emplacement retenu
+                        tmp=0;
+                        max=0;//max temporaire
+                        //Calcul des bonds
                         for(int k=0;k<nbA;k++)
                         {
                             val1+=tab3[k][j]*tab2[k][i];
@@ -194,11 +197,8 @@ public class BEA
                             val3+=tab3[k][j]*tab3[k][j+1];
                         }
                         val1=val1*2;
-                        System.out.println("val1 :"+val1);
                         val2=val2*2;
-                        System.out.println("val2 :"+val2);
                         val3=val3*2;
-                        System.out.println("val3 :"+val3);
                         valT=val1+val2-val3;
                         System.out.println("valT :"+valT);
                         if(valT>=max)
@@ -208,7 +208,21 @@ public class BEA
                             max=valT;
                         }
                     }
-                    
+                    //Assignation de la colonne à sa place dans le tableau BEA final
+                    for(int j =0;j<nbA;j++)
+                    {
+                        tmp=emp;
+                        if(emp==1)
+                        {
+                            emp--;
+                        }
+                        else if(emp==nbA+1)
+                            emp--;
+                        System.out.println("Emp :"+emp);      
+                        tableau_BEA[j][emp]=tab3[i][j];
+                        System.out.print(""+tab3[i][j]);
+                    }
+                    System.out.println("");
                 }
 		return tab2;
 	}
