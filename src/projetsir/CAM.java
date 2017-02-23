@@ -1,53 +1,31 @@
 
-package sir;
+package projetsir;
 
 import static java.lang.Math.pow;
 
 public class CAM {
     private int taille; //Taille de la matrice
     private int nb_sites;
-    private int[] ordre = new int[taille]; //Ordre des attributs 
-    private int[][] BEA = new int[taille][taille];
-    private int[][] mat_d = new int[taille][nb_sites]; //Matrice distribution
-    private int[][] mat_ut = new int[taille][taille]; //Matrice d'utilisation
+    private int[] ordre; //Ordre des attributs 
+    private int[][] mat_d; //Matrice distribution
+    private int[][] mat_ut; //Matrice d'utilisation
     
-    public CAM()
+    public CAM(int taille, int nb_sites, int[] ordre, int[][] mat_d, int[][] mat_ut)
     {
-        this.taille = 4;
-        this.nb_sites = 3;
-        this.ordre = new int[taille];
-        BEA = new int[taille][taille];
-        mat_d = new int[taille][nb_sites];
-        mat_ut = new int[taille][taille];
-        this.remplissage(); //TODO : lecture de fichiers
+        this.taille = taille;
+        this.nb_sites = nb_sites;
+        this.ordre = ordre;
+        this.mat_d = mat_d;
+        this.mat_ut = mat_ut;
+        //this.remplissage(); //TODO : lecture de fichiers
     }
     
-    private void remplissage()
+    /*private void remplissage()
     {
         ordre[0] = 0;
 	ordre[1] = 2;
 	ordre[2] = 1;
 	ordre[3] = 3;
-	
-	BEA[0][0] = 45;
-	BEA[0][1] = 45;
-	BEA[0][2] = 0;
-	BEA[0][3] = 0;
-	
-	BEA[1][0] = 45;
-	BEA[1][1] = 53;
-	BEA[1][2] = 5;
-	BEA[1][3] = 3;
-	
-	BEA[2][0] = 0;
-	BEA[2][1] = 5;
-	BEA[2][2] = 80;
-	BEA[2][3] = 75;
-	
-	BEA[3][0] = 0;
-	BEA[3][1] = 3;
-	BEA[3][2] = 75;
-	BEA[3][3] = 78;
 	
 	mat_d[0][0] = 15;
 	mat_d[0][1] = 20;
@@ -84,7 +62,7 @@ public class CAM {
 	mat_ut[3][1] = 0;
 	mat_ut[3][2] = 1;
 	mat_ut[3][3] = 1;
-    }
+    }*/
     
     //Savoir si une requête est concernée par les attributs
     private boolean is_concern(int req, int[] attributs)
@@ -102,7 +80,7 @@ public class CAM {
     }
     
     //Valeur d'un placement
-    int val_subdivision(int subdivision)
+    private int val_subdivision(int subdivision)
     {
         int[] TQ = new int[this.taille];
         int[] BQ = new int[this.taille];
@@ -164,7 +142,7 @@ public class CAM {
     }
     
     //Donne la meilleure valeur pour la fragmentation
-    int[] meilleur_placement()
+    private int[] meilleur_placement()
     {
         int meilleur = 1;
         int val_meilleur = this.val_subdivision(1);
@@ -181,7 +159,7 @@ public class CAM {
     }
     
     //Permute la matrice ordre sur la gauche
-    void permutation()
+    private void permutation()
     {
         int[] mat_resultat = new int[this.taille];
         for(int i=0; i<this.taille; i++)
@@ -190,7 +168,7 @@ public class CAM {
     }
     
     //Teste toutes les permutations et retourne les fragments séparés de la meilleure manière
-    int[][] meilleure_fragmentation()
+    public int[][] meilleure_fragmentation()
     {
         int[][] fragmentation = new int[2][this.taille];
         int[] meilleur_placement = this.meilleur_placement();
