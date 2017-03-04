@@ -1,0 +1,25 @@
+{
+    "num_serveur": 1,
+    "port": 1201,
+    "BD_login": "login",
+    "BD_mdp": "mdp",
+    "stockage_schemas": "../schemas",
+    "serveurs":
+            [
+                {
+                    "num": 2,
+                    "ip": "1.1.1.1",
+                    "port": 1202
+                },
+                {
+                    "num": 3,
+                    "ip": "1.1.1.1",
+                    "port": 1203
+                },
+                {
+                    "num": 4,
+                    "ip": "1.1.1.1",
+                    "port": 1204
+                }
+            ]
+}
