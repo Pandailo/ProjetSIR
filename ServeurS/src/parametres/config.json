@@ -4,7 +4,16 @@
     "BD_login": "login",
     "BD_mdp": "mdp",
     "stockage_schemas": "src/schemas",
+    "schemas_a_envoyer": "src/schemas/envoi",
     "serveurs":
+        [
+            {
+                "num": 1,
+                "ip": "127.0.0.1",
+                "port": 1201
+            }
+        ],
+    "serveurs2":
         [
             {
                 "num": 2,

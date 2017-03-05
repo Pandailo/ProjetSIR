@@ -54,6 +54,21 @@ public class Gestion_json {
         return o;
     }
     
+    public int get_taille_tableau(String nom_tableau)
+    {
+        JSONArray array = null;
+        int taille = -1;
+        //On vérifie que le tableau existe
+        if(this.j_fichier.containsKey(nom_tableau))
+        {
+            array = (JSONArray)this.j_fichier.get(nom_tableau);
+            taille = array.size();
+        }
+        else
+            System.out.println("Le tableau "+nom_tableau+" n'existe pas.");
+        return taille;
+    }
+    
     public Object get_attribut_tableau(String nom_tableau, int indice_tableau, String nom_attribut)
     {
         JSONArray array = null;

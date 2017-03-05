@@ -5,6 +5,8 @@
  */
 package serveurs;
 
+import java.io.*;
+
 /**
  *
  * @author Annabelle
@@ -38,5 +40,27 @@ public class Communication {
             System.out.println("Serveur de communication démarré. Port : "+port+", "
                     + "chemin de stockage des schémas : "+chemin_schemas+".");
         }
+    }
+    
+    public void envoi_schemas()
+    {
+        int nb_serveurs = this.g_json.get_taille_tableau("serveurs");
+        String chemin_schemas = (String)this.g_json.get_attribut("schemas_a_envoyer");
+        if(chemin_schemas!=null)
+        {
+            if(new File(chemin_schemas).exists())
+                for(int i=0; i<nb_serveurs; i++)
+                {
+                    int num_serveur = (int)(long)this.g_json.get_attribut_tableau("serveurs", i, "num");
+                    String ip = (String)this.g_json.get_attribut_tableau("serveurs", i, "ip");
+                    int port = (int)(long)this.g_json.get_attribut_tableau("serveurs", i, "port");
+                    Communication_client cc = new Communication_client(ip, port, 0, num_serveur, chemin_schemas);
+                    cc.start();
+                }
+            else
+                System.out.println("Erreur : le dossier des schémas à envoyer n'existe pas. Chemin des paramètres : "+chemin_schemas+".");
+        }
+        else
+            System.out.println("Erreur dans les paramètres pour le chemin des schémas à envoyer. Valeur : "+chemin_schemas+".");
     }
 }

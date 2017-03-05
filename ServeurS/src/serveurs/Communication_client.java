@@ -64,7 +64,7 @@ public class Communication_client extends Thread {
     private void envoi_schemas()
     {
         //Envoi du schéma global
-        this.envoi_fichier(this.chemin_schemas+"/global_a_envoyer.json");
+        this.envoi_fichier(this.chemin_schemas+"/global.json");
         System.out.println("Scéma global envoyé.");
 
         //Envoi du schéma local
