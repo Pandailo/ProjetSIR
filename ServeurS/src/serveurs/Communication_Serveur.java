@@ -12,13 +12,13 @@ import java.net.*;
  *
  * @author Annabelle
  */
-public class Communication_Serveur extends Thread {
+public class Communication_serveur extends Thread {
     private int port;
     private ServerSocket socket_serveur;
     private boolean continuer;
     private String chemin_schemas;
     
-    public Communication_Serveur(int port, String chemin_schemas)
+    public Communication_serveur(int port, String chemin_schemas)
     {
         this.port = port;
         this.continuer = true;

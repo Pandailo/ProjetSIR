@@ -12,7 +12,7 @@ import java.net.*;
  *
  * @author Annabelle
  */
-public class Communication_Client extends Thread {
+public class Communication_client extends Thread {
     private InetAddress ip;
     private int port;
     private Socket socket;
@@ -22,7 +22,7 @@ public class Communication_Client extends Thread {
     private int serveur;
     private String chemin_schemas;
     
-    public Communication_Client(String ip, int port, int action, int serveur, String chemin_schemas)
+    public Communication_client(String ip, int port, int action, int serveur, String chemin_schemas)
     {
         this.action = action;
         this.serveur = serveur;
@@ -40,17 +40,6 @@ public class Communication_Client extends Thread {
     
     private void envoi_fichier(String chemin_fichier)
     {
-        /*File a_envoyer = new File(chemin_fichier);
-        try 
-        {
-            oos.flush();
-            oos.writeObject(a_envoyer);
-            oos.flush();
-        } 
-        catch (IOException ex) 
-        {
-            Logger.getLogger(Communication_Client.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
         byte buf[] = new byte[1024];
         InputStream in = null;        
         try
