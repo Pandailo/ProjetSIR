@@ -204,15 +204,15 @@ public class BEA
                         if(valT>=max)
                         {
                             emp=j;
-                            System.out.println("Emplacement :"+emp);
+                            System.out.println("Emplacement optimal pour le moment :"+emp);
                             max=valT;
                         }
                     }
                     //Assignation de la colonne à sa place dans le tableau BEA final
                     for(int j =0;j<nbA;j++)
                     {
-                        System.out.println("Emp :"+emp);
-                        tableau_BEA[emp][j]=tab3[i][j];
+                        System.out.println("Emplacement retenu :"+emp);
+                        tableau_BEA[emp][i]=tab3[i][j];
                         System.out.print(""+tab3[i][j]);
                     }
                     System.out.println("OK");
