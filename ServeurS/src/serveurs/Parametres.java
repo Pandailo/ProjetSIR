@@ -24,10 +24,10 @@ public class Parametres {
     {
         this.chemin_parametres = "src/parametres/config.json";
         this.g_json = new Gestion_json(this.chemin_parametres);
-        this.g_json.ouverture_json();
         this.init_parametres();
     }
     
+    //**********Lecture du fichier**********// 
     private void init_parametres()
     {
         //Récupération du numéro du serveur
@@ -107,4 +107,6 @@ public class Parametres {
     {
         return Integer.parseInt(this.serveurs[i][2]);
     }
+    
+    //**********Ecriture du fichier**********//
 }

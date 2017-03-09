@@ -23,11 +23,6 @@ public class Gestion_json {
     {
         this.chemin_fichier = chemin_fichier;
         this.j_fichier = null;
-    }
-    
-    //**********Lecture du fichier**********//
-    public void ouverture_json()
-    {
         JSONParser parser = new JSONParser();
         try 
         {
@@ -43,6 +38,7 @@ public class Gestion_json {
         }
     }
     
+    //**********Lecture du fichier**********//    
     public Object get_attribut(String nom_attribut)
     {
         Object o = null;
@@ -94,6 +90,67 @@ public class Gestion_json {
         }
         else
             System.out.println("Le tableau "+nom_tableau+" n'existe pas.");
+        return o;
+    }
+    
+    public int get_taille_tableau_imbrique_niveau_1(String nom_tableau1, int indice_tableau1, String nom_tableau2)
+    {
+        JSONArray array = (JSONArray)this.get_attribut_tableau(nom_tableau1, indice_tableau1, nom_tableau2);
+        int taille = -1;
+        //On vérifie que le tableau existe
+        if(array!=null)
+        {
+            taille = array.size();
+        }
+        else
+            System.out.println("Le tableau "+nom_tableau2+" n'existe pas.");
+        return taille;
+    }
+    
+    public Object get_attribut_tableau_imbrique_niveau_1(String nom_tableau1, int indice_tableau1, String nom_tableau2,
+        int indice_tableau2, String nom_attribut2)
+    {
+        Object o = null;
+        JSONArray array = (JSONArray)this.get_attribut_tableau(nom_tableau1, indice_tableau1, nom_tableau2);
+        JSONObject jo = (JSONObject)array.get(indice_tableau2);
+        if(jo.containsKey(nom_attribut2))
+        {
+            o = (Object)jo.get(nom_attribut2);
+        }
+        else
+            System.out.println("L'attribut "+nom_attribut2+" n'existe pas.");
+        return o;
+    }
+    
+    public int get_taille_tableau_imbrique_niveau_2(String nom_tableau1, int indice_tableau1, String nom_tableau2,
+            int indice_tableau2, String nom_tableau3)
+    {
+        JSONArray array = (JSONArray)this.get_attribut_tableau_imbrique_niveau_1(nom_tableau1, indice_tableau1, nom_tableau2, 
+                indice_tableau2, nom_tableau3);
+        int taille = -1;
+        //On vérifie que le tableau existe
+        if(array!=null)
+        {
+            taille = array.size();
+        }
+        else
+            System.out.println("Le tableau "+nom_tableau3+" n'existe pas.");
+        return taille;
+    }
+    
+    public Object get_attribut_tableau_imbrique_niveau_2(String nom_tableau1, int indice_tableau1, String nom_tableau2,
+            int indice_tableau2, String nom_tableau3, int indice_tableau3, String nom_attribut3)
+    {
+        Object o = null;
+        JSONArray array = (JSONArray)this.get_attribut_tableau_imbrique_niveau_1(nom_tableau1, indice_tableau1, 
+                nom_tableau2, indice_tableau2, nom_tableau3);
+        JSONObject jo = (JSONObject)array.get(indice_tableau3);
+        if(jo.containsKey(nom_attribut3))
+        {
+            o = (Object)jo.get(nom_attribut3);
+        }
+        else
+            System.out.println("L'attribut "+nom_attribut3+" n'existe pas.");
         return o;
     }
     
