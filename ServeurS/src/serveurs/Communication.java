@@ -24,16 +24,13 @@ public class Communication {
     public void demarrer_serveur()
     {
         int port = this.parametres.getPort();
-        String chemin_schemas = this.parametres.getChemin_schemas();
-        if(port==-1 || chemin_schemas==null)
-            System.out.println("Erreur dans les paramètres, le serveur de communication ne peut pas se lancer. Port : "+port+", "
-                    + "chemin de stockage des schémas : "+chemin_schemas+".");
+        if(port==-1)
+            System.out.println("Erreur dans les paramètres, le serveur de communication ne peut pas se lancer. Port : "+port+".");
         else
         {
-            this.cs = new Communication_serveur(port, chemin_schemas);
+            this.cs = new Communication_serveur(port, this.parametres);
             this.cs.start();
-            System.out.println("Serveur de communication démarré. Port : "+port+", "
-                    + "chemin de stockage des schémas : "+chemin_schemas+".");
+            System.out.println("Serveur de communication démarré. Port : "+port+".");
         }
     }
     

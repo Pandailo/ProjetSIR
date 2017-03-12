@@ -17,17 +17,8 @@ public class ProjetSIR
      */
     public static void main(String[] args) 
     {
-        BEA test=new BEA(4,4,4,3);
-        test.remplissage();
-        int[][] bea=test.bea();
-        for(int i=0;i<bea.length;i++)
-        {
-            for(int j=0;j<bea[i].length;j++)
-            {
-                System.out.print(" "+bea[i][j]);
-            }
-            System.out.println("");
-        }
+        Communication com = new Communication();
+        com.start();
     }
     
 }

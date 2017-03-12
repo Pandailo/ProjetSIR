@@ -1,0 +1,17 @@
+{
+    "nb_serveurs": 3,
+    "port_serveur_local": 1201,
+    "chemin_schemas": "src/schemas",
+    "serveurs":
+    [
+        {
+            "num": 1
+        },
+        {
+            "num": 2
+        },
+        {
+            "num": 3
+        }
+    ]
+}
