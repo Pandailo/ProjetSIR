@@ -1,23 +1,27 @@
 
 package projetsir;
 
-import static java.lang.Math.pow;
+import static java.lang.Math.*;
+import java.util.*;
 
-public class CAM {
-    private int taille; //Taille de la matrice
+public class CAM 
+{
+    private int nb_attributs; //Taille de la matrice
     private int nb_sites;
     private int[] ordre; //Ordre des attributs 
     private int[][] mat_d; //Matrice distribution
     private int[][] mat_ut; //Matrice d'utilisation
+    private int nb_fragments; //Nombre de fragments demandés
     
-    public CAM(int taille, int nb_sites, int[] ordre, int[][] mat_d, int[][] mat_ut)
+    public CAM(int nb_attributs, int nb_sites, int[] ordre, int[][] mat_d, int[][] mat_ut, int nb_fragments)
     {
-        this.taille = taille;
+        this.nb_attributs = nb_attributs;
         this.nb_sites = nb_sites;
         this.ordre = ordre;
         this.mat_d = mat_d;
         this.mat_ut = mat_ut;
-        //this.remplissage(); //TODO : lecture de fichiers
+        this.nb_fragments = nb_fragments;
+        //this.remplissage();
     }
     
     /*private void remplissage()
@@ -65,36 +69,67 @@ public class CAM {
     }*/
     
     //Savoir si une requête est concernée par les attributs
-    private boolean is_concern(int req, int[] attributs)
+    private boolean is_concern(int req, List<Integer> attributs)
     {
         boolean reponse = true;
-        for(int i=0; i<this.taille; i++)
+        for(int i=0; i<attributs.size(); i++)
         {
-            if(this.mat_ut[req][i]==1 && attributs[i]==0)
+            if(this.mat_ut[req][attributs.get(i)]==0)
             {
                 reponse = false;
-                i = this.taille;
+                i = this.nb_attributs;
             }
         }
         return reponse;
     }
     
-    //Valeur d'un placement
-    private int val_subdivision(int subdivision)
+    //Calcul de z
+    private int calcul_z(List<Integer> attributs)
     {
-        int[] TQ = new int[this.taille];
-        int[] BQ = new int[this.taille];
-        int[] OQ = new int[this.taille];
+        int z = 0;
+        for(int i=0; i<this.nb_attributs; i++)
+        {
+            if(is_concern(i, attributs))
+            {
+                for(int j=0; j<this.nb_sites; j++)
+                    z += this.mat_d[i][j];
+            }
+        }
+        return z;
+    }
+    
+    //Valeur d'un placement
+    private int val_subdivision(int[] subdivision) //A CHANGER
+    {
+        int val_subdivision = 0;
+        List<Integer> requetes_non_utilisees = new ArrayList<Integer>();
+        List<Integer> attributs_utilises = new ArrayList<Integer>();
+        for(int i=0; i<this.nb_attributs; i++)
+            attributs_non_utilises.add(i);
+        for(int i=0; i<subdivision.length; i++)
+        {
+            attributs_utilises.clear();
+            for(int j=0; j<subdivision[i]; j++)
+            {
+                for(int k=0; k<this.nb_attributs; k++)
+                if(this.ordre[i])
+                attributs_utilises.add();
+            }
+        }
+        return val_subdivision;
+        /*int[] TQ = new int[this.nb_attributs];
+        int[] BQ = new int[this.nb_attributs];
+        int[] OQ = new int[this.nb_attributs];
 
-        int[] attributsTQ = new int[this.taille];
-        int[] attributsBQ = new int[this.taille];
+        int[] attributsTQ = new int[this.nb_attributs];
+        int[] attributsBQ = new int[this.nb_attributs];
 
         int CTQ = 0;
         int CBQ = 0;
         int COQ = 0;
 
         //Initialisation
-        for(int i=0; i<this.taille; i++)
+        for(int i=0; i<this.nb_attributs; i++)
         {
             TQ[i] = 0;
             BQ[i] = 0;
@@ -113,7 +148,7 @@ public class CAM {
         }
 
         //Répartition des requêtes
-        for(int i=0; i<this.taille; i++)
+        for(int i=0; i<this.nb_attributs; i++)
         {
             if(this.is_concern(i, attributsTQ))
             {
@@ -128,7 +163,7 @@ public class CAM {
         }
 
         //Calcul
-        for(int i=0; i<this.taille; i++)
+        for(int i=0; i<this.nb_attributs; i++)
         {
             for(int j=0; j<this.nb_sites; j++)
             {
@@ -138,7 +173,7 @@ public class CAM {
             }
         }
 
-        return (CTQ*CBQ-(int)pow(COQ, 2));
+        return (CTQ*CBQ-(int)pow(COQ, 2));*/
     }
     
     //Donne la meilleure valeur pour la fragmentation
@@ -146,7 +181,7 @@ public class CAM {
     {
         int meilleur = 1;
         int val_meilleur = this.val_subdivision(1);
-        for(int i=1; i<this.taille; i++)
+        for(int i=1; i<this.nb_attributs; i++)
         {
             if(this.val_subdivision(i)>val_meilleur)
             {
@@ -161,31 +196,31 @@ public class CAM {
     //Permute la matrice ordre sur la gauche
     private void permutation()
     {
-        int[] mat_resultat = new int[this.taille];
-        for(int i=0; i<this.taille; i++)
-            mat_resultat[i]  = this.ordre[(i+1)%this.taille];
+        int[] mat_resultat = new int[this.nb_attributs];
+        for(int i=0; i<this.nb_attributs; i++)
+            mat_resultat[i]  = this.ordre[(i+1)%this.nb_attributs];
         this.ordre = mat_resultat;
     }
     
     //Teste toutes les permutations et retourne les fragments séparés de la meilleure manière
     public int[][] meilleure_fragmentation()
     {
-        int[][] fragmentation = new int[2][this.taille];
+        int[][] fragmentation = new int[2][this.nb_attributs];
         int[] meilleur_placement = this.meilleur_placement();
-        for(int i=0; i<this.taille; i++)
+        for(int i=0; i<this.nb_attributs; i++)
         {
             if(i<meilleur_placement[0])
                 fragmentation[0][i] = this.ordre[i];
             else
                 fragmentation[1][i-meilleur_placement[0]] = this.ordre[i];
         }
-        for(int j=0; j<this.taille; j++)
+        for(int j=0; j<this.nb_attributs; j++)
         {
             this.permutation();
             if(this.meilleur_placement()[0]>meilleur_placement[0])
             {
                 meilleur_placement = this.meilleur_placement();
-                for(int i=0; i<this.taille; i++)
+                for(int i=0; i<this.nb_attributs; i++)
                 {
                     if(i<meilleur_placement[0])
                         fragmentation[0][i] = this.ordre[i];
@@ -195,7 +230,7 @@ public class CAM {
             }
         }
         System.out.println("p "+meilleur_placement[0]+" v "+meilleur_placement[1]);
-        for(int i=0; i<this.taille; i++)
+        for(int i=0; i<this.nb_attributs; i++)
         {
             if(i>=meilleur_placement[0])
                 fragmentation[0][i] = -1;
@@ -207,16 +242,16 @@ public class CAM {
     
     void test()
     {
-        for(int i=0; i<this.taille; i++)
+        for(int i=0; i<this.nb_attributs; i++)
             System.out.println("Ordre "+i+" : "+this.ordre[i]);
         int[][] f = meilleure_fragmentation();
-        for(int i=0; i<this.taille; i++)
+        for(int i=0; i<this.nb_attributs; i++)
             System.out.println("Ordre "+i+" : "+this.ordre[i]);
-        for(int i=0; i<this.taille; i++)
+        for(int i=0; i<this.nb_attributs; i++)
         {
             System.out.println("F1 "+i+" : "+f[0][i]);
         }
-        for(int i=0; i<this.taille; i++)
+        for(int i=0; i<this.nb_attributs; i++)
         {
             System.out.println("F2 "+i+" : "+f[1][i]);
         }
