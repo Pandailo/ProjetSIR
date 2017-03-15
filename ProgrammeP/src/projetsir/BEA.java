@@ -11,213 +11,224 @@ package projetsir;
  */
 public class BEA 
 {
-       	private int [][] matD=new int[4][3];//Matrice de distribution
-	private int [][] matUt=new int[4][4];//Matrice d'utilisation requetes-> attributs
-	private int taille;
-        int nbQ;
-        int nbA;
-        int nbS;
-    public int[][] getMatD() 
+    private int matrice_utilisation[][];
+    private int matrice_distribution[][];
+    private int matrice_affinite[][];
+    private int nb_attributs;
+    private int nb_sites;
+    private int nb_requetes;
+    private int[] ordre_colonnes;
+
+    public BEA(int[][] matrice_utilisation, int[][] matrice_distribution) 
     {
-        return matD;
+        this.matrice_utilisation = matrice_utilisation;
+        this.matrice_distribution = matrice_distribution;
+        nb_attributs=matrice_utilisation[0].length;
+        nb_sites=matrice_distribution[0].length;
+        nb_requetes=matrice_utilisation.length;
+        matrice_affinite=new int[nb_attributs][nb_attributs];
+        ordre_colonnes=new int[nb_attributs];
     }
-
-    public void setNbS(int nbS) {
-        this.nbS = nbS;
-    }
-
-    public int getNbS() {
-        return nbS;
-    }
-
-    public BEA(int taille, int nbQ, int nbA, int nbS) {
-        this.taille = taille;
-        this.nbQ = nbQ;
-        this.nbA = nbA;
-        this.nbS = nbS;
-    }
-
-
-    public void setNbQ(int nbQ) 
+    public BEA()
     {
-        this.nbQ = nbQ;
+        matrice_distribution=new int[4][3];
+        matrice_utilisation=new int[4][4];
+        remplissage();
+        nb_attributs=matrice_utilisation[0].length;
+        nb_sites=matrice_distribution[0].length;
+        nb_requetes=matrice_utilisation.length;
+        matrice_affinite=new int[nb_attributs][nb_attributs];
+        ordre_colonnes=new int[nb_attributs];
     }
 
-    public void setNbA(int nbA)
+    public int[] getOrdre_colonnes() 
     {
-        this.nbA = nbA;
+        return ordre_colonnes;
     }
-
-    public int getNbQ() 
-    {
-        return nbQ;
-    }
-
-    public int getNbA() 
-    {
-        return nbA;
-    }
-
-    public int[][] getMatUt() 
-    {
-        return matUt;
-    }
-
-    public int getTaille() 
-    {
-            
-        return taille;
-    }
-
-    public void setMatD(int[][] matD) 
-    {
-        this.matD = matD;
-    }
-
-    public void setMatUt(int[][] matUt) 
-    {
-        this.matUt = matUt;
-    }
-
-    public void setTaille(int taille) 
-    {
-        this.taille = taille;
-    }
-   
-        
+    
+    
         void remplissage()
 	{
-		taille=4;
-                nbQ=nbA=4;
-                nbS=3;
-		matD[0][0]=15;
-		matD[0][1]=20;
-		matD[0][2]=10;
-		matD[1][0]=5;
-		matD[1][1]=0;
-		matD[1][2]=0;
-		matD[2][0]=25;
-		matD[2][1]=25;
-		matD[2][2]=25;
-		matD[3][0]=3;
-		matD[3][1]=0;
-		matD[3][2]=0;
+		matrice_distribution[0][0]=15;
+		matrice_distribution[0][1]=20;
+		matrice_distribution[0][2]=10;
+		matrice_distribution[1][0]=5;
+		matrice_distribution[1][1]=0;
+		matrice_distribution[1][2]=0;
+		matrice_distribution[2][0]=25;
+		matrice_distribution[2][1]=25;
+		matrice_distribution[2][2]=25;
+		matrice_distribution[3][0]=3;
+		matrice_distribution[3][1]=0;
+		matrice_distribution[3][2]=0;
 
-		matUt[0][0]=1;
-		matUt[0][1]=0;
-		matUt[0][2]=1;
-		matUt[0][3]=0;
-		matUt[1][0]=0;
-		matUt[1][1]=1;
-		matUt[1][2]=1;
-		matUt[1][3]=0;
-		matUt[2][0]=0;
-		matUt[2][1]=1;
-		matUt[2][2]=0;
-		matUt[2][3]=1;
-		matUt[3][0]=0;
-		matUt[3][1]=0;
-		matUt[3][2]=1;
-		matUt[3][3]=1;
+		matrice_utilisation[0][0]=1;
+		matrice_utilisation[0][1]=0;
+		matrice_utilisation[0][2]=1;
+		matrice_utilisation[0][3]=0;
+		matrice_utilisation[1][0]=0;
+		matrice_utilisation[1][1]=1;
+		matrice_utilisation[1][2]=1;
+		matrice_utilisation[1][3]=0;
+		matrice_utilisation[2][0]=0;
+		matrice_utilisation[2][1]=1;
+		matrice_utilisation[2][2]=0;
+		matrice_utilisation[2][3]=1;
+		matrice_utilisation[3][0]=0;
+		matrice_utilisation[3][1]=0;
+		matrice_utilisation[3][2]=1;
+		matrice_utilisation[3][3]=1;
 	}
-        int[][] bea()
-	{
-                //Calcul affinite
-		int[][] tab=new int[nbA][nbA];
-		for(int i=0;i<this.nbQ;i++)
+        void Calcul_affinite()
+        {
+            System.out.println("----------------------------------------");
+            System.out.println("-----------CALCUL AFFINITE--------------");
+		for(int i=0;i<this.nb_requetes;i++)
                 {
-                    for(int j=0;j<this.nbA;j++)
+                    for(int j=0;j<this.nb_attributs;j++)
                     {
-                        for(int k=0;k<this.nbA;k++)
+                        for(int k=0;k<this.nb_attributs;k++)
                         {
-                            if(this.matUt[i][j]==1&&this.matUt[i][k]==1)
+                            if(this.matrice_utilisation[i][j]==1&&this.matrice_utilisation[i][k]==1)
                             {
-                                for(int u=0;u<nbS;u++)
+                                for(int u=0;u<nb_sites;u++)
                                 {
-                                    tab[j][k]+=matD[i][u];
+                                    matrice_affinite[j][k]+=matrice_distribution[i][u];
                                 }
                             }
                         }
+                    
                     }
                 }
-                //remplissage des cotés du tableau par des 0
-                int[][] tab2=new int[nbA][nbA+2];
-                for(int i=0;i<nbA;i++)
+                for(int i=0;i<this.nb_attributs;i++)
                 {
-                    for(int j=0;j<nbA+2;j++)
+                    for(int j=0;j<this.nb_attributs;j++)
                     {
-                        if(j==0||j==nbA+1)
+                        System.out.print(matrice_affinite[i][j]+" ");                                
+                    }
+                    System.out.println("");
+                }
+        }
+        int calcul_bond(int[] vec1,int[] vec2)
+        {
+            int bond=0;
+            for(int  i=0;i<vec1.length;i++)
+            {
+                bond+=vec1[i]*vec2[i];
+            }
+            return bond;
+        }
+        int calcul_contribution(int[] gauche,int[] milieu,int[] droite)
+        {
+            int cont=0;
+            cont+=2*calcul_bond(gauche,milieu)+2*calcul_bond(droite,milieu)-2*calcul_bond(gauche,droite);
+            return cont;
+        }
+        int[][] bea()
+        {
+            System.out.println("----------------------------------------");
+            System.out.println("---------------BEA 1--------------------");
+            //Init tableau
+            int[][] tableau_intermediaire=new int[this.nb_attributs][this.nb_attributs+2];
+            int[][] tableau_final=new int[this.nb_attributs][this.nb_attributs];
+            int[][] tableau_placement=new int[this.nb_attributs][this.nb_attributs+2];
+            for(int i=0;i<this.nb_attributs;i++)
+            {
+                ordre_colonnes[i]=-1;
+                for(int j=0;j<this.nb_attributs+2;j++)
+                {
+                    if(j<this.nb_attributs)
+                    {
+                        tableau_final[i][j]=0;
+                    }
+                    if(j==1||j==2)
+                    {
+                        tableau_intermediaire[i][j]=tableau_placement[i][j]=this.matrice_affinite[i][j-1];
+                    }
+                    else
+                    {
+                        tableau_intermediaire[i][j]=tableau_placement[i][j]=0;
+                    }
+                }
+            }
+            ordre_colonnes[0]=0;ordre_colonnes[1]=1;
+            int[] colonneG=new int[this.nb_attributs];
+            int[] colonneD=new int[this.nb_attributs];
+            //i=colonnes d'attributs traités
+            for(int i=2;i<this.nb_attributs;i++)
+            {
+                int indice_cont=-1;
+                int[] colonneT=this.matrice_affinite[i];
+                int max_cont=Integer.MIN_VALUE;
+                int cont=0;
+                for(int j=0;j<i+1;j++)
+                {
+                    for(int k=0; k<this.nb_attributs; k++)
+                    {
+                        colonneG[k] = tableau_intermediaire[k][j];
+                        colonneD[k] = tableau_intermediaire[k][j+1];
+                    }
+                    cont=calcul_contribution(colonneG,colonneT,colonneD);
+                    if(cont>max_cont)
+                    {
+                        indice_cont=j;
+                        max_cont=cont;
+                    }
+                }
+                
+                int indice_placement = 0;
+                for(int j=0;j<this.nb_attributs;j++)
+                {
+                    indice_placement = 0;
+                    for(int k=0; k<this.nb_attributs+2; k++)
+                    {
+                        if(k!=indice_cont+1)
                         {
-                            tab2[i][j]=0;
+                            tableau_intermediaire[j][k]=tableau_placement[j][indice_placement];
+                            indice_placement++;
                         }
                         else
                         {
-                            tab2[i][j]=tab[i][j-1];
+                            tableau_intermediaire[j][k]=colonneT[j];
                         }
                     }
                 }
-                //CULCULE DES PLACEMENTS
-                int emp=0;
-                int max=0;
-                int val1=0;
-                int val2=0;
-                int val3=0;
-                int valT=0;
-                int[][] tab3=new int[nbA][nbA+2];
-                int[][] tableau_BEA=new int[nbA][nbA];
-                //init tab3
-                for(int i=0;i<tab2.length;i++)
+                for(int j=0;j<this.nb_attributs;j++)
                 {
-                    for(int j=0;j<tab2[i].length;j++)
+                    for(int k=0; k<this.nb_attributs+2; k++)
                     {
-                        if(i==1)
-                        {
-                            tab3[i][j]=tab2[i][j];
-                        }
+                        tableau_placement[j][k] = tableau_intermediaire[j][k];
                     }
                 }
-                for(int i=2;i<nbA+1;i++)
+                for(int j=0;j<this.nb_attributs;j++)
                 {
-                    max=0;
-                    
-                    for(int j=0;j<nbA+1;j++)
+                    if(ordre_colonnes[j]>=indice_cont)
                     {
-                        val1=0;//Comparaison avec colonne de gauche (bond)
-                        val2=0;//Comparaison avec colonne de droite
-                        val3=0;//Comparaison entre les deux collones de base
-                        valT=0;//Valeur du cont
-                        emp=0;//emplacement retenu
-                        //max temporaire
-
-                        //Calcul des bonds
-                        for(int k=0;k<nbA;k++)
-                        {
-                            val1+=tab3[k][j]*tab2[k][i];
-                            val2+=tab3[k][j+1]*tab2[k][i];
-                            val3+=tab3[k][j]*tab3[k][j+1];
-                        }
-                        val1=val1*2;
-                        val2=val2*2;
-                        val3=val3*2;
-                        valT=val1+val2-val3;
-                        System.out.println("valT :"+valT);
-                        if(valT>=max)
-                        {
-                            emp=j;
-                            System.out.println("Emplacement optimal pour le moment :"+emp);
-                            max=valT;
-                        }
+                        ordre_colonnes[j]++;
                     }
-                    //Assignation de la colonne à sa place dans le tableau BEA final
-                    for(int j =0;j<nbA;j++)
-                    {
-                        System.out.println("Emplacement retenu :"+emp);
-                        tableau_BEA[emp][i]=tab3[i][j];
-                        System.out.print(""+tab3[i][j]);
-                    }
-                    System.out.println("OK");
                 }
-		return tab2;
-	}
-    
+                ordre_colonnes[i]=indice_cont;
+            }
+            for(int i=0;i<this.nb_attributs;i++)
+            {
+                for(int j=0;j<this.nb_attributs;j++)
+                {
+                    tableau_final[i][j]=tableau_intermediaire[i][j+1];
+                }
+            }
+            int[][] tableau_final2=new int[this.nb_attributs][this.nb_attributs];
+            for(int i=0;i<this.nb_attributs;i++)
+            {
+                tableau_final2[i]=tableau_final[ordre_colonnes[i]];
+            }
+            for(int i=0;i<this.nb_attributs;i++)
+            {
+                for(int j=0;j<this.nb_attributs;j++)
+                {
+                    System.out.print(tableau_final2[i][j]+" ");
+                }
+                System.out.println("");
+            }
+            return tableau_final2;
+        }
 }

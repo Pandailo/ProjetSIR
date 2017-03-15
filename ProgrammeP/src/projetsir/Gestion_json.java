@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package serveurs;
+package projetsir;
 
 import java.io.*;
 import java.util.logging.Level;
@@ -153,6 +153,4 @@ public class Gestion_json {
             System.out.println("L'attribut "+nom_attribut3+" n'existe pas.");
         return o;
     }
-    
-    //**********Ecriture du fichier**********//
 }
