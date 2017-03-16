@@ -17,12 +17,12 @@ public class CAM
     private int[] meilleure_subdivision;
     private int meilleure_val_subdivision;
     
-    public CAM(/*int[] ordre, int[][] matrice_distribution, int[][] matrice_utilisation,*/ int nb_fragments)
+    public CAM(int[] ordre, int[][] matrice_distribution, int[][] matrice_utilisation, int nb_fragments)
     {
-        this.remplissage2();
-        /*this.ordre = ordre;
+        //this.remplissage2();
+        this.ordre = ordre;
         this.matrice_distribution = matrice_distribution;
-        this.matrice_utilisation = matrice_utilisation;*/
+        this.matrice_utilisation = matrice_utilisation;
         this.nb_sites = this.matrice_distribution[0].length;
         this.nb_attributs = this.matrice_utilisation[0].length;
         this.nb_requetes = this.matrice_utilisation.length;
@@ -31,7 +31,7 @@ public class CAM
         this.meilleure_val_subdivision = Integer.MIN_VALUE;
     }
     
-    private void remplissage2()
+    /*private void remplissage2()
     {
         ordre = new int[5];
         ordre[0] = 2;
@@ -106,7 +106,7 @@ public class CAM
 	matrice_utilisation[3][1] = 0;
 	matrice_utilisation[3][2] = 1;
 	matrice_utilisation[3][3] = 1;
-    }
+    }*/
     
     //Savoir si une requête est concernée par les attributs
     private boolean is_concern(int req, List<Integer> attributs)
@@ -141,7 +141,6 @@ public class CAM
             requetes_non_utilisees.add(i);
         for(int i=0; i<this.nb_fragments; i++)
         {
-            //System.out.println("Placement subdi "+subdivision[i]);
             attributs_concernes.clear();
             requetes_utilisees.clear();
             //Récupération des attributs contenus dans la partie de la subdivision
@@ -271,7 +270,7 @@ public class CAM
         return fragmentation;
     }
     
-    void test()
+    /*void test()
     {
         for(int i=0; i<this.nb_attributs; i++)
             System.out.println("Ordre "+i+" : "+this.ordre[i]);
@@ -284,5 +283,5 @@ public class CAM
                     System.out.println("Attribut "+j+", fragment "+i);
             }
         }
-    }
+    }*/
 }
