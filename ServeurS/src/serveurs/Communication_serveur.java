@@ -16,13 +16,11 @@ public class Communication_serveur extends Thread {
     private int port;
     private ServerSocket socket_serveur;
     private boolean continuer;
-    private String chemin_schemas;
     
-    public Communication_serveur(int port, String chemin_schemas)
+    public Communication_serveur(int port)
     {
         this.port = port;
         this.continuer = true;
-        this.chemin_schemas = chemin_schemas;
     }
     
     public void run()
@@ -33,7 +31,7 @@ public class Communication_serveur extends Thread {
             //On attend les connexions
             while(this.continuer)
             {
-                Thread t = new Thread(new Accepter_client(this.socket_serveur.accept(), this.chemin_schemas));
+                Thread t = new Thread(new Accepter_client(this.socket_serveur.accept()));
                 t.start();
             }
             this.socket_serveur.close();
@@ -49,12 +47,12 @@ class Accepter_client implements Runnable {
     private Socket socket;
     private DataInputStream dis;
     private DataOutputStream dos;
-    private String chemin_schemas;
+    private Parametres parametres;
     
-    public Accepter_client(Socket s, String chemin_schemas)
+    public Accepter_client(Socket s)
     {
         this.socket = s;
-        this.chemin_schemas = chemin_schemas;
+        this.parametres = new Parametres();
     }
 
     private void reception_fichier(String chemin_fichier)
@@ -77,11 +75,11 @@ class Accepter_client implements Runnable {
     
     private void reception_schemas()
     {
-        this.reception_fichier(this.chemin_schemas+"/global.json");
+        this.reception_fichier(this.parametres.getChemin_schemas()+"/global.json");
         System.out.println("Schéma global reçu.");
 
         //Réception du schéma local
-        this.reception_fichier(this.chemin_schemas+"/local.json");
+        this.reception_fichier(this.parametres.getChemin_schemas()+"/local.json");
         System.out.println("Schéma local reçu.");
     }
     

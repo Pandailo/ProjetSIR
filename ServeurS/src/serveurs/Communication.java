@@ -28,7 +28,7 @@ public class Communication {
             System.out.println("Erreur dans les paramètres, le serveur de communication ne peut pas se lancer. Port : "+port+".");
         else
         {
-            this.cs = new Communication_serveur(port, this.parametres);
+            this.cs = new Communication_serveur(port);
             this.cs.start();
             System.out.println("Serveur de communication démarré. Port : "+port+".");
         }
