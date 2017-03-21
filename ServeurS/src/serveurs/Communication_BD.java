@@ -95,7 +95,7 @@ public class Communication_BD
     }
     
     //Ajout des tuples dans la BD
-    public void ajoutTuples(CachedRowSet crs, String table, String cle_primaire)
+    public void ajoutTuples(CachedRowSet crs, String table, String[] cles_primaires)
     {
         CachedRowSet crs_local = null;
         try 
@@ -106,25 +106,45 @@ public class Communication_BD
             crs_local.setCommand("SELECT * FROM "+table);
             crs_local.execute(this.connect);
             //Récupération de la clé primaire
-            List<Object> crs_local_pk = new ArrayList<>();
+            int nb_tuples_local = crs_local.size();
+            Object[][] crs_local_pk = new Object[nb_tuples_local][cles_primaires.length];
             crs_local.beforeFirst();
+            int i = 0;
             while(crs_local.next())
-                crs_local_pk.add(crs_local.getObject(cle_primaire));
-            
+            {
+                for(int j=0; j<cles_primaires.length; j++)
+                    crs_local_pk[i][j] = crs_local.getObject(cles_primaires[j]);
+                i++;
+            }
+
             //Insertion/mise à jour des tuples
             crs.beforeFirst();
             int indice = -1;
             while(crs.next())
             {
-                if(crs_local_pk.contains(crs.getObject(cle_primaire)))
-                    indice = crs_local_pk.indexOf(crs.getObject(cle_primaire));
-                else
-                    indice = -1;
+                //On vérifie si le tuple est déjà présent dans la base
+                indice = -1;
+                for(i=0; i<nb_tuples_local; i++)
+                    for(int j=0; j<cles_primaires.length; j++)
+                    {
+                        if(crs.getObject(cles_primaires[j]).equals(crs_local_pk[i][j]))
+                        {
+                            if(j>=cles_primaires.length-1)
+                            {
+                                indice = i;
+                                i = nb_tuples_local;  
+                                System.out.println("Ce tuple existe déjà.");
+                            }
+                        }
+                        else
+                            j = cles_primaires.length;
+                    }
+                
                 if(indice==-1)
                     crs_local.moveToInsertRow();
                 else
                     crs_local.absolute(indice+1);
-                for(int i=1; i<=crs.getMetaData().getColumnCount(); i++)
+                for(i=1; i<=crs.getMetaData().getColumnCount(); i++)
                 {
                     nom_colonne = crs.getMetaData().getColumnName(i);
                     System.out.println(nom_colonne+" : "+crs.getObject(i));

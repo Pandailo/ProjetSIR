@@ -29,7 +29,10 @@ public class ServeurS {
             crs.first();
             //crs.updateInt("id", 1);
             //com2.ajoutColonne("test", "att1", "VARCHAR2(30)");
-            com2.ajoutTuples(crs, "test", "id");
+            String[] pk = new String[1];
+            pk[0] = "id";
+            //pk[1] = "id2";
+            com2.ajoutTuples(crs, "test", pk);
         } catch (SQLException ex) {
             Logger.getLogger(ServeurS.class.getName()).log(Level.SEVERE, null, ex);
         }
