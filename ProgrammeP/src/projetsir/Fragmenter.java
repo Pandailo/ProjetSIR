@@ -62,6 +62,11 @@ public class Fragmenter extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
         f_verticale.setText("Fragmentation verticale");
+        f_verticale.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                f_verticaleActionPerformed(evt);
+            }
+        });
         jPanel3.add(f_verticale);
 
         f_horizontale.setText("Fragmentation horizontale");
@@ -89,6 +94,14 @@ public class Fragmenter extends javax.swing.JFrame {
     private void ValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValiderActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_ValiderActionPerformed
+
+    private void f_verticaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_f_verticaleActionPerformed
+        //recup nb query
+        DLG_Frag_Verticale dlgV=new DLG_Frag_Verticale((String) Liste_tables.getSelectedItem());
+        dlgV.setVisible(true);
+        //ON A BESOIN DU NB DE REQUETES
+        //Nb site/att -> JSON , nbs = param, nbatt fichier global(fonction de la table -> changer constructeur)
+    }//GEN-LAST:event_f_verticaleActionPerformed
 
     /**
      * @param args the command line arguments
