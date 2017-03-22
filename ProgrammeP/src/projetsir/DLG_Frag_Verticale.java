@@ -49,18 +49,37 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        Pan_Ut = new javax.swing.JPanel();
+        Pan_Dis = new javax.swing.JPanel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridLayout(1, 2));
+
+        javax.swing.GroupLayout Pan_UtLayout = new javax.swing.GroupLayout(Pan_Ut);
+        Pan_Ut.setLayout(Pan_UtLayout);
+        Pan_UtLayout.setHorizontalGroup(
+            Pan_UtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        Pan_UtLayout.setVerticalGroup(
+            Pan_UtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
         );
+
+        getContentPane().add(Pan_Ut);
+
+        javax.swing.GroupLayout Pan_DisLayout = new javax.swing.GroupLayout(Pan_Dis);
+        Pan_Dis.setLayout(Pan_DisLayout);
+        Pan_DisLayout.setHorizontalGroup(
+            Pan_DisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
+        );
+        Pan_DisLayout.setVerticalGroup(
+            Pan_DisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(Pan_Dis);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -97,5 +116,7 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Pan_Dis;
+    private javax.swing.JPanel Pan_Ut;
     // End of variables declaration//GEN-END:variables
 }
