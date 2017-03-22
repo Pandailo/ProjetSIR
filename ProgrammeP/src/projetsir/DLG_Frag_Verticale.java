@@ -5,7 +5,8 @@
  */
 package projetsir;
 
-import javax.swing.JOptionPane;
+import java.awt.GridLayout;
+import javax.swing.*;
 
 /**
  *
@@ -37,6 +38,11 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         String[] liste_att=bdg.get_liste_attributs_table(table);
         int nbA=liste_att.length;
         initComponents();
+        Pan_Dis.setLayout(new GridLayout(nbR,nbS));
+        Pan_Ut.setLayout(new GridLayout(nbR,nbA));
+        this.creationMatDis(nbR, nbS);
+        this.creationMatUt(nbR, nbA);
+        
             
     }
 
@@ -49,24 +55,11 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Pan_Ut = new javax.swing.JPanel();
         Pan_Dis = new javax.swing.JPanel();
+        Pan_Ut = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridLayout(1, 2));
-
-        javax.swing.GroupLayout Pan_UtLayout = new javax.swing.GroupLayout(Pan_Ut);
-        Pan_Ut.setLayout(Pan_UtLayout);
-        Pan_UtLayout.setHorizontalGroup(
-            Pan_UtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
-        );
-        Pan_UtLayout.setVerticalGroup(
-            Pan_UtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(Pan_Ut);
 
         javax.swing.GroupLayout Pan_DisLayout = new javax.swing.GroupLayout(Pan_Dis);
         Pan_Dis.setLayout(Pan_DisLayout);
@@ -80,6 +73,9 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         );
 
         getContentPane().add(Pan_Dis);
+
+        Pan_Ut.setLayout(new java.awt.GridLayout());
+        getContentPane().add(Pan_Ut);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -114,7 +110,33 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         /* Create and display the form */
         
     }
-
+    void creationMatDis(int nbR,int nbS)
+    {
+        for(int i=0;i<nbR;i++)
+        {
+            for(int j=0;j<nbS;j++)
+            {
+                SpinnerModel model = new SpinnerNumberModel();
+                JSpinner spin=new JSpinner(model);
+                Pan_Dis.add(spin);
+            }
+        }
+        
+        
+    }
+    void creationMatUt(int nbR,int nbA)
+    {
+        for(int i=0;i<nbR;i++)
+        {
+            for(int j=0;j<nbA;j++)
+            {
+                JCheckBox ch=new JCheckBox();
+                Pan_Ut.add(ch);
+            }
+        }
+        
+        
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Pan_Dis;
     private javax.swing.JPanel Pan_Ut;

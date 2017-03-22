@@ -1,5 +1,5 @@
 {
-    "nb_serveurs": 3,
+    "nb_serveurs": 4,
     "port_serveur_local": 1201,
     "chemin_schemas": "src/schemas",
     "serveurs":
@@ -12,6 +12,9 @@
         },
         {
             "num": 3
+        },
+        {
+            "num": 4
         }
     ]
 }
