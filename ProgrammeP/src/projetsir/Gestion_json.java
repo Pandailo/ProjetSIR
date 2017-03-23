@@ -18,23 +18,39 @@ import org.json.simple.parser.*;
 public class Gestion_json {
     private String chemin_fichier;
     private JSONObject j_fichier;
+    private FileWriter file_writer;
     
-    public Gestion_json(String chemin_fichier)
+    public Gestion_json(String chemin_fichier, boolean lecture)
     {
         this.chemin_fichier = chemin_fichier;
         this.j_fichier = null;
-        JSONParser parser = new JSONParser();
-        try 
+        this.file_writer = null;
+        if(lecture)
         {
-            this.j_fichier = (JSONObject)parser.parse(new FileReader(this.chemin_fichier));
-        } 
-        catch (FileNotFoundException ex) 
+            JSONParser parser = new JSONParser();
+            try 
+            {
+                this.j_fichier = (JSONObject)parser.parse(new FileReader(this.chemin_fichier));
+            } 
+            catch (FileNotFoundException ex) 
+            {
+                Logger.getLogger(Gestion_json.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+            catch (IOException | ParseException ex) 
+            {
+                Logger.getLogger(Gestion_json.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
         {
-            Logger.getLogger(Gestion_json.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        catch (IOException | ParseException ex) 
-        {
-            Logger.getLogger(Gestion_json.class.getName()).log(Level.SEVERE, null, ex);
+            try 
+            {
+                this.file_writer = new FileWriter(chemin_fichier);
+            } 
+            catch (IOException ex) 
+            {
+                Logger.getLogger(Gestion_json.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -152,5 +168,20 @@ public class Gestion_json {
         else
             System.out.println("L'attribut "+nom_attribut3+" n'existe pas.");
         return o;
+    }
+    
+    //**********Ecriture du fichier**********//
+    public boolean ecriture_json(String contenu)
+    {
+        try 
+        {
+            this.file_writer.write(contenu);
+            this.file_writer.close();
+            return true;
+        } 
+        catch (IOException ex) 
+        {
+            return false;
+        }
     }
 }

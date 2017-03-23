@@ -28,7 +28,7 @@ public class bd_globale {
     {
         Parametres p = new Parametres();
         this.chemin_schema_global = p.get_chemin_schemas()+"/bd_globale.json";
-        this.g_json = new Gestion_json(this.chemin_schema_global);
+        this.g_json = new Gestion_json(this.chemin_schema_global, true);
     }
     
     //**********Lecture du fichier**********// 

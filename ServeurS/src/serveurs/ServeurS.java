@@ -22,7 +22,7 @@ public class ServeurS {
         c.demarrer_serveur();*/
         //c.envoi_schemas();*/
         //Schema_global sg = new Schema_global();
-        Communication_BD com = new Communication_BD("ag092850", "ag092850", false);
+        /*Communication_BD com = new Communication_BD("ag092850", "ag092850", false);
         CachedRowSet crs = com.chargerTable("test", "*", "1=1");
         Communication_BD com2 = new Communication_BD("aj205896", "aj205896", false); 
         try {
@@ -35,6 +35,8 @@ public class ServeurS {
             com2.ajoutTuples(crs, "test", pk);
         } catch (SQLException ex) {
             Logger.getLogger(ServeurS.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
+        Parametres p = new Parametres();
+        p.ecriture_parametres();
     }   
 }

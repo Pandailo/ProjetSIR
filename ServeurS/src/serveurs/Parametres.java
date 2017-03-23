@@ -23,7 +23,7 @@ public class Parametres {
     public Parametres()
     {
         this.chemin_parametres = "src/parametres/config.json";
-        this.g_json = new Gestion_json(this.chemin_parametres);
+        this.g_json = new Gestion_json(this.chemin_parametres, true);
         this.init_parametres();
     }
     
@@ -109,4 +109,40 @@ public class Parametres {
     }
     
     //**********Ecriture du fichier**********//
+    public boolean ecriture_parametres()
+    {
+        //Formation du fichier
+        String contenu = "{\n";
+        boolean succes;
+        contenu += "\t\"num_serveur\": "+this.num_serveur+",\n";
+        contenu += "\t\"port\": "+this.port+",\n";
+        contenu += "\t\"BD_login\": \""+this.BD_login+"\",\n";
+        contenu += "\t\"BD_mdp\": \""+this.BD_mdp+"\",\n";
+        contenu += "\t\"stockage_schemas\": \""+this.chemin_schemas+"\",\n";
+        contenu += "\t\"schemas_a_envoyer\": \""+this.schemas_a_envoyer+"\",\n";
+        contenu += "\t\"serveurs\":\n\t[\n";
+        for(int i=0; i<this.getNb_serveurs(); i++)
+        {
+            contenu += "\t\t{\n";
+            contenu += "\t\t\t\"num\": "+this.serveurs[i][0]+",\n";
+            contenu += "\t\t\t\"ip\": \""+this.serveurs[i][1]+"\",\n";
+            contenu += "\t\t\t\"port\": "+this.serveurs[i][2]+"\n";
+            contenu += "\t\t}";
+            if(i+1<this.getNb_serveurs())
+                contenu += ",";
+            contenu += "\n";
+        }
+        contenu += "\t]";
+        contenu += "\n}";
+        
+        //Ecriture du fichier
+        Gestion_json ecriture = new Gestion_json("test.json", false);
+        succes = ecriture.ecriture_json(contenu);
+        
+        //Récupération du nouveau fichier
+        this.g_json = new Gestion_json(this.chemin_parametres, true);
+        this.init_parametres();
+        
+        return succes;
+    }
 }

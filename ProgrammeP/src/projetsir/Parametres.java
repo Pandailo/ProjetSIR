@@ -20,7 +20,7 @@ public class Parametres {
     public Parametres()
     {
         this.chemin_parametres = "src/parametres/config.json";
-        this.g_json = new Gestion_json(this.chemin_parametres);
+        this.g_json = new Gestion_json(this.chemin_parametres, true);
         this.init_parametres();
     }
     
@@ -65,4 +65,35 @@ public class Parametres {
         return this.num_serveurs[i];
     }
     //**********Ecriture du fichier**********//
+    public boolean ecriture_parametres()
+    {
+        //Formation du fichier
+        String contenu = "{\n";
+        boolean succes;
+        contenu += "\t\"nb_serveurs\": "+this.nb_serveurs+",\n";
+        contenu += "\t\"port_serveur_local\": "+this.port_serveur_local+",\n";
+        contenu += "\t\"chemin_schemas\": \""+this.chemin_schemas+"\",\n";
+        contenu += "\t\"serveurs\":\n\t[\n";
+        for(int i=0; i<this.nb_serveurs; i++)
+        {
+            contenu += "\t\t{\n";
+            contenu += "\t\t\t\"num\": "+this.num_serveurs[i]+"\n";
+            contenu += "\t\t}";
+            if(i+1<this.nb_serveurs)
+                contenu += ",";
+            contenu += "\n";
+        }
+        contenu += "\t]";
+        contenu += "\n}";
+        
+        //Ecriture du fichier
+        Gestion_json ecriture = new Gestion_json("test.json", false);
+        succes = ecriture.ecriture_json(contenu);
+        
+        //Récupération du nouveau fichier
+        this.g_json = new Gestion_json(this.chemin_parametres, true);
+        this.init_parametres();
+        
+        return succes;
+    }
 }
