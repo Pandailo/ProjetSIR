@@ -46,7 +46,7 @@ public class Communication {
                     int num_serveur = this.parametres.getNum_serveur_distant(i);
                     String ip = this.parametres.getIp_serveur_distant(i);
                     int port = this.parametres.getPort_serveur_distant(i);
-                    Communication_client cc = new Communication_client(ip, port, 0, num_serveur, chemin_schemas_a_envoyer);
+                    Communication_client cc = new Communication_client(ip, port, 0, num_serveur);
                     cc.start();
                 }
             else

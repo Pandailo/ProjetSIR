@@ -6,7 +6,6 @@
 package serveurs;
 
 import java.io.*;
-import static java.lang.Thread.*;
 import java.net.*;
 /**
  *
@@ -20,13 +19,13 @@ public class Communication_client extends Thread {
     private DataOutputStream dos;
     private int action;
     private int serveur;
-    private String chemin_schemas;
+    private Parametres parametres;
     
-    public Communication_client(String ip, int port, int action, int serveur, String chemin_schemas)
+    public Communication_client(String ip, int port, int action, int serveur)
     {
         this.action = action;
         this.serveur = serveur;
-        this.chemin_schemas = chemin_schemas;
+        this.parametres = new Parametres();
         try 
         {
             this.ip = InetAddress.getByName(ip);
@@ -36,40 +35,6 @@ public class Communication_client extends Thread {
             e.printStackTrace();
         }
         this.port = port;
-    }
-    
-    private void envoi_fichier(String chemin_fichier)
-    {
-        byte buf[] = new byte[1024];
-        InputStream in = null;        
-        try
-        {
-            in = new FileInputStream(chemin_fichier);
-            this.dos.flush();
-            //Envoi du fichier
-            int n;
-            String contenu = "";
-            int taille = in.available();
-            while((n=in.read(buf))!=-1)
-                contenu += new String(buf);
-            dos.writeUTF(contenu.substring(0, taille-1));
-            in.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-    
-    private void envoi_schemas()
-    {
-        //Envoi du schéma global
-        this.envoi_fichier(this.chemin_schemas+"/global_a_envoyer.json");
-        System.out.println("Scéma global envoyé.");
-
-        //Envoi du schéma local
-        this.envoi_fichier(this.chemin_schemas+"/local_"+this.serveur+".json");
-        System.out.println("Scéma local du serveur "+this.serveur+" envoyé.");
     }
     
     public void run()
@@ -100,5 +65,39 @@ public class Communication_client extends Thread {
         {
             e.printStackTrace();
         }
+    }
+    
+    private void envoi_fichier(String chemin_fichier)
+    {
+        byte buf[] = new byte[1024];
+        InputStream in = null;        
+        try
+        {
+            in = new FileInputStream(chemin_fichier);
+            this.dos.flush();
+            //Envoi du fichier
+            int n;
+            String contenu = "";
+            int taille = in.available();
+            while((n=in.read(buf))!=-1)
+                contenu += new String(buf);
+            this.dos.writeUTF(contenu.substring(0, taille));
+            in.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    private void envoi_schemas()
+    {
+        //Envoi du schéma global
+        this.envoi_fichier(this.parametres.getSchemas_a_envoyer()+"/global.json");
+        System.out.println("Scéma global envoyé.");
+
+        //Envoi du schéma local
+        this.envoi_fichier(this.parametres.getSchemas_a_envoyer()+"/local_"+this.serveur+".json");
+        System.out.println("Scéma local du serveur "+this.serveur+" envoyé.");
     }
 }

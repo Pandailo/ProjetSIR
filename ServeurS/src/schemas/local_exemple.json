@@ -10,11 +10,6 @@
                     "nom_attribut":"attribut_1",
                     "cle_primaire":"oui",
                     "type":"int"
-                },
-                {
-                    "nom_attribut":"attribut_2",
-                    "cle_primaire":"non",
-                    "type":"int"
                 }
             ]
         },

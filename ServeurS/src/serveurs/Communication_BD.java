@@ -7,7 +7,6 @@ package serveurs;
 
 import com.sun.rowset.*;
 import java.sql.*;
-import java.util.*;
 import java.util.logging.*;
 import javax.sql.rowset.*;
 
@@ -42,6 +41,40 @@ public class Communication_BD
     }
     
     //**********Reconstruction de la BD**********//
+    //Ajout d'une table
+    public void ajoutTable(String table, String attributs)
+    {
+        String requete = "CREATE TABLE "+table+" ("+attributs+")";
+        try 
+        {
+            Statement stmt = connect.createStatement();
+            stmt.executeQuery(requete);
+            System.out.println("La table "+table+" a été ajoutée.");
+            stmt.close();
+        } 
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(Communication_BD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    //Suppression d'une table
+    public void suppressionTable(String table)
+    {
+        String requete = "DROP TABLE "+table;
+        try 
+        {
+            Statement stmt = connect.createStatement();
+            stmt.executeQuery(requete);
+            System.out.println("La table "+table+" a été supprimée.");
+            stmt.close();
+        } 
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(Communication_BD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     //Ajout d'une colonne dans une table
     public void ajoutColonne(String table, String nom_colonne, String type)
     {
