@@ -6,6 +6,7 @@
 package serveurs;
 
 import java.io.*;
+import javax.sql.rowset.CachedRowSet;
 
 /**
  *
@@ -46,7 +47,7 @@ public class Communication {
                     int num_serveur = this.parametres.getNum_serveur_distant(i);
                     String ip = this.parametres.getIp_serveur_distant(i);
                     int port = this.parametres.getPort_serveur_distant(i);
-                    Communication_client cc = new Communication_client(ip, port, 0, num_serveur);
+                    Communication_client cc = new Communication_client(ip, port, num_serveur);
                     cc.start();
                 }
             else
@@ -54,5 +55,25 @@ public class Communication {
         }
         else
             System.out.println("Erreur dans les paramètres pour le chemin des schémas à envoyer. Valeur : "+chemin_schemas_a_envoyer+".");
+    }
+    
+    public CachedRowSet envoi_requete(int num_serveur, String tables, String attributs, String conditions)
+    {
+        CachedRowSet crs = null;
+        String ip = this.parametres.getIp_serveur_distant_by_num(num_serveur);
+        int port = this.parametres.getPort_serveur_distant_by_num(num_serveur);
+        if(!ip.equals("") && port != 0)
+        {
+            Communication_client cc = new Communication_client(ip, port, tables, attributs, conditions);
+            cc.start();
+            while(!cc.is_requete_terminee())
+            {
+
+            }
+            crs = cc.getRes_requete();
+        }
+        else
+            System.out.println("L'ip ou le port du serveur "+num_serveur+" n'est pas correctement défini (vérifier les paramètres).");
+        return crs;
     }
 }

@@ -2,6 +2,7 @@
 package serveurs;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.rowset.CachedRowSet;
@@ -41,9 +42,10 @@ public class ServeurS {
         Schema_local bd_actuelle = new Schema_local(true);
         Schema_local bd_nouvelle = new Schema_local(false);
         //TODO: automatisation pour savoir si la co se fait à la fac ou non
-        //Communication_BD com_BD = new Communication_BD(parametres.getBD_login(), parametres.getBD_mdp(), false);
+        //Communication_BD com_BD = new Communication_BD(this.parametres.getBD_login(), this.parametres.getBD_mdp(), false);
         
         //Construction des tables qui n'existent pas
+        System.out.println("/***Construction des tables***/");
         String[] tables_actuelles = bd_actuelle.get_liste_nom_tables();
         String[] tables_nouvelles = bd_nouvelle.get_liste_nom_tables();
         String[] attributs_nouveaux;
@@ -84,6 +86,7 @@ public class ServeurS {
         }
         
         //Construction des colonnes qui n'existent pas
+        System.out.println("/***Construction des colonnes***/");
         String[] attributs_actuels;
         for(int i=0; i<tables_nouvelles.length; i++)
         {
@@ -117,13 +120,138 @@ public class ServeurS {
         }
         
         //Récupération des tuples manquants
+        System.out.println("/***Récupération des tuples***/");
+        Schema_global bd_globale = new Schema_global();
+        String tables;
+        String attributs;
+        String conditions;
+        int[] num_serveurs;
+        int num_serveur_envoi_requete;
+        String[][] tab_conditions;
+        for(int i=0; i<tables_nouvelles.length; i++)
+        {   
+            attributs = "";
+            tab_conditions = null;
+            conditions = "";
+            //Recherche des tuples souhaités
+            tables = tables_nouvelles[i];
+            attributs_nouveaux = bd_nouvelle.get_liste_attributs_table(tables);
+            //Définition des conditions
+            if(!bd_nouvelle.get_table_fragmentation(tables_nouvelles[i]).equals("verticale"))
+                tab_conditions = bd_nouvelle.get_attributs_fragment(tables, 0);
+            else
+                conditions = "1=1";
+            
+            if(bd_globale.get_table_fragmentation(tables_nouvelles[i]).equals("horizontale"))
+            {
+                System.out.println("HORIZON");
+                //Fragmentation horizontale
+                //Récupération des serveurs sur lesquels il y a des fragments
+                ArrayList<Integer> liste_serveurs = new ArrayList<>();
+                liste_serveurs.clear();
+                int[] tab_serveurs_par_fragment;
+                int nb_fragments = bd_globale.get_nb_fragments(tables);
+                for(int j=0; j<nb_fragments; j++)
+                {
+                    tab_serveurs_par_fragment = bd_globale.get_serveurs_fragment(tables, j);
+                    for(int k=0; k<tab_serveurs_par_fragment.length; k++)
+                        if(tab_serveurs_par_fragment[k]!=parametres.getNum_serveur() && !liste_serveurs.contains(tab_serveurs_par_fragment[k]))
+                            liste_serveurs.add(tab_serveurs_par_fragment[k]);
+                }
+                //Construction de la requête
+                if(liste_serveurs.size()>0)
+                {
+                    //Attributs
+                    for(int j=0; j<attributs_nouveaux.length; j++)
+                    {
+                        if(!attributs.equals(""))
+                            attributs += ", ";
+                        attributs += attributs_nouveaux[j];
+                    }
+                    //Conditions
+                    for(int j=0; j<tab_conditions.length; j++)
+                    {
+                        if(!conditions.equals(""))
+                            conditions += " AND ";
+                        conditions += tab_conditions[j][0]+""+tab_conditions[j][1]+""+tab_conditions[j][2];
+                    }
+                    //Envoi de la requête aux serveurs
+                    for(int j=0; j<liste_serveurs.size(); j++)
+                    {
+                        System.out.println("Requete au serveur "+liste_serveurs.get(j)+" : Table "+tables+", attributs : "+attributs);
+                        System.out.println("Conditions : "+conditions);
+                        /*com_BD.ajoutTuples(this.communication.envoi_requete(liste_serveurs.get(j), tables, attributs, conditions), 
+                                tables, bd_nouvelle.get_cles_primaires(tables));*/
+                    }
+                }
+            }
+            if(!bd_globale.get_table_fragmentation(tables_nouvelles[i]).equals("horizontale"))
+            {
+                System.out.println("VERTICON");
+                //Fragmentation verticale et hybride
+                //On vérifie tous les serveurs pour savoir auxquels demander des tuples
+                for(int j=0; j<parametres.getNb_serveurs(); j++)
+                {
+                    attributs = "";
+                    if(tab_conditions!=null)
+                        conditions = "";
+                    else
+                        conditions = "1=1";
+                    num_serveur_envoi_requete = parametres.getNum_serveur_distant(j);
+                    if(num_serveur_envoi_requete!=parametres.getNum_serveur())
+                    {
+                        //On parcourt tous les attributs qui seront dans la BD mise à jour
+                        for(int k=0; k<attributs_nouveaux.length; k++)
+                        {
+                            num_serveurs = bd_globale.get_num_serveurs(tables_nouvelles[i], attributs_nouveaux[k]);
+                            //Si l'attribut est sur le serveur, on lui demande les tuples
+                            for(int l=0; l<num_serveurs.length; l++)
+                            {
+                                if(num_serveur_envoi_requete==num_serveurs[l])
+                                {
+                                    //MAJ attributs
+                                    if(!attributs.equals(""))
+                                        attributs += ", ";
+                                    attributs += attributs_nouveaux[k];
+                                    //MAJ conditions
+                                    if(tab_conditions!=null)
+                                    {
+                                        for(int m=0; m<tab_conditions.length; m++)
+                                        {
+                                            System.out.println(tab_conditions[m][0]+" "+attributs_nouveaux[k]);
+                                            if(tab_conditions[m][0].equals(attributs_nouveaux[k]))
+                                            {
+                                                if(!conditions.equals(""))
+                                                    conditions += " AND ";
+                                                conditions += attributs_nouveaux[k]+""+tab_conditions[m][1]+""+tab_conditions[m][2];
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        //Si le serveur a des tuples concernés, on lui envoie une requête
+                        if(!attributs.equals(""))
+                        {
+                            System.out.println("Requete au serveur "+num_serveur_envoi_requete+" : Table "+tables+", attributs : "+attributs);
+                            System.out.println("Conditions : "+conditions);
+                            /*com_BD.ajoutTuples(this.communication.envoi_requete(num_serveur_envoi_requete, tables, attributs, conditions), 
+                                    tables, bd_nouvelle.get_cles_primaires(tables));*/
+                        }
+                    }
+                }
+            }
+        }
         
         //Attente de la confirmation des autres serveurs
+        System.out.println("/***Attente des la confirmations des autres serveurs avant la suppression***/");
         //Sotckage des réponses dans un fichier pour y avoir accès sans bloquer le programme ?
         
-        //Suppression des tuples
+        //Suppression des tuples (pour la fragmentation horizontale seulement)
+        System.out.println("/***Suppression des tuples***/");
         
         //Suppression des colonnes
+        System.out.println("/***Suppression des colonnes***/");
         boolean suppression;
         for(int i=0; i<tables_nouvelles.length; i++)
         {
@@ -157,6 +285,7 @@ public class ServeurS {
         }
         
         //Suppression des tables
+        System.out.println("/***Suppression des tables***/");
         for(int i=0; i<tables_actuelles.length; i++)
         {
             suppression = true;
@@ -172,10 +301,5 @@ public class ServeurS {
                 //com_BD.suppressionTable(tables_nouvelles[i]);
             }
         }
-        
-        //MAJ du fichier BD_actuelle.json
-        /*File source = new File(this.parametres.getChemin_schemas()+"/local.json");
-        File dest = new File(this.parametres.getChemin_schemas()+"/BD_actuelle.json");
-        this.copier_fichier(source, dest);*/
     } 
 }

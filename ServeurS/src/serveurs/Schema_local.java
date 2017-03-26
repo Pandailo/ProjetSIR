@@ -5,6 +5,8 @@
  */
 package serveurs;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Annabelle
@@ -81,6 +83,16 @@ public class Schema_local {
         return attributs;
     }
     
+    public String[] get_cles_primaires(String nom_table)
+    {
+        ArrayList<String> cles_primaires = new ArrayList<String>();
+        String[] attributs = this.get_liste_attributs_table(nom_table);
+        for(int i=0; i<attributs.length; i++)
+            if(this.is_primary_key(nom_table, attributs[i]))
+                cles_primaires.add(attributs[i]);
+        return (String[])cles_primaires.toArray();
+    }
+    
     private int get_indice_attribut(String nom_table, String nom_attribut)
     {
         int i = this.get_indice_table(nom_table);
@@ -97,10 +109,7 @@ public class Schema_local {
         String pk = null;
         if(i!=-1 && j!=-1)
             pk = (String)this.g_json.get_attribut_tableau_imbrique_niveau_1("tables", i, "attributs", j, "cle_primaire");
-        if(pk.equals("oui"))
-            return true;
-        else
-            return false;
+        return pk.equals("oui");
     }
     
     public String get_type_attribut(String nom_table, String nom_attribut)

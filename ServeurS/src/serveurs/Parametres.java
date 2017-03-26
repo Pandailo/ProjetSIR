@@ -103,9 +103,37 @@ public class Parametres {
         return this.serveurs[i][1];
     }
     
+    public String getIp_serveur_distant_by_num(int num_serveur)
+    {
+        String ip = "";
+        for(int i=0; i<this.getNb_serveurs(); i++)
+        {
+            if(this.getNum_serveur_distant(i)==num_serveur)
+            {
+                ip = this.getIp_serveur_distant(i);
+                i = this.getNb_serveurs();
+            }
+        }
+        return ip;
+    }
+    
     public int getPort_serveur_distant(int i)
     {
         return Integer.parseInt(this.serveurs[i][2]);
+    }
+    
+    public int getPort_serveur_distant_by_num(int num_serveur)
+    {
+        int port = 0;
+        for(int i=0; i<this.getNb_serveurs(); i++)
+        {
+            if(this.getNum_serveur_distant(i)==num_serveur)
+            {
+                port = this.getPort_serveur_distant(i);
+                i = this.getNb_serveurs();
+            }
+        }
+        return port;
     }
     
     //**********Ecriture du fichier**********//

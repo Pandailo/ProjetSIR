@@ -7,6 +7,7 @@ package serveurs;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.logging.*;
 /**
  *
@@ -45,8 +46,8 @@ public class Communication_serveur extends Thread {
 
 class Accepter_client implements Runnable {
     private Socket socket;
-    private DataInputStream dis;
-    private DataOutputStream dos;
+    private ObjectInputStream dis;
+    private ObjectOutputStream dos;
     private Parametres parametres;
     private Communication communication;
     
@@ -63,8 +64,8 @@ class Accepter_client implements Runnable {
         try 
         {
             //Mise en place des canaux de communication
-            this.dis = new DataInputStream(this.socket.getInputStream());
-            this.dos = new DataOutputStream(this.socket.getOutputStream());
+            this.dis = new ObjectInputStream(this.socket.getInputStream());
+            this.dos = new ObjectOutputStream(this.socket.getOutputStream());
             
             //Réception de la demande du client
             choix_client = this.dis.readInt();
@@ -77,7 +78,7 @@ class Accepter_client implements Runnable {
                 //Réception des schémas du programme P
                 case 1 : this.reception_schemas_programme(); break;
                 //Réception requête BD
-                case 2 : break;
+                case 2 : this.executer_requete(); break;
             }
             
             //Fermeture du socket
@@ -140,12 +141,21 @@ class Accepter_client implements Runnable {
     
     private void reception_schemas()
     {
-        this.reception_fichier(this.parametres.getChemin_schemas()+"/global.json");
-        System.out.println("Schéma global reçu.");
-
         //Réception du schéma local
         this.reception_fichier(this.parametres.getChemin_schemas()+"/local.json");
         System.out.println("Schéma local reçu.");
+        
+        //Réception du schéma global
+        this.reception_fichier(this.parametres.getChemin_schemas()+"/global_nouveau.json");
+        System.out.println("Schéma global reçu.");
+        
+        //Mise à jour de la BD
+        this.construction_BD();
+        
+        //MAJ du schéma global
+        File source = new File(this.parametres.getChemin_schemas()+"/global_nouveau.json");
+        File dest = new File(this.parametres.getChemin_schemas()+"/global.json");
+        this.copier_fichier(source, dest);
     }
     
     private void reception_schemas_programme()
@@ -189,6 +199,38 @@ class Accepter_client implements Runnable {
         this.communication.envoi_schemas();   
     }
     
+    private void executer_requete()
+    {
+        String tables = "";
+        String attributs = "";
+        String conditions = "";
+        
+        //Récupération des éléments de la requête
+        try 
+        {
+            tables = this.dis.readUTF();
+            attributs = this.dis.readUTF();
+            conditions = this.dis.readUTF();
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(Accepter_client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //Exécution de la requête
+        Communication_BD com_BD = new Communication_BD(this.parametres.getBD_login(), this.parametres.getBD_mdp(), false);
+        
+        //Envoi du résultat
+        try 
+        {
+            this.dos.writeObject((Object)com_BD.requete(tables, attributs, conditions));
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(Accepter_client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void construction_BD()
     {
         Schema_local bd_actuelle = new Schema_local(true);
@@ -197,6 +239,7 @@ class Accepter_client implements Runnable {
         Communication_BD com_BD = new Communication_BD(this.parametres.getBD_login(), this.parametres.getBD_mdp(), false);
         
         //Construction des tables qui n'existent pas
+        System.out.println("/***Construction des tables***/");
         String[] tables_actuelles = bd_actuelle.get_liste_nom_tables();
         String[] tables_nouvelles = bd_nouvelle.get_liste_nom_tables();
         String[] attributs_nouveaux;
@@ -237,6 +280,7 @@ class Accepter_client implements Runnable {
         }
         
         //Construction des colonnes qui n'existent pas
+        System.out.println("/***Construction des colonnes***/");
         String[] attributs_actuels;
         for(int i=0; i<tables_nouvelles.length; i++)
         {
@@ -270,13 +314,131 @@ class Accepter_client implements Runnable {
         }
         
         //Récupération des tuples manquants
+        System.out.println("/***Récupération des tuples***/");
+        Schema_global bd_globale = new Schema_global();
+        String tables;
+        String attributs;
+        String conditions;
+        int[] num_serveurs;
+        int num_serveur_envoi_requete;
+        String[][] tab_conditions;
+        for(int i=0; i<tables_nouvelles.length; i++)
+        {   
+            attributs = "";
+            tab_conditions = null;
+            conditions = "";
+            //Recherche des tuples souhaités
+            tables = tables_nouvelles[i];
+            attributs_nouveaux = bd_nouvelle.get_liste_attributs_table(tables);
+            //Définition des conditions
+            if(!bd_nouvelle.get_table_fragmentation(tables_nouvelles[i]).equals("verticale"))
+                tab_conditions = bd_nouvelle.get_attributs_fragment(tables, 0);
+            else
+                conditions = "1=1";
+            
+            if(bd_globale.get_table_fragmentation(tables_nouvelles[i]).equals("horizontale"))
+            {
+                //Fragmentation horizontale
+                //Récupération des serveurs sur lesquels il y a des fragments
+                ArrayList<Integer> liste_serveurs = new ArrayList<>();
+                liste_serveurs.clear();
+                int[] tab_serveurs_par_fragment;
+                int nb_fragments = bd_globale.get_nb_fragments(tables);
+                for(int j=0; j<nb_fragments; j++)
+                {
+                    tab_serveurs_par_fragment = bd_globale.get_serveurs_fragment(tables, j);
+                    for(int k=0; k<tab_serveurs_par_fragment.length; k++)
+                        if(tab_serveurs_par_fragment[k]!=this.parametres.getNum_serveur() && !liste_serveurs.contains(tab_serveurs_par_fragment[k]))
+                            liste_serveurs.add(tab_serveurs_par_fragment[k]);
+                }
+                //Construction de la requête
+                if(liste_serveurs.size()>0)
+                {
+                    //Attributs
+                    for(int j=0; j<attributs_nouveaux.length; j++)
+                    {
+                        if(!attributs.equals(""))
+                            attributs += ", ";
+                        attributs += attributs_nouveaux[j];
+                    }
+                    //Conditions
+                    for(int j=0; j<tab_conditions.length; j++)
+                    {
+                        if(!conditions.equals(""))
+                            conditions += " AND ";
+                        conditions += tab_conditions[j][0]+""+tab_conditions[j][1]+""+tab_conditions[j][2];
+                    }
+                    //Envoi de la requête aux serveurs
+                    for(int j=0; j<liste_serveurs.size(); j++)
+                    {
+                        System.out.println("Requete au serveur "+liste_serveurs.get(j)+" : Table "+tables+", attributs : "+attributs);
+                        System.out.println("Conditions : "+conditions);
+                        /*com_BD.ajoutTuples(this.communication.envoi_requete(liste_serveurs.get(j), tables, attributs, conditions), 
+                                tables, bd_nouvelle.get_cles_primaires(tables));*/
+                    }
+                }
+            }
+            if(!bd_globale.get_table_fragmentation(tables_nouvelles[i]).equals("horizontale"))
+            {
+                //Fragmentation verticale et hybride
+                //On vérifie tous les serveurs pour savoir auxquels demander des tuples
+                for(int j=0; j<this.parametres.getNb_serveurs(); j++)
+                {
+                    attributs = "";
+                    num_serveur_envoi_requete = this.parametres.getNum_serveur_distant(j);
+                    if(num_serveur_envoi_requete!=this.parametres.getNum_serveur())
+                    {
+                        //On parcourt tous les attributs qui seront dans la BD mise à jour
+                        for(int k=0; k<attributs_nouveaux.length; k++)
+                        {
+                            num_serveurs = bd_globale.get_num_serveurs(tables_nouvelles[i], attributs_nouveaux[k]);
+                            //Si l'attribut est sur le serveur, on lui demande les tuples
+                            for(int l=0; l<num_serveurs.length; l++)
+                            {
+                                if(num_serveur_envoi_requete==num_serveurs[l])
+                                {
+                                    //MAJ attributs
+                                    if(!attributs.equals(""))
+                                        attributs += ", ";
+                                    attributs += attributs_nouveaux[k];
+                                    //MAJ conditions
+                                    if(tab_conditions!=null)
+                                    {
+                                        for(int m=0; m<tab_conditions.length; m++)
+                                        {
+                                            if(tab_conditions[m][0].equals(attributs_nouveaux[k]))
+                                            {
+                                                if(!conditions.equals(""))
+                                                    conditions += " AND ";
+                                                conditions += tab_conditions[m][0]+""+tab_conditions[m][1]+""+tab_conditions[m][2];
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        //Si le serveur a des tuples concernés, on lui envoie une requête
+                        if(!attributs.equals(""))
+                        {
+                            System.out.println("Requete au serveur "+num_serveur_envoi_requete+" : Table "+tables+", attributs : "+attributs);
+                            System.out.println("Conditions : "+conditions);
+                            /*com_BD.ajoutTuples(this.communication.envoi_requete(num_serveur_envoi_requete, tables, attributs, conditions), 
+                                    tables, bd_nouvelle.get_cles_primaires(tables));*/
+                        }
+                    }
+                }
+            }
+        }
         
         //Attente de la confirmation des autres serveurs
+        System.out.println("/***Attente des la confirmations des autres serveurs avant la suppression***/");
         //Sotckage des réponses dans un fichier pour y avoir accès sans bloquer le programme ?
         
-        //Suppression des tuples
+        //Suppression des tuples (pour la fragmentation horizontale seulement)
+        System.out.println("/***Suppression des tuples***/");
         
         //Suppression des colonnes
+        System.out.println("/***Suppression des colonnes***/");
         boolean suppression;
         for(int i=0; i<tables_nouvelles.length; i++)
         {
@@ -310,6 +472,7 @@ class Accepter_client implements Runnable {
         }
         
         //Suppression des tables
+        System.out.println("/***Suppression des tables***/");
         for(int i=0; i<tables_actuelles.length; i++)
         {
             suppression = true;
@@ -327,8 +490,8 @@ class Accepter_client implements Runnable {
         }
         
         //MAJ du fichier BD_actuelle.json
-        /*File source = new File(this.parametres.getChemin_schemas()+"/local.json");
+        File source = new File(this.parametres.getChemin_schemas()+"/local.json");
         File dest = new File(this.parametres.getChemin_schemas()+"/BD_actuelle.json");
-        this.copier_fichier(source, dest);*/
+        this.copier_fichier(source, dest);
     }
 }

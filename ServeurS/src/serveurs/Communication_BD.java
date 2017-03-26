@@ -110,14 +110,14 @@ public class Communication_BD
     }
     
     //Extraction des tuples correspondants à la condition
-    public CachedRowSet chargerTable(String table, String attributs, String condition)
+    public CachedRowSet requete(String tables, String attributs, String conditions)
     {
         ResultSet res = null;
         CachedRowSet crs = null;
         try 
         {
             crs = new CachedRowSetImpl();
-            crs.setCommand("SELECT "+attributs+" FROM "+table+" WHERE "+condition);
+            crs.setCommand("SELECT "+attributs+" FROM "+tables+" WHERE "+conditions);
             crs.execute(this.connect);
         }
         catch (SQLException ex) 

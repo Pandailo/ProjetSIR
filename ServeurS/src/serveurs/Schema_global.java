@@ -5,6 +5,8 @@
  */
 package serveurs;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Annabelle
@@ -72,6 +74,16 @@ public class Schema_global {
         else
             System.out.println("La table "+nom_table+" n'a pas été trouvée.");
         return attributs;
+    }
+    
+    public String[] get_cles_primaires(String nom_table)
+    {
+        ArrayList<String> cles_primaires = new ArrayList<String>();
+        String[] attributs = this.get_liste_attributs_table(nom_table);
+        for(int i=0; i<attributs.length; i++)
+            if(this.is_primary_key(nom_table, attributs[i]))
+                cles_primaires.add(attributs[i]);
+        return (String[])cles_primaires.toArray();
     }
     
     private int get_indice_attribut(String nom_table, String nom_attribut)
