@@ -6,7 +6,6 @@
 package projetsir;
 
 import java.io.*;
-import static java.lang.Thread.*;
 import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,15 +15,17 @@ import java.util.logging.Logger;
  */
 public class Communication extends Thread {
     private InetAddress ip;
+    private int action;
     private int port;
     private Socket socket;
     private DataInputStream dis;
     private DataOutputStream dos;
     private Parametres parametres;
     
-    public Communication()
+    public Communication(int action)
     {
         this.parametres = new Parametres();
+        this.action = action;
         try 
         {
             this.ip = InetAddress.getLocalHost();
@@ -61,6 +62,16 @@ public class Communication extends Thread {
     
     private void envoi_schemas()
     {
+        try 
+        {
+            //Envoi de l'action à effectuer
+            this.dos.writeInt(1);
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(Communication.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         String chemin_schemas = this.parametres.get_chemin_schemas();
         //Envoi du schéma global
         this.envoi_fichier(chemin_schemas+"/global.json");
@@ -88,6 +99,24 @@ public class Communication extends Thread {
         }
     }
     
+    private void envoi_initialisation()
+    {
+        try 
+        {
+            //Envoi de l'action à effectuer
+            this.dos.writeInt(3);
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(Communication.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+        String chemin_schemas = this.parametres.get_chemin_schemas();
+        //Envoi du schéma global
+        this.envoi_fichier(chemin_schemas+"/global.json");
+        System.out.println("Scéma global envoyé.");
+    }
+    
     public void run()
     {
         try 
@@ -98,12 +127,15 @@ public class Communication extends Thread {
             this.dis = new DataInputStream(this.socket.getInputStream());
             this.dos = new DataOutputStream(this.socket.getOutputStream());
             
-            //Envoi de l'action à effectuer
-            this.dos.writeInt(1);
+            //Définition du comportement en fonction de l'action
+            switch(this.action)
+            {
+                //Envoi des schémas
+                case 0 : this.envoi_schemas(); break;
+                //Demande de l'initialisation
+                case 1 : this.envoi_initialisation(); break;
+            }
             
-            //Envoi des schémas
-            this.envoi_schemas();
-
             //Fermeture du socket
             this.socket.close();
         }

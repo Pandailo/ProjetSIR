@@ -35,7 +35,7 @@ public class Communication {
         }
     }
     
-    public void envoi_schemas()
+    public void envoi_schemas(int action)
     {
         int nb_serveurs = this.parametres.getNb_serveurs();
         String chemin_schemas_a_envoyer = this.parametres.getSchemas_a_envoyer();
@@ -47,7 +47,7 @@ public class Communication {
                     int num_serveur = this.parametres.getNum_serveur_distant(i);
                     String ip = this.parametres.getIp_serveur_distant(i);
                     int port = this.parametres.getPort_serveur_distant(i);
-                    Communication_client cc = new Communication_client(ip, port, num_serveur);
+                    Communication_client cc = new Communication_client(ip, port, num_serveur, action);
                     cc.start();
                 }
             else

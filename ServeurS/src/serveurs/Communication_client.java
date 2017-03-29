@@ -29,9 +29,9 @@ public class Communication_client extends Thread {
     private CachedRowSet res_requete;
     private boolean requete_terminee;
     
-    public Communication_client(String ip, int port, int serveur)
+    public Communication_client(String ip, int port, int serveur, int action)
     {
-        this.action = 0;
+        this.action = action;
         this.serveur = serveur;
         this.parametres = new Parametres();
         try 
@@ -84,9 +84,6 @@ public class Communication_client extends Thread {
             this.dis = new ObjectInputStream(this.socket.getInputStream());
             this.dos = new ObjectOutputStream(this.socket.getOutputStream());
             
-            //Envoi de l'action à effectuer
-            this.dos.writeInt(this.action);
-            
             //Définition du comportement en fonction de l'action
             switch(this.action)
             {
@@ -94,7 +91,10 @@ public class Communication_client extends Thread {
                 case 0 : this.envoi_schemas(); break;
                 //Demande d'une requête de BD
                 case 1 : this.envoi_requete(); break;
+                //Envoi de l'initialisation
+                case 2 : this.envoi_initialisation(); break;
             }
+            
             //Fermeture du socket
             this.socket.close();
         }
@@ -129,6 +129,16 @@ public class Communication_client extends Thread {
     
     private void envoi_schemas()
     {
+        try 
+        {
+            //Envoi de l'action à effectuer
+            this.dos.writeInt(0);
+        }
+        catch (IOException ex) 
+        {
+            Logger.getLogger(Communication_client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
         //Envoi du schéma global
         this.envoi_fichier(this.parametres.getSchemas_a_envoyer()+"/global.json");
         System.out.println("Scéma global envoyé.");
@@ -138,10 +148,36 @@ public class Communication_client extends Thread {
         System.out.println("Scéma local du serveur "+this.serveur+" envoyé.");
     }
     
+    private void envoi_initialisation()
+    {
+        try 
+        {
+            //Envoi de l'action à effectuer
+            this.dos.writeInt(4);
+        }
+        catch (IOException ex) 
+        {
+            Logger.getLogger(Communication_client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //Envoi du schéma d'initialisation
+        this.envoi_fichier(this.parametres.getSchemas_a_envoyer()+"/global.json");
+        System.out.println("Scéma global envoyé.");
+    }
+    
     private void envoi_requete()
     {
-        CachedRowSet crs = null;
+        try 
+        {
+            //Envoi de l'action à effectuer
+            this.dos.writeInt(2);
+        }
+        catch (IOException ex) 
+        {
+            Logger.getLogger(Communication_client.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
+        CachedRowSet crs = null;
         try 
         {
             this.dos.writeUTF(this.tables);

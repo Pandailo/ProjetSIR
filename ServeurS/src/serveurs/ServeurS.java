@@ -138,13 +138,12 @@ public class ServeurS {
             attributs_nouveaux = bd_nouvelle.get_liste_attributs_table(tables);
             //Définition des conditions
             if(!bd_nouvelle.get_table_fragmentation(tables_nouvelles[i]).equals("verticale"))
-                tab_conditions = bd_nouvelle.get_attributs_fragment(tables, 0);
+                tab_conditions = bd_nouvelle.get_attributs_fragment(tables);
             else
                 conditions = "1=1";
             
             if(bd_globale.get_table_fragmentation(tables_nouvelles[i]).equals("horizontale"))
             {
-                System.out.println("HORIZON");
                 //Fragmentation horizontale
                 //Récupération des serveurs sur lesquels il y a des fragments
                 ArrayList<Integer> liste_serveurs = new ArrayList<>();
@@ -187,16 +186,11 @@ public class ServeurS {
             }
             if(!bd_globale.get_table_fragmentation(tables_nouvelles[i]).equals("horizontale"))
             {
-                System.out.println("VERTICON");
                 //Fragmentation verticale et hybride
                 //On vérifie tous les serveurs pour savoir auxquels demander des tuples
                 for(int j=0; j<parametres.getNb_serveurs(); j++)
                 {
                     attributs = "";
-                    if(tab_conditions!=null)
-                        conditions = "";
-                    else
-                        conditions = "1=1";
                     num_serveur_envoi_requete = parametres.getNum_serveur_distant(j);
                     if(num_serveur_envoi_requete!=parametres.getNum_serveur())
                     {
@@ -218,12 +212,11 @@ public class ServeurS {
                                     {
                                         for(int m=0; m<tab_conditions.length; m++)
                                         {
-                                            System.out.println(tab_conditions[m][0]+" "+attributs_nouveaux[k]);
                                             if(tab_conditions[m][0].equals(attributs_nouveaux[k]))
                                             {
                                                 if(!conditions.equals(""))
                                                     conditions += " AND ";
-                                                conditions += attributs_nouveaux[k]+""+tab_conditions[m][1]+""+tab_conditions[m][2];
+                                                conditions += tab_conditions[m][0]+""+tab_conditions[m][1]+""+tab_conditions[m][2];
                                             }
                                         }
                                     }
@@ -247,8 +240,44 @@ public class ServeurS {
         System.out.println("/***Attente des la confirmations des autres serveurs avant la suppression***/");
         //Sotckage des réponses dans un fichier pour y avoir accès sans bloquer le programme ?
         
-        //Suppression des tuples (pour la fragmentation horizontale seulement)
+        //Suppression des tuples (pour la fragmentation horizontale ou hybride seulement)
         System.out.println("/***Suppression des tuples***/");
+        for(int i=0; i<tables_nouvelles.length; i++)
+        {   
+            if(bd_nouvelle.get_table_fragmentation(tables_nouvelles[i]).equals("horizontale") ||
+                    bd_nouvelle.get_table_fragmentation(tables_nouvelles[i]).equals("hybride"))
+            {
+                tab_conditions = null;
+                conditions = "";
+                //Recherche des tuples souhaités
+                tables = tables_nouvelles[i];
+                attributs_nouveaux = bd_nouvelle.get_liste_attributs_table(tables);
+                //Définition des conditions
+                tab_conditions = bd_nouvelle.get_attributs_fragment(tables);
+
+                for(int j=0; j<tab_conditions.length; j++)
+                {
+                    if(!conditions.equals(""))
+                        conditions += " AND ";
+                    String signe = tab_conditions[j][1];
+                    String res = "";
+                    switch(signe)
+                    {
+                        case ">" : res = "<="; break;
+                        case "<" : res = ">="; break;
+                        case ">=" : res = "<"; break;
+                        case "<=" : res = ">"; break;
+                        case "=" : res = "<>"; break;
+                        case "<>" : res = "="; break;
+                        case "LIKE" : res = "NOT LIKE"; break;
+                        case "NOT LIKE" : res = "LIKE"; break;
+                    }
+                    conditions += tab_conditions[j][0]+""+res+""+tab_conditions[j][2];
+                }
+                System.out.println("Table : "+tables+", suppression : "+conditions);
+                //com_BD.suppressionTuples(tables, conditions);
+            }
+        }
         
         //Suppression des colonnes
         System.out.println("/***Suppression des colonnes***/");
@@ -302,4 +331,10 @@ public class ServeurS {
             }
         }
     } 
+    String inverse_signe(String signe)
+    {
+        String res = "";
+        
+        return res;
+    }
 }

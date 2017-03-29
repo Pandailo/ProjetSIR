@@ -18,7 +18,7 @@ public class Schema_global {
     public Schema_global()
     {
         Parametres p = new Parametres();
-        this.chemin_schema_global = p.getChemin_schemas()+"\\global.json";
+        this.chemin_schema_global = p.getChemin_schemas()+"/global.json";
         this.g_json = new Gestion_json(this.chemin_schema_global, true);
     }
     

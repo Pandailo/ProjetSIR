@@ -79,6 +79,12 @@ class Accepter_client implements Runnable {
                 case 1 : this.reception_schemas_programme(); break;
                 //Réception requête BD
                 case 2 : this.executer_requete(); break;
+                //Réception de l'initialisation depuis programme P
+                case 3 : this.reception_initialisation_programme(); break;
+                //Réception de l'initialisation d'un serveurs S
+                case 4 : this.reception_initialisation(); break;
+                //Réception de la fin de maj de BD
+                case 5 : break;
             }
             
             //Fermeture du socket
@@ -196,7 +202,38 @@ class Accepter_client implements Runnable {
         this.copier_fichier(source, dest);
         
         //Envoi des schémas aux autres serveurs
-        this.communication.envoi_schemas();   
+        this.communication.envoi_schemas(0);   
+    }
+    
+    private void reception_initialisation()
+    {
+        String schemas_a_envoyer = this.parametres.getSchemas_a_envoyer();
+        //Réception du schéma global
+        this.reception_fichier(schemas_a_envoyer+"/global.json");
+        System.out.println("Schéma global reçu.");
+        
+        //Récupération des schémas du serveur   
+        String chemin_schemas = this.parametres.getChemin_schemas();
+        File source = new File(schemas_a_envoyer+"/global.json");
+        File dest = new File(chemin_schemas+"/global.json");
+        this.copier_fichier(source, dest);
+    }
+    
+    private void reception_initialisation_programme()
+    {
+        String schemas_a_envoyer = this.parametres.getSchemas_a_envoyer();
+        //Réception du schéma global
+        this.reception_fichier(schemas_a_envoyer+"/global.json");
+        System.out.println("Schéma global reçu.");
+        
+        //Récupération des schémas du serveur   
+        String chemin_schemas = this.parametres.getChemin_schemas();
+        File source = new File(schemas_a_envoyer+"/global.json");
+        File dest = new File(chemin_schemas+"/global.json");
+        this.copier_fichier(source, dest);
+        
+        //Envoi des schémas aux autres serveurs
+        this.communication.envoi_schemas(2);   
     }
     
     private void executer_requete()
@@ -332,7 +369,7 @@ class Accepter_client implements Runnable {
             attributs_nouveaux = bd_nouvelle.get_liste_attributs_table(tables);
             //Définition des conditions
             if(!bd_nouvelle.get_table_fragmentation(tables_nouvelles[i]).equals("verticale"))
-                tab_conditions = bd_nouvelle.get_attributs_fragment(tables, 0);
+                tab_conditions = bd_nouvelle.get_attributs_fragment(tables);
             else
                 conditions = "1=1";
             
@@ -434,8 +471,33 @@ class Accepter_client implements Runnable {
         System.out.println("/***Attente des la confirmations des autres serveurs avant la suppression***/");
         //Sotckage des réponses dans un fichier pour y avoir accès sans bloquer le programme ?
         
-        //Suppression des tuples (pour la fragmentation horizontale seulement)
+        //Suppression des tuples (pour la fragmentation horizontale ou hybride seulement)
         System.out.println("/***Suppression des tuples***/");
+        String signe = "";
+        for(int i=0; i<tables_nouvelles.length; i++)
+        {   
+            if(bd_nouvelle.get_table_fragmentation(tables_nouvelles[i]).equals("horizontale") ||
+                    bd_nouvelle.get_table_fragmentation(tables_nouvelles[i]).equals("hybride"))
+            {
+                tab_conditions = null;
+                conditions = "";
+                //Recherche des tuples souhaités
+                tables = tables_nouvelles[i];
+                attributs_nouveaux = bd_nouvelle.get_liste_attributs_table(tables);
+                //Définition des conditions
+                tab_conditions = bd_nouvelle.get_attributs_fragment(tables);
+
+                for(int j=0; j<tab_conditions.length; j++)
+                {
+                    if(!conditions.equals(""))
+                        conditions += " AND ";
+                    conditions += tab_conditions[j][0]+""+this.inverse_signe(tab_conditions[j][1])+""+tab_conditions[j][2];
+                    
+                }
+                System.out.println("Table : "+tables+", suppression : "+conditions);
+                //com_BD.suppressionTuples(tables, conditions);
+            }
+        }
         
         //Suppression des colonnes
         System.out.println("/***Suppression des colonnes***/");
@@ -493,5 +555,22 @@ class Accepter_client implements Runnable {
         File source = new File(this.parametres.getChemin_schemas()+"/local.json");
         File dest = new File(this.parametres.getChemin_schemas()+"/BD_actuelle.json");
         this.copier_fichier(source, dest);
+    }
+    
+    private String inverse_signe(String signe)
+    {
+        String res = "";
+        switch(signe)
+        {
+            case ">" : res = "<="; break;
+            case "<" : res = ">="; break;
+            case ">=" : res = "<"; break;
+            case "<=" : res = ">"; break;
+            case "=" : res = "<>"; break;
+            case "<>" : res = "="; break;
+            case "LIKE" : res = "NOT LIKE"; break;
+            case "NOT LIKE" : res = "LIKE"; break;
+        }
+        return res;
     }
 }

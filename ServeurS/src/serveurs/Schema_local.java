@@ -19,9 +19,9 @@ public class Schema_local {
     {
         Parametres p = new Parametres();
         if(actuel)
-            this.chemin_schema_local = p.getChemin_schemas()+"\\BD_actuelle.json";
+            this.chemin_schema_local = p.getChemin_schemas()+"/BD_actuelle.json";
         else
-            this.chemin_schema_local = p.getChemin_schemas()+"\\local.json";
+            this.chemin_schema_local = p.getChemin_schemas()+"/local.json";
         this.g_json = new Gestion_json(this.chemin_schema_local, true);
     }
     
@@ -134,19 +134,19 @@ public class Schema_local {
     //Dimension 0 : nom de l'attribut
     //Dimension 1 : signe de comparaison
     //Dimension 2 : valeur de comparaison
-    public String[][] get_attributs_fragment(String nom_table, int fragment)
+    public String[][] get_attributs_fragment(String nom_table)
     {
         String[][] attributs = null;
         int table = this.get_indice_table(nom_table);
-        int nb_attributs = this.g_json.get_taille_tableau_imbrique_niveau_2("tables", table, "fragments", fragment, "attributs");
+        int nb_attributs = this.g_json.get_taille_tableau_imbrique_niveau_2("tables", table, "fragments", 0, "attributs");
         if(nb_attributs!=-1)
         {
             attributs = new String[nb_attributs][3];
             for(int i=0; i<nb_attributs; i++)
             {
-                attributs[i][0] = (String)this.g_json.get_attribut_tableau_imbrique_niveau_2("tables", table, "fragments", fragment, "attributs", i, "attribut");
-                attributs[i][1] = (String)this.g_json.get_attribut_tableau_imbrique_niveau_2("tables", table, "fragments", fragment, "attributs", i, "signe");
-                attributs[i][2] = (String)this.g_json.get_attribut_tableau_imbrique_niveau_2("tables", table, "fragments", fragment, "attributs", i, "valeur");
+                attributs[i][0] = (String)this.g_json.get_attribut_tableau_imbrique_niveau_2("tables", table, "fragments", 0, "attributs", i, "attribut");
+                attributs[i][1] = (String)this.g_json.get_attribut_tableau_imbrique_niveau_2("tables", table, "fragments", 0, "attributs", i, "signe");
+                attributs[i][2] = (String)this.g_json.get_attribut_tableau_imbrique_niveau_2("tables", table, "fragments", 0, "attributs", i, "valeur");
             }
         }
         return attributs;

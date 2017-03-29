@@ -64,7 +64,7 @@
                         },
                         {
                             "attribut":"attribut_2",
-                            "signe":"==",
+                            "signe":"=",
                             "valeur":"val_2"
                         }
                     ],
@@ -128,7 +128,7 @@
                     [
                         {
                             "attribut":"attribut_1",
-                            "signe":"!=",
+                            "signe":"<>",
                             "valeur":"val_1"
                         }
                     ],

@@ -200,9 +200,9 @@ public class Communication_BD
     }
     
     //Suppression des tuples correspondants à la condition
-    public void suppressionTuples(String table, String condition)
+    public void suppressionTuples(String table, String conditions)
     {
-        String requete = "DELETE FROM "+table+" WHERE "+condition;
+        String requete = "DELETE FROM "+table+" WHERE "+conditions;
         try 
         {
             Statement stmt = connect.createStatement();
