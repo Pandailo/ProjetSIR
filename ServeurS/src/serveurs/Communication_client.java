@@ -88,11 +88,30 @@ public class Communication_client extends Thread {
             switch(this.action)
             {
                 //Envoi des schémas
-                case 0 : this.envoi_schemas(); break;
+                case 0 : 
+                    System.out.println("Action client : envoi des schémas.");
+                    this.envoi_schemas(); break;
                 //Demande d'une requête de BD
-                case 1 : this.envoi_requete(); break;
+                case 1 : 
+                    System.out.println("Action client : envoi d'une requête.");
+                    this.envoi_requete(); break;
                 //Envoi de l'initialisation
-                case 2 : this.envoi_initialisation(); break;
+                case 2 : 
+                    System.out.println("Action client : envoi de l'initialisation.");
+                    this.envoi_initialisation(); break;
+                //Envoi de la confirmation de la maj bd
+                case 3 : 
+                    System.out.println("Action client : envoi de la confirmation de MAJ BD.");
+                    try 
+                    {
+                        //Envoi de l'action à effectuer
+                        this.dos.writeInt(5);
+                    }
+                    catch (IOException ex) 
+                    {
+                        Logger.getLogger(Communication_client.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    break;
             }
             
             //Fermeture du socket
@@ -118,7 +137,7 @@ public class Communication_client extends Thread {
             int taille = in.available();
             while((n=in.read(buf))!=-1)
                 contenu += new String(buf);
-            this.dos.writeUTF(contenu.substring(0, taille));
+            this.dos.writeObject(contenu.substring(0, taille));
             in.close();
         }
         catch (IOException e)

@@ -17,16 +17,15 @@ public class ProjetSIR
      */
     public static void main(String[] args) 
     {
-      /*  Communication com = new Communication();
+        Communication com = new Communication(1);
         com.start();
-*/
         //c BEA(int taille, int nbQ, int nbA, int nbS)
        /* BEA test=new BEA();
         test.Calcul_affinite();
         int[][] lel=test.bea();
 */
-        Menu_Principal p=new Menu_Principal();
-        p.setVisible(true);
+        /*Menu_Principal p=new Menu_Principal();
+        p.setVisible(true);*/
     }
     
 }

@@ -57,6 +57,19 @@ public class Communication {
             System.out.println("Erreur dans les paramètres pour le chemin des schémas à envoyer. Valeur : "+chemin_schemas_a_envoyer+".");
     }
     
+    public void envoi_maj_bd()
+    {
+        int nb_serveurs = this.parametres.getNb_serveurs();
+        for(int i=0; i<nb_serveurs; i++)
+        {
+            int num_serveur = this.parametres.getNum_serveur_distant(i);
+            String ip = this.parametres.getIp_serveur_distant(i);
+            int port = this.parametres.getPort_serveur_distant(i);
+            Communication_client cc = new Communication_client(ip, port, num_serveur, 3);
+            cc.start();
+        }
+    }
+    
     public CachedRowSet envoi_requete(int num_serveur, String tables, String attributs, String conditions)
     {
         CachedRowSet crs = null;

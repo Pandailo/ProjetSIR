@@ -17,11 +17,44 @@ public class Communication_serveur extends Thread {
     private int port;
     private ServerSocket socket_serveur;
     private boolean continuer;
+    private boolean[] MAJ_BD;
     
     public Communication_serveur(int port)
     {
         this.port = port;
         this.continuer = true;
+        this.initialisation_MAJ_BD();
+    }
+    
+    public void initialisation_MAJ_BD()
+    {
+        Parametres p = new Parametres();
+        int nb_serveurs = p.getNb_serveurs()-1;
+        this.MAJ_BD = new boolean[nb_serveurs];
+        for(int i=0; i<nb_serveurs; i++)
+            this.MAJ_BD[i] = false;
+    }
+    
+    public boolean bd_dispo()
+    {
+        boolean res = true;
+        for(int i=0; i<this.MAJ_BD.length; i++)
+            if(!this.MAJ_BD[i])
+            {
+                res = false;
+                i=this.MAJ_BD.length;
+            }
+        return res;
+    }
+    
+    public void bd_maj_dispo()
+    {
+        for(int i=0; i<this.MAJ_BD.length; i++)
+            if(!this.MAJ_BD[i])
+            {
+                this.MAJ_BD[i] = true;
+                i=this.MAJ_BD.length;
+            }
     }
     
     public void run()
@@ -32,7 +65,7 @@ public class Communication_serveur extends Thread {
             //On attend les connexions
             while(this.continuer)
             {
-                Thread t = new Thread(new Accepter_client(this.socket_serveur.accept()));
+                Thread t = new Thread(new Accepter_client(this.socket_serveur.accept(), this));
                 t.start();
             }
             this.socket_serveur.close();
@@ -50,12 +83,15 @@ class Accepter_client implements Runnable {
     private ObjectOutputStream dos;
     private Parametres parametres;
     private Communication communication;
+    private Communication_serveur com_serveur;
     
-    public Accepter_client(Socket s)
+    public Accepter_client(Socket s, Communication_serveur com_serveur)
     {
+        System.out.println("Connexion d'un client.");
         this.socket = s;
         this.parametres = new Parametres();
         this.communication = new Communication();
+        this.com_serveur = com_serveur;
     }
 
     public void run() 
@@ -64,8 +100,8 @@ class Accepter_client implements Runnable {
         try 
         {
             //Mise en place des canaux de communication
-            this.dis = new ObjectInputStream(this.socket.getInputStream());
             this.dos = new ObjectOutputStream(this.socket.getOutputStream());
+            this.dis = new ObjectInputStream(this.socket.getInputStream());
             
             //Réception de la demande du client
             choix_client = this.dis.readInt();
@@ -74,17 +110,29 @@ class Accepter_client implements Runnable {
             switch(choix_client)
             {
                 //Réception des schémas
-                case 0 : this.reception_schemas(); break;
+                case 0 :
+                    System.out.println("Action serveur : Réception des schémas d'un serveur S.");
+                    this.reception_schemas(); break;
                 //Réception des schémas du programme P
-                case 1 : this.reception_schemas_programme(); break;
+                case 1 : 
+                    System.out.println("Action serveur : Réception des schémas du programme P.");
+                    this.reception_schemas_programme(); break;
                 //Réception requête BD
-                case 2 : this.executer_requete(); break;
+                case 2 : 
+                    System.out.println("Action serveur : Réception d'une requête.");
+                    this.executer_requete(); break;
                 //Réception de l'initialisation depuis programme P
-                case 3 : this.reception_initialisation_programme(); break;
+                case 3 : 
+                    System.out.println("Action serveur : Réception de l'initialisation du programme P.");
+                    this.reception_initialisation_programme(); break;
                 //Réception de l'initialisation d'un serveurs S
-                case 4 : this.reception_initialisation(); break;
+                case 4 : 
+                    System.out.println("Action serveur : Réception de l'initialisation d'un serveur S.");
+                    this.reception_initialisation(); break;
                 //Réception de la fin de maj de BD
-                case 5 : break;
+                case 5 : 
+                    System.out.println("Action serveur : Réception d'une fin de MAJ BD.");
+                    this.com_serveur.bd_maj_dispo(); break;
             }
             
             //Fermeture du socket
@@ -106,13 +154,15 @@ class Accepter_client implements Runnable {
             out = new FileWriter(new File(chemin_fichier));
             //Réception du fichier
             int n;
-            String contenu = this.dis.readUTF();
+            String contenu = (String)this.dis.readObject();
             out.write(contenu);
             out.close();
         }
         catch (IOException e)
         {
             e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Accepter_client.class.getName()).log(Level.SEVERE, null, ex);
         }  
     }
     
@@ -469,7 +519,12 @@ class Accepter_client implements Runnable {
         
         //Attente de la confirmation des autres serveurs
         System.out.println("/***Attente des la confirmations des autres serveurs avant la suppression***/");
-        //Sotckage des réponses dans un fichier pour y avoir accès sans bloquer le programme ?
+        //Envoi de la fin de récupération des tuples aux autres serveurs
+        this.communication.envoi_maj_bd();
+        while(this.com_serveur.bd_dispo())
+        {
+            
+        }
         
         //Suppression des tuples (pour la fragmentation horizontale ou hybride seulement)
         System.out.println("/***Suppression des tuples***/");
@@ -555,6 +610,9 @@ class Accepter_client implements Runnable {
         File source = new File(this.parametres.getChemin_schemas()+"/local.json");
         File dest = new File(this.parametres.getChemin_schemas()+"/BD_actuelle.json");
         this.copier_fichier(source, dest);
+        
+        //Réinitialisation de la MAJ BD
+        this.com_serveur.initialisation_MAJ_BD();
     }
     
     private String inverse_signe(String signe)

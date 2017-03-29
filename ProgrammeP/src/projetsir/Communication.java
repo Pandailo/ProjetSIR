@@ -18,8 +18,8 @@ public class Communication extends Thread {
     private int action;
     private int port;
     private Socket socket;
-    private DataInputStream dis;
-    private DataOutputStream dos;
+    private ObjectInputStream dis;
+    private ObjectOutputStream dos;
     private Parametres parametres;
     
     public Communication(int action)
@@ -35,6 +35,34 @@ public class Communication extends Thread {
             e.printStackTrace();
         }
         this.port = this.parametres.get_port_serveur_local();
+    }
+    
+    public void run()
+    {
+        try 
+        {  
+            //Ouverture du socket
+            this.socket = new Socket(this.ip, this.port);
+            //Mise en place des canaux de communication
+            this.dis = new ObjectInputStream(this.socket.getInputStream());
+            this.dos = new ObjectOutputStream(this.socket.getOutputStream());
+
+            //Définition du comportement en fonction de l'action
+            switch(this.action)
+            {
+                //Envoi des schémas
+                case 0 : this.envoi_schemas(); break;
+                //Demande de l'initialisation
+                case 1 : this.envoi_initialisation(); break;
+            }
+            
+            //Fermeture du socket
+            this.socket.close();
+        }
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
     }
     
     private void envoi_fichier(String chemin_fichier)
@@ -75,7 +103,7 @@ public class Communication extends Thread {
         String chemin_schemas = this.parametres.get_chemin_schemas();
         //Envoi du schéma global
         this.envoi_fichier(chemin_schemas+"/global.json");
-        System.out.println("Scéma global envoyé.");
+        System.out.println("Schéma global envoyé.");
         
         //Envoi des schémas locaux
         //Envoi du nombre de schémas locaux
@@ -95,7 +123,7 @@ public class Communication extends Thread {
                 Logger.getLogger(Communication.class.getName()).log(Level.SEVERE, null, ex);
             }
             this.envoi_fichier(chemin_schemas+"/local_"+num_serveur+".json");
-            System.out.println("Scéma local du serveur "+num_serveur+" envoyé.");
+            System.out.println("Schéma local du serveur "+num_serveur+" envoyé.");
         }
     }
     
@@ -114,34 +142,6 @@ public class Communication extends Thread {
         String chemin_schemas = this.parametres.get_chemin_schemas();
         //Envoi du schéma global
         this.envoi_fichier(chemin_schemas+"/global.json");
-        System.out.println("Scéma global envoyé.");
-    }
-    
-    public void run()
-    {
-        try 
-        {  
-            //Ouverture du socket
-            this.socket = new Socket(this.ip, this.port);
-            //Mise en place des canaux de communication
-            this.dis = new DataInputStream(this.socket.getInputStream());
-            this.dos = new DataOutputStream(this.socket.getOutputStream());
-            
-            //Définition du comportement en fonction de l'action
-            switch(this.action)
-            {
-                //Envoi des schémas
-                case 0 : this.envoi_schemas(); break;
-                //Demande de l'initialisation
-                case 1 : this.envoi_initialisation(); break;
-            }
-            
-            //Fermeture du socket
-            this.socket.close();
-        }
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-        }
+        System.out.println("Schéma global envoyé.");
     }
 }

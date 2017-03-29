@@ -5,7 +5,7 @@
     "BD_mdp": "mdp",
     "stockage_schemas": "src/schemas",
     "schemas_a_envoyer": "src/schemas/envoi",
-    "serveurs2":
+    "serveurs":
     [
         {
             "num": 1,
@@ -13,7 +13,7 @@
             "port": 1201
         }
     ],
-    "serveurs":
+    "serveurs2":
     [
         {
             "num": 2,
