@@ -65,10 +65,11 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        Annuler_button = new javax.swing.JButton();
-        Valider_button = new javax.swing.JButton();
+        Quitter_button = new javax.swing.JButton();
+        Lancer_button = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Fragmentation verticale");
         setPreferredSize(new java.awt.Dimension(900, 600));
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 2));
@@ -108,26 +109,26 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         jPanel3.setPreferredSize(new java.awt.Dimension(400, 50));
         jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
-        Annuler_button.setText("Annuler fragmentation");
-        Annuler_button.addActionListener(new java.awt.event.ActionListener() {
+        Quitter_button.setText("Quitter fragmentation");
+        Quitter_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Annuler_buttonActionPerformed(evt);
+                Quitter_buttonActionPerformed(evt);
             }
         });
-        jPanel3.add(Annuler_button);
+        jPanel3.add(Quitter_button);
 
-        Valider_button.setText("Lancer fragmentation");
-        Valider_button.setToolTipText("");
-        jPanel3.add(Valider_button);
+        Lancer_button.setText("Lancer fragmentation");
+        Lancer_button.setToolTipText("");
+        jPanel3.add(Lancer_button);
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void Annuler_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Annuler_buttonActionPerformed
+    private void Quitter_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Quitter_buttonActionPerformed
         this.setVisible(false);
-    }//GEN-LAST:event_Annuler_buttonActionPerformed
+    }//GEN-LAST:event_Quitter_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -252,10 +253,10 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Annuler_button;
+    private javax.swing.JButton Lancer_button;
     private javax.swing.JPanel Pan_Dis;
     private javax.swing.JPanel Pan_Ut;
-    private javax.swing.JButton Valider_button;
+    private javax.swing.JButton Quitter_button;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
