@@ -125,19 +125,19 @@ public class Communication_client extends Thread {
     
     private void envoi_fichier(String chemin_fichier)
     {
-        byte buf[] = new byte[1024];
-        InputStream in = null;        
+        FileReader in = null;
         try
         {
-            in = new FileInputStream(chemin_fichier);
+            in = new FileReader(new File(chemin_fichier));
             this.dos.flush();
             //Envoi du fichier
-            int n;
+            int c;
             String contenu = "";
-            int taille = in.available();
-            while((n=in.read(buf))!=-1)
-                contenu += new String(buf);
-            this.dos.writeObject(contenu.substring(0, taille));
+            //int taille = in.available();
+            while((c=in.read())!=-1)
+                contenu += (char)c;
+            this.dos.writeInt(contenu.length());
+            this.dos.writeObject((Object)contenu);
             in.close();
         }
         catch (IOException e)

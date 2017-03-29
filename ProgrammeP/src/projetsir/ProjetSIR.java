@@ -17,7 +17,7 @@ public class ProjetSIR
      */
     public static void main(String[] args) 
     {
-        Communication com = new Communication(1);
+        Communication com = new Communication(0);
         com.start();
         //c BEA(int taille, int nbQ, int nbA, int nbS)
        /* BEA test=new BEA();

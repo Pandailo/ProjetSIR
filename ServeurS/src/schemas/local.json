@@ -9,12 +9,30 @@
                 {
                     "nom_attribut":"attribut_1",
                     "cle_primaire":"oui",
-                    "type":"int"
+                    "type":"int",
+                    "serveurs":
+                    [
+                        {
+                            "num_serveur":1
+                        },
+                        {
+                            "num_serveur":2
+                        },
+                        {
+                            "num_serveur":3
+                        }
+                    ]
                 },
                 {
                     "nom_attribut":"attribut_2",
                     "cle_primaire":"non",
-                    "type":"int"
+                    "type":"String",
+                    "serveurs":
+                    [
+                        {
+                            "num_serveur":2
+                        }
+                    ]
                 }
             ]
         },
@@ -46,8 +64,38 @@
                         },
                         {
                             "attribut":"attribut_2",
-                            "signe":"=",
+                            "signe":"==",
                             "valeur":"val_2"
+                        }
+                    ],
+                    "serveurs":
+                    [
+                        {
+                            "num_serveur":1
+                        },
+                        {
+                            "num_serveur":3
+                        }
+                    ]
+                },
+                {
+                    "attributs":
+                    [
+                        {
+                            "attribut":"attribut_1",
+                            "signe":"<=",
+                            "valeur":"val_1"
+                        },
+                        {
+                            "attribut":"attribut_2",
+                            "signe":">=",
+                            "valeur":"val_2"
+                        }
+                    ],
+                    "serveurs":
+                    [
+                        {
+                            "num_serveur":2
                         }
                     ]
                 }
@@ -61,7 +109,16 @@
                 {
                     "nom_attribut":"attribut_1",
                     "cle_primaire":"oui",
-                    "type":"int"
+                    "type":"int",
+                    "serveurs":
+                    [
+                        {
+                            "num_serveur":1
+                        },
+                        {
+                            "num_serveur":2
+                        }
+                    ]
                 }
             ],
             "fragments":
@@ -71,8 +128,30 @@
                     [
                         {
                             "attribut":"attribut_1",
-                            "signe":"<>",
+                            "signe":"!=",
                             "valeur":"val_1"
+                        }
+                    ],
+                    "serveurs":
+                    [
+                        {
+                            "num_serveur":1
+                        }
+                    ]
+                },
+                {
+                    "attributs":
+                    [
+                        {
+                            "attribut":"attribut_1",
+                            "signe":">",
+                            "valeur":"val_1"
+                        }
+                    ],
+                    "serveurs":
+                    [
+                        {
+                            "num_serveur":2
                         }
                     ]
                 }

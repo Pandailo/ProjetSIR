@@ -153,9 +153,9 @@ class Accepter_client implements Runnable {
         {
             out = new FileWriter(new File(chemin_fichier));
             //Réception du fichier
-            int n;
+            int taille = this.dis.readInt();
             String contenu = (String)this.dis.readObject();
-            out.write(contenu);
+            out.write(contenu.substring(0, taille));
             out.close();
         }
         catch (IOException e)
@@ -283,7 +283,10 @@ class Accepter_client implements Runnable {
         this.copier_fichier(source, dest);
         
         //Envoi des schémas aux autres serveurs
-        this.communication.envoi_schemas(2);   
+        this.communication.envoi_schemas(2);  
+        
+        //Reconstruction de la BD
+        this.construction_BD();
     }
     
     private void executer_requete()
@@ -326,6 +329,44 @@ class Accepter_client implements Runnable {
         Communication_BD com_BD = new Communication_BD(this.parametres.getBD_login(), this.parametres.getBD_mdp(), false);
         
         //Construction des tables qui n'existent pas
+        this.construction_tables(bd_actuelle, bd_nouvelle);
+        
+        //Construction des colonnes qui n'existent pas
+        this.construction_colonnes(bd_actuelle, bd_nouvelle);
+        
+        //Récupération des tuples manquants
+        this.recuperation_tuples(bd_nouvelle);
+        
+        //Attente de la confirmation des autres serveurs
+        System.out.println("/***Attente des la confirmations des autres serveurs avant la suppression***/");
+        //Envoi de la fin de récupération des tuples aux autres serveurs
+        this.communication.envoi_maj_bd();
+        while(this.com_serveur.bd_dispo())
+        {
+            
+        }
+        
+        //Suppression des tuples (pour la fragmentation horizontale ou hybride seulement)
+        this.suppression_tuples(bd_nouvelle);
+        
+        //Suppression des colonnes
+        this.suppression_colonnes(bd_actuelle, bd_nouvelle);
+        
+        //Suppression des tables
+        this.suppression_tables(bd_actuelle, bd_nouvelle);
+        
+        //MAJ du fichier BD_actuelle.json
+        File source = new File(this.parametres.getChemin_schemas()+"/local.json");
+        File dest = new File(this.parametres.getChemin_schemas()+"/BD_actuelle.json");
+        this.copier_fichier(source, dest);
+        
+        //Réinitialisation de la MAJ BD
+        this.com_serveur.initialisation_MAJ_BD();
+    }
+    
+    private void construction_tables(Schema_local bd_actuelle, Schema_local bd_nouvelle)
+    {
+        //Construction des tables qui n'existent pas
         System.out.println("/***Construction des tables***/");
         String[] tables_actuelles = bd_actuelle.get_liste_nom_tables();
         String[] tables_nouvelles = bd_nouvelle.get_liste_nom_tables();
@@ -365,10 +406,18 @@ class Accepter_client implements Runnable {
                 //com_BD.ajoutTable(tables_nouvelles[i], null);
             }
         }
-        
+    }
+    
+    private void construction_colonnes(Schema_local bd_actuelle, Schema_local bd_nouvelle)
+    {
         //Construction des colonnes qui n'existent pas
         System.out.println("/***Construction des colonnes***/");
+        
+        String[] tables_actuelles = bd_actuelle.get_liste_nom_tables();
+        String[] tables_nouvelles = bd_nouvelle.get_liste_nom_tables();
+        String[] attributs_nouveaux;
         String[] attributs_actuels;
+        boolean creation;
         for(int i=0; i<tables_nouvelles.length; i++)
         {
             creation = false;
@@ -399,9 +448,15 @@ class Accepter_client implements Runnable {
                 }
             }
         }
-        
+    }
+    
+    private void recuperation_tuples(Schema_local bd_nouvelle)
+    {
         //Récupération des tuples manquants
         System.out.println("/***Récupération des tuples***/");
+        
+        String[] tables_nouvelles = bd_nouvelle.get_liste_nom_tables();
+        String[] attributs_nouveaux;
         Schema_global bd_globale = new Schema_global();
         String tables;
         String attributs;
@@ -516,19 +571,17 @@ class Accepter_client implements Runnable {
                 }
             }
         }
-        
-        //Attente de la confirmation des autres serveurs
-        System.out.println("/***Attente des la confirmations des autres serveurs avant la suppression***/");
-        //Envoi de la fin de récupération des tuples aux autres serveurs
-        this.communication.envoi_maj_bd();
-        while(this.com_serveur.bd_dispo())
-        {
-            
-        }
-        
+    }
+    
+    private void suppression_tuples(Schema_local bd_nouvelle)
+    {
         //Suppression des tuples (pour la fragmentation horizontale ou hybride seulement)
         System.out.println("/***Suppression des tuples***/");
-        String signe = "";
+        
+        String[] tables_nouvelles = bd_nouvelle.get_liste_nom_tables();
+        String tables;
+        String conditions;
+        String[][] tab_conditions;
         for(int i=0; i<tables_nouvelles.length; i++)
         {   
             if(bd_nouvelle.get_table_fragmentation(tables_nouvelles[i]).equals("horizontale") ||
@@ -538,7 +591,6 @@ class Accepter_client implements Runnable {
                 conditions = "";
                 //Recherche des tuples souhaités
                 tables = tables_nouvelles[i];
-                attributs_nouveaux = bd_nouvelle.get_liste_attributs_table(tables);
                 //Définition des conditions
                 tab_conditions = bd_nouvelle.get_attributs_fragment(tables);
 
@@ -553,9 +605,17 @@ class Accepter_client implements Runnable {
                 //com_BD.suppressionTuples(tables, conditions);
             }
         }
-        
+    }
+    
+    private void suppression_colonnes(Schema_local bd_actuelle, Schema_local bd_nouvelle)
+    {
         //Suppression des colonnes
         System.out.println("/***Suppression des colonnes***/");
+        
+        String[] tables_actuelles = bd_actuelle.get_liste_nom_tables();
+        String[] tables_nouvelles = bd_nouvelle.get_liste_nom_tables();
+        String[] attributs_nouveaux;
+        String[] attributs_actuels;
         boolean suppression;
         for(int i=0; i<tables_nouvelles.length; i++)
         {
@@ -587,9 +647,16 @@ class Accepter_client implements Runnable {
                 }
             }
         }
-        
+    }
+    
+    private void suppression_tables(Schema_local bd_actuelle, Schema_local bd_nouvelle)
+    {
         //Suppression des tables
         System.out.println("/***Suppression des tables***/");
+        
+        String[] tables_actuelles = bd_actuelle.get_liste_nom_tables();
+        String[] tables_nouvelles = bd_nouvelle.get_liste_nom_tables();
+        boolean suppression;
         for(int i=0; i<tables_actuelles.length; i++)
         {
             suppression = true;
@@ -605,14 +672,6 @@ class Accepter_client implements Runnable {
                 //com_BD.suppressionTable(tables_nouvelles[i]);
             }
         }
-        
-        //MAJ du fichier BD_actuelle.json
-        File source = new File(this.parametres.getChemin_schemas()+"/local.json");
-        File dest = new File(this.parametres.getChemin_schemas()+"/BD_actuelle.json");
-        this.copier_fichier(source, dest);
-        
-        //Réinitialisation de la MAJ BD
-        this.com_serveur.initialisation_MAJ_BD();
     }
     
     private String inverse_signe(String signe)
