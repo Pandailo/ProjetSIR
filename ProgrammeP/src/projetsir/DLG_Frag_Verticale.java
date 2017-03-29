@@ -13,7 +13,7 @@ import javax.swing.*;
  * @author yv965015
  */
 public class DLG_Frag_Verticale extends javax.swing.JFrame {
-
+    Parametres param;
     /**
      * Creates new form DLG_Frag_Verticale
      */
@@ -32,16 +32,19 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
             else
                 message="Nombre de requêtes en nombre positif ? ";
         }
-        Parametres param=new Parametres();
+        param=new Parametres();
         int nbS=param.get_nb_serveurs();
         bd_globale bdg=new bd_globale();
         String[] liste_att=bdg.get_liste_attributs_table(table);
         int nbA=liste_att.length;
         initComponents();
+        nbR++;
+        nbS++;
+        nbA++;
         Pan_Dis.setLayout(new GridLayout(nbR,nbS));
         Pan_Ut.setLayout(new GridLayout(nbR,nbA));
-        this.creationMatDis(nbR, nbS);
-        this.creationMatUt(nbR, nbA);
+        this.creationMatDis(nbR, nbS,liste_att);
+        this.creationMatUt(nbR, nbA,liste_att);
         
             
     }
@@ -55,11 +58,23 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Pan_Dis = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         Pan_Ut = new javax.swing.JPanel();
+        Pan_Dis = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        Annuler_button = new javax.swing.JButton();
+        Valider_button = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridLayout(1, 2));
+        setPreferredSize(new java.awt.Dimension(900, 600));
+
+        jPanel1.setLayout(new java.awt.GridLayout(1, 2));
+
+        Pan_Ut.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel1.add(Pan_Ut);
 
         javax.swing.GroupLayout Pan_DisLayout = new javax.swing.GroupLayout(Pan_Dis);
         Pan_Dis.setLayout(Pan_DisLayout);
@@ -69,16 +84,50 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         );
         Pan_DisLayout.setVerticalGroup(
             Pan_DisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 259, Short.MAX_VALUE)
         );
 
-        getContentPane().add(Pan_Dis);
+        jPanel1.add(Pan_Dis);
 
-        Pan_Ut.setLayout(new java.awt.GridLayout());
-        getContentPane().add(Pan_Ut);
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        jPanel2.setLayout(new java.awt.GridLayout(1, 2));
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Matrice Utilisation");
+        jLabel1.setToolTipText("");
+        jPanel2.add(jLabel1);
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Matrice Distribution");
+        jPanel2.add(jLabel2);
+
+        getContentPane().add(jPanel2, java.awt.BorderLayout.NORTH);
+
+        jPanel3.setMinimumSize(new java.awt.Dimension(380, 50));
+        jPanel3.setPreferredSize(new java.awt.Dimension(400, 50));
+        jPanel3.setLayout(new java.awt.GridLayout(1, 2));
+
+        Annuler_button.setText("Annuler fragmentation");
+        Annuler_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Annuler_buttonActionPerformed(evt);
+            }
+        });
+        jPanel3.add(Annuler_button);
+
+        Valider_button.setText("Lancer fragmentation");
+        Valider_button.setToolTipText("");
+        jPanel3.add(Valider_button);
+
+        getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void Annuler_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Annuler_buttonActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_Annuler_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -110,35 +159,107 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         /* Create and display the form */
         
     }
-    void creationMatDis(int nbR,int nbS)
+    void creationMatDis(int nbR,int nbS,String[] liste_att)
     {
         for(int i=0;i<nbR;i++)
         {
-            for(int j=0;j<nbS;j++)
-            {
-                SpinnerModel model = new SpinnerNumberModel();
-                JSpinner spin=new JSpinner(model);
-                Pan_Dis.add(spin);
+            if(i==0)
+            {   
+                for(int j=0;j<nbS;j++)
+                {
+                    if(j==0)
+                    {
+                        JLabel nomA=new JLabel();
+                        nomA.setText("");
+                        Pan_Dis.add(nomA);
+                    }
+                    else
+                    {
+                        JLabel nomA=new JLabel();
+                        nomA.setText("Serveur :"+param.get_num_serveur(j-1));
+                        Pan_Dis.add(nomA);
+                    }
+                    
+                }
             }
+            else
+            {
+                for(int j=0;j<nbS;j++)
+                {
+                    if(j==0)
+                    {
+                        JLabel nomA=new JLabel();
+                        nomA.setText("Requete "+i);
+                        Pan_Dis.add(nomA); 
+                        
+                    }
+                    else
+                    {
+                        SpinnerModel model = new SpinnerNumberModel();
+                        JSpinner spin=new JSpinner(model);
+                        Pan_Dis.add(spin);
+                    }
+                }
+            }
+                
+           
         }
         
         
     }
-    void creationMatUt(int nbR,int nbA)
+    void creationMatUt(int nbR,int nbA,String[] liste_att)
     {
         for(int i=0;i<nbR;i++)
         {
-            for(int j=0;j<nbA;j++)
-            {
-                JCheckBox ch=new JCheckBox();
-                Pan_Ut.add(ch);
+            if(i==0)
+            { 
+                for(int j=0;j<nbA;j++)
+                {
+                    if(j==0)
+                    {
+                        JLabel nomA=new JLabel();
+                        nomA.setText("");
+                        Pan_Ut.add(nomA);
+                    }
+                    else
+                    {
+                       JLabel nomA=new JLabel();
+                        nomA.setText("Attribut :"+liste_att[j-1]);
+                        Pan_Ut.add(nomA); 
+                    }
+                }
             }
+            else
+            {
+                 for(int j=0;j<nbA;j++)
+                {
+                    if(j==0)
+                    {
+                        JLabel nomA=new JLabel();
+                        nomA.setText("Requete "+i);
+                        Pan_Ut.add(nomA); 
+                    }
+                    else
+                    {
+                        JCheckBox ch=new JCheckBox();
+                        Pan_Ut.add(ch);
+                    }
+                }
+            }
+            
         }
         
         
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Annuler_button;
     private javax.swing.JPanel Pan_Dis;
     private javax.swing.JPanel Pan_Ut;
+    private javax.swing.JButton Valider_button;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
 }
