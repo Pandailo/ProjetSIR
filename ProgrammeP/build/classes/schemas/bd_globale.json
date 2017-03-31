@@ -1,0 +1,77 @@
+{
+    "tables":
+    [
+        {
+            "nom":"nom_table_1",
+            "attributs":
+            [
+                {
+                    "nom_attribut":"attribut_1",
+                    "cle_primaire":"oui",
+                    "type":"int"
+                    
+                },
+                {
+                    "nom_attribut":"attribut_2",
+                    "cle_primaire":"non",
+                    "type":"String"
+                   
+                }
+            ]
+        },
+        {
+            "nom":"nom_table_2",
+            "attributs":
+            [
+                {
+                    "nom_attribut":"attribut_1",
+                    "cle_primaire":"oui",
+                    "type":"int"
+                },
+                {
+                    "nom_attribut":"attribut_2",
+                    "cle_primaire":"non",
+                    "type":"String"
+                }
+            ]
+        },
+        {
+            "nom":"nom_table_3",
+            "attributs":
+            [
+                {
+                    "nom_attribut":"attribut_1",
+                    "cle_primaire":"oui",
+                    "type":"int"
+                    
+                }
+            ],
+            "fragments":
+            [
+                {
+                    "attributs":
+                    [
+                        {
+                            "attribut":"nom_attribut1",
+                            "signe":"!=",
+                            "valeur":"val_1"
+                        }
+                    ]
+                    
+                },
+                {
+                    "attributs":
+                    [
+                        {
+                            "attribut":"nom_attribut1",
+                            "signe":">",
+                            "valeur":"val_1"
+                        }
+                    ]
+                   
+                }
+            ]
+        }
+    ]
+}
+

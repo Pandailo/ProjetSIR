@@ -11,6 +11,7 @@ package projetsir;
  */
 public class Parametres {
     private int nb_serveurs;
+    private int num_serveur_local;
     private int port_serveur_local;
     private String chemin_schemas;
     private String chemin_parametres;
@@ -35,6 +36,12 @@ public class Parametres {
         else
             this.nb_serveurs = -1;
         
+        //Récupération du numéro du serveur local
+        if(this.g_json.get_attribut("num_serveur_local")!=null)
+            this.num_serveur_local = (int)(long)this.g_json.get_attribut("num_serveur_local");
+        else
+            this.num_serveur_local = -1;
+        
         //Récupération du port du serveur local
         if(this.g_json.get_attribut("port_serveur_local")!=null)
             this.port_serveur_local = (int)(long)this.g_json.get_attribut("port_serveur_local");
@@ -56,6 +63,11 @@ public class Parametres {
     public int get_nb_serveurs()
     {
         return this.nb_serveurs;
+    }
+    
+    public int get_num_serveur_local()
+    {
+        return this.num_serveur_local;
     }
     
     public int get_port_serveur_local()
@@ -87,7 +99,12 @@ public class Parametres {
     {
         this.nb_serveurs = nb_serveurs;
     }
-
+    
+    public void setNum_serveur_local(int num_serveur_local)
+    {
+        this.num_serveur_local = num_serveur_local;
+    }
+    
     public void setPort_serveur_local(int port_serveur_local)
     {
         this.port_serveur_local = port_serveur_local;
@@ -120,6 +137,7 @@ public class Parametres {
         String contenu = "{\n";
         boolean succes;
         contenu += "\t\"nb_serveurs\": "+this.nb_serveurs+",\n";
+        contenu += "\t\"num_serveur_local\": "+this.num_serveur_local+",\n";
         contenu += "\t\"port_serveur_local\": "+this.port_serveur_local+",\n";
         contenu += "\t\"BD_login\": \""+this.BD_login+"\",\n";
         contenu += "\t\"BD_mdp\": \""+this.BD_mdp+"\",\n";
