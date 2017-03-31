@@ -135,6 +135,41 @@ public class Parametres {
         }
         return port;
     }
+
+    public void setNum_serveur(int num_serveur) 
+    {
+        this.num_serveur = num_serveur;
+    }
+
+    public void setPort(int port) 
+    {
+        this.port = port;
+    }
+
+    public void setChemin_schemas(String chemin_schemas) 
+    {
+        this.chemin_schemas = chemin_schemas;
+    }
+
+    public void setSchemas_a_envoyer(String schemas_a_envoyer) 
+    {
+        this.schemas_a_envoyer = schemas_a_envoyer;
+    }
+
+    public void setServeurs(String[][] serveurs) 
+    {
+        this.serveurs = serveurs;
+    }
+
+    public void setBD_login(String BD_login) 
+    {
+        this.BD_login = BD_login;
+    }
+
+    public void setBD_mdp(String BD_mdp) 
+    {
+        this.BD_mdp = BD_mdp;
+    }
     
     //**********Ecriture du fichier**********//
     public boolean ecriture_parametres()

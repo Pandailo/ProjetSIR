@@ -21,21 +21,30 @@ public class Communication_BD
     private String url;
     private Connection connect;
     
-    public Communication_BD(String login, String mdp, boolean co_fac)
+    public Communication_BD(String login, String mdp)
     {
         this.login = login;
         this.mdp = mdp;
         try 
         {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            if(co_fac)
-                this.url = "jdbc:oracle:thin:@butor:1521:ensb2016";
-            else
-                this.url = "jdbc:oracle:thin:@ufrsciencestech.u-bourgogne.fr:25561:ensb2016";
+            this.url = "jdbc:oracle:thin:@butor:1521:ensb2016";
             this.connect = DriverManager.getConnection(url, login, mdp);
+            System.out.println("Connecté à la BD depuis la fac.");
         } 
-        catch (ClassNotFoundException | SQLException ex) 
+        catch (SQLException ex) 
         {
+            this.url = "jdbc:oracle:thin:@ufrsciencestech.u-bourgogne.fr:25561:ensb2016";
+            try 
+            {
+                this.connect = DriverManager.getConnection(url, login, mdp);
+                System.out.println("Connecté à la BD depuis l'extérieur de la fac.");
+            } 
+            catch (SQLException ex1) 
+            {
+                Logger.getLogger(Communication_BD.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(Communication_BD.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

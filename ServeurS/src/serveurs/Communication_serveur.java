@@ -253,20 +253,32 @@ class Accepter_client implements Runnable {
         
         //Envoi des schémas aux autres serveurs
         this.communication.envoi_schemas(0);   
+        
+        //Reconstruction de la BD
+        this.construction_BD();
     }
     
     private void reception_initialisation()
     {
-        String schemas_a_envoyer = this.parametres.getSchemas_a_envoyer();
+        String chemin_schemas = this.parametres.getChemin_schemas();
         //Réception du schéma global
-        this.reception_fichier(schemas_a_envoyer+"/global.json");
+        this.reception_fichier(chemin_schemas+"/global.json");
         System.out.println("Schéma global reçu.");
         
-        //Récupération des schémas du serveur   
-        String chemin_schemas = this.parametres.getChemin_schemas();
-        File source = new File(schemas_a_envoyer+"/global.json");
-        File dest = new File(chemin_schemas+"/global.json");
-        this.copier_fichier(source, dest);
+        //Création du schéma local  
+        String contenu = "{\n\t\"tables\":\n\t[\n\t]\n}";
+        FileWriter out = null;
+        try
+        {
+            out = new FileWriter(new File(chemin_schemas+"/local.json"));
+            out.write(contenu);
+            out.close();
+            System.out.println("Schéma local créé.");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
     
     private void reception_initialisation_programme()
@@ -282,11 +294,23 @@ class Accepter_client implements Runnable {
         File dest = new File(chemin_schemas+"/global.json");
         this.copier_fichier(source, dest);
         
+        //Création du schéma local  
+        String contenu = "{\n\t\"tables\":\n\t[\n\t]\n}";
+        FileWriter out = null;
+        try
+        {
+            out = new FileWriter(new File(chemin_schemas+"/local.json"));
+            out.write(contenu);
+            out.close();
+            System.out.println("Schéma local créé.");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        
         //Envoi des schémas aux autres serveurs
         this.communication.envoi_schemas(2);  
-        
-        //Reconstruction de la BD
-        this.construction_BD();
     }
     
     private void executer_requete()
@@ -308,7 +332,7 @@ class Accepter_client implements Runnable {
         }
         
         //Exécution de la requête
-        Communication_BD com_BD = new Communication_BD(this.parametres.getBD_login(), this.parametres.getBD_mdp(), false);
+        Communication_BD com_BD = new Communication_BD(this.parametres.getBD_login(), this.parametres.getBD_mdp());
         
         //Envoi du résultat
         try 
@@ -326,7 +350,7 @@ class Accepter_client implements Runnable {
         Schema_local bd_actuelle = new Schema_local(true);
         Schema_local bd_nouvelle = new Schema_local(false);
         //TODO: automatisation pour savoir si la co se fait à la fac ou non
-        Communication_BD com_BD = new Communication_BD(this.parametres.getBD_login(), this.parametres.getBD_mdp(), false);
+        Communication_BD com_BD = new Communication_BD(this.parametres.getBD_login(), this.parametres.getBD_mdp());
         
         //Construction des tables qui n'existent pas
         this.construction_tables(bd_actuelle, bd_nouvelle);
