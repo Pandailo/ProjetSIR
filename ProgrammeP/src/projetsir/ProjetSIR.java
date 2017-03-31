@@ -18,7 +18,7 @@ public class ProjetSIR
     public static void main(String[] args) 
     {
         Initialisation init = new Initialisation();
-        init.getListe_tables();
+        //init.getListe_tables();
         /*Communication com = new Communication(1);
         com.start();*/
         //c BEA(int taille, int nbQ, int nbA, int nbS)
