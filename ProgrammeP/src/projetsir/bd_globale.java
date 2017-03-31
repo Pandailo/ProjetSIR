@@ -10,6 +10,8 @@
  */
 package projetsir;
 
+import java.util.*;
+
 /**
  *
  * @author Annabelle
@@ -21,13 +23,13 @@ package projetsir;
  * @author yv965015
  */
 public class bd_globale {
-     private Gestion_json g_json;
+    private Gestion_json g_json;
     private String chemin_schema_global;
     
     public bd_globale()
     {
         Parametres p = new Parametres();
-        this.chemin_schema_global = p.get_chemin_schemas()+"/bd_globale.json";
+        this.chemin_schema_global = p.get_chemin_schemas()+"/global.json";
         this.g_json = new Gestion_json(this.chemin_schema_global, true);
     }
     
@@ -75,6 +77,16 @@ public class bd_globale {
         return attributs;
     }
     
+    public String[] get_cles_primaires(String nom_table)
+    {
+        ArrayList<String> cles_primaires = new ArrayList<String>();
+        String[] attributs = this.get_liste_attributs_table(nom_table);
+        for(int i=0; i<attributs.length; i++)
+            if(this.is_primary_key(nom_table, attributs[i]))
+                cles_primaires.add(attributs[i]);
+        return (String[])cles_primaires.toArray();
+    }
+    
     private int get_indice_attribut(String nom_table, String nom_attribut)
     {
         int i = this.get_indice_table(nom_table);
@@ -107,5 +119,67 @@ public class bd_globale {
             return null;
     }
     
+    public int[] get_num_serveurs(String nom_table, String nom_attribut)
+    {
+        int i = this.get_indice_table(nom_table);
+        int j = this.get_indice_attribut(nom_table, nom_attribut);
+        if(i!=-1 && j!=-1)
+        {
+            int[] serveurs = null;
+            int taille = this.g_json.get_taille_tableau_imbrique_niveau_2("tables", i, "attributs", j, "serveurs");
+            if(taille!=-1)
+            {
+                serveurs = new int[taille];
+                for(int k=0; k<serveurs.length; k++)
+                    serveurs[k] = (int)(long)this.g_json.get_attribut_tableau_imbrique_niveau_2("tables", i, "attributs", j, "serveurs", k, "num_serveur");
+            }
+            return serveurs;
+        }
+        else
+            return null;
+    }
     
+    public int get_nb_fragments(String nom_table)
+    {
+        int i = this.get_indice_table(nom_table);
+        if(i!=-1)
+            return this.g_json.get_taille_tableau_imbrique_niveau_1("tables", i, "fragments");
+        else
+            return -1;
+    }
+    
+    //Dimension 0 : nom de l'attribut
+    //Dimension 1 : signe de comparaison
+    //Dimension 2 : valeur de comparaison
+    public String[][] get_attributs_fragment(String nom_table, int fragment)
+    {
+        String[][] attributs = null;
+        int table = this.get_indice_table(nom_table);
+        int nb_attributs = this.g_json.get_taille_tableau_imbrique_niveau_2("tables", table, "fragments", fragment, "attributs");
+        if(nb_attributs!=-1)
+        {
+            attributs = new String[nb_attributs][3];
+            for(int i=0; i<nb_attributs; i++)
+            {
+                attributs[i][0] = (String)this.g_json.get_attribut_tableau_imbrique_niveau_2("tables", table, "fragments", fragment, "attributs", i, "attribut");
+                attributs[i][1] = (String)this.g_json.get_attribut_tableau_imbrique_niveau_2("tables", table, "fragments", fragment, "attributs", i, "signe");
+                attributs[i][2] = (String)this.g_json.get_attribut_tableau_imbrique_niveau_2("tables", table, "fragments", fragment, "attributs", i, "valeur");
+            }
+        }
+        return attributs;
+    }
+    
+    public int[] get_serveurs_fragment(String nom_table, int fragment)
+    {
+        int i = this.get_indice_table(nom_table);
+        if(i!=-1)
+        {
+            int[] serveurs = new int[this.g_json.get_taille_tableau_imbrique_niveau_2("tables", i, "fragments", fragment, "serveurs")];
+            for(int k=0; k<serveurs.length; k++)
+                serveurs[k] = (int)(long)this.g_json.get_attribut_tableau_imbrique_niveau_2("tables", i, "fragments", fragment, "serveurs", k, "num_serveur");
+            return serveurs;
+        }
+        else
+            return null;
+    }
 }

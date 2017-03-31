@@ -86,7 +86,7 @@ public class Initialisation {
     {
         String s ="\t\t{\n\t\t\t\"nom\":\""+table+"\",\n";
         s += "\t\t\t\"fragmentation\":\"verticale\",\n";
-        s += "\t\t\t\"atributs\":\n\t\t\t[\n";
+        s += "\t\t\t\"attributs\":\n\t\t\t[\n";
         try 
         {
             List<String> cles_primaires = this.getPrimary_keys(table);

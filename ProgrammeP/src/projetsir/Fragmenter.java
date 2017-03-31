@@ -35,21 +35,20 @@ public class Fragmenter extends javax.swing.JFrame {
     private void initComponents() {
 
         Titre = new javax.swing.JLabel();
-        Liste_tables = new javax.swing.JComboBox<>();
+        Liste_tables = new javax.swing.JComboBox<String>();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         f_verticale = new javax.swing.JButton();
         f_horizontale = new javax.swing.JButton();
         Valider = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.BorderLayout(0, 2));
 
         Titre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Titre.setText("Fragmenter");
         getContentPane().add(Titre, java.awt.BorderLayout.NORTH);
 
-        Liste_tables.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Liste_tables.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         Liste_tables.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Liste_tablesActionPerformed(evt);

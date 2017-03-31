@@ -68,7 +68,6 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         Quitter_button = new javax.swing.JButton();
         Lancer_button = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Fragmentation verticale");
         setPreferredSize(new java.awt.Dimension(900, 600));
 

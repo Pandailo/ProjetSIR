@@ -4,7 +4,7 @@
 		{
 			"nom":"SIR_TEST",
 			"fragmentation":"verticale",
-			"atributs":
+			"attributs":
 			[
 				{
 					"nom_attribut":"ID",
@@ -33,7 +33,7 @@
 		{
 			"nom":"SIR_TEST2",
 			"fragmentation":"verticale",
-			"atributs":
+			"attributs":
 			[
 				{
 					"nom_attribut":"ID1",
