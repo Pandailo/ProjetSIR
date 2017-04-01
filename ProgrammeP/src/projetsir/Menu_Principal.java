@@ -5,6 +5,9 @@
  */
 package projetsir;
 
+import java.io.File;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author yv965015
@@ -33,9 +36,10 @@ public class Menu_Principal extends javax.swing.JFrame {
         Parametrer = new javax.swing.JButton();
         Fragmenter = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        Initialiser = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
@@ -58,16 +62,15 @@ public class Menu_Principal extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+        jPanel3.setLayout(new java.awt.GridLayout());
+
+        Initialiser.setText("Initialiser");
+        Initialiser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InitialiserActionPerformed(evt);
+            }
+        });
+        jPanel3.add(Initialiser);
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
@@ -80,6 +83,38 @@ public class Menu_Principal extends javax.swing.JFrame {
         Fragmenter f=new Fragmenter();
         f.setVisible(true);
     }//GEN-LAST:event_FragmenterActionPerformed
+
+    private void InitialiserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InitialiserActionPerformed
+        //Désactivation des boutons
+        this.Initialiser.setEnabled(false);
+        this.Parametrer.setEnabled(false);
+        this.Fragmenter.setEnabled(false);
+        JOptionPane jop = new JOptionPane();    	
+        int option = jop.showConfirmDialog(null, "Voulez-vous lancer l'initialisation ?", "Lancement de l'initialisation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if(option == JOptionPane.OK_OPTION)
+        {
+            Parametres parametres = new Parametres();
+            File f = new File(parametres.get_chemin_schemas()+"/global.json");
+            if(f.exists())
+                option = jop.showConfirmDialog(null, "Il semble qu'une initialisation ait déjà été faite, êtes-vous sûr de vouloir continuer ? (résultats non garantis)", "Lancement de l'initialisation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if(option==JOptionPane.OK_OPTION)
+            {
+                Initialisation initialisation = new Initialisation();
+                System.out.println("Initialisation du schéma terminée.");
+                Communication communication = new Communication(1);
+                communication.start();
+                System.out.println("Envoi du schéma terminée.");
+                jop.showMessageDialog(null, "Initialisation terminée !", "Fin de l'initialisation", JOptionPane.INFORMATION_MESSAGE, null);
+            }
+            else
+                jop.showMessageDialog(null, "Initialisation anulée.", "Fin de l'initialisation", JOptionPane.INFORMATION_MESSAGE, null);
+        }
+        //Réactivation des boutons
+        this.Initialiser.setEnabled(true);
+        this.Parametrer.setEnabled(true);
+        this.Fragmenter.setEnabled(true);
+    }//GEN-LAST:event_InitialiserActionPerformed
 
     /**
      * @param args the command line arguments
@@ -118,6 +153,7 @@ public class Menu_Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Fragmenter;
+    private javax.swing.JButton Initialiser;
     private javax.swing.JButton Parametrer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

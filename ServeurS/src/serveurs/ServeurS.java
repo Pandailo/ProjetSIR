@@ -33,8 +33,8 @@ public class ServeurS {
         }*/
         //Parametres p = new Parametres();
         //p.ecriture_parametres();
-        /*Communication c = new Communication();
-        c.demarrer_serveur();*/
-        Communication_BD bd = new Communication_BD("ag092850", "ag092850");
+        Communication c = new Communication();
+        c.demarrer_serveur();
+        //Communication_BD bd = new Communication_BD("ag092850", "ag092850");
     } 
 }
