@@ -49,7 +49,7 @@ public class Menu_Principal extends javax.swing.JFrame {
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
-        Parametrer.setText("Parametrer");
+        Parametrer.setText("Paramétrer");
         jPanel2.add(Parametrer);
 
         Fragmenter.setText("Fragmenter");
@@ -62,7 +62,7 @@ public class Menu_Principal extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
 
-        jPanel3.setLayout(new java.awt.GridLayout());
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         Initialiser.setText("Initialiser");
         Initialiser.addActionListener(new java.awt.event.ActionListener() {

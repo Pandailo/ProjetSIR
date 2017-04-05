@@ -55,7 +55,7 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="Parametrer">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Parametrer"/>
+                <Property name="text" type="java.lang.String" value="Param&#xe9;trer"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="Fragmenter">
