@@ -9,6 +9,7 @@ package projetsir;
  *
  * @author yv965015
  */
-public class Frag_Horizontale {
+public class Frag_Horizontale 
+{
     
 }
