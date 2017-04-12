@@ -40,9 +40,7 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         initComponents();
         nbR++;
         nbS++;
-        nbA++;
-        //@todo
-                
+        nbA++;       
         Pan_Dis.setLayout(new GridLayout(nbR,nbS));
         Pan_Ut.setLayout(new GridLayout(nbR,nbA));
         this.creationMatDis(nbR, nbS,liste_att);
