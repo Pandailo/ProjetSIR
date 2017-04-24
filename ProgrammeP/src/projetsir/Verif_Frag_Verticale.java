@@ -15,6 +15,8 @@ import javax.swing.JLabel;
  */
 public class Verif_Frag_Verticale extends javax.swing.JFrame
 {
+    String table;
+    int[][] frag;
 
     /**
      * Creates new form Verif_Frag_Verticale
@@ -23,6 +25,8 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
     {
         initComponents();
         this.nom_table.setText(table);
+        this.table=table;
+        this.frag=frag;
         //1er fragment,2° attribut, si 1 là
         bd_globale bd=new bd_globale();
         String[] cleP=bd.get_cles_primaires(table);
@@ -65,9 +69,9 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
                 {
                     if(j==0)
                     {
-                        JLabel nomA=new JLabel();
-                        nomA.setText("Fragment "+i);
-                        pan_frag.add(nomA); 
+                        JLabel nomF=new JLabel();
+                        nomF.setText("Fragment "+i);
+                        pan_frag.add(nomF); 
                     }
                     else
                     {
@@ -135,6 +139,13 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
         pan_buttons.add(annuler_button);
 
         valider_button.setText("Valider");
+        valider_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                valider_buttonActionPerformed(evt);
+            }
+        });
         pan_buttons.add(valider_button);
 
         pan_principal.add(pan_buttons, java.awt.BorderLayout.SOUTH);
@@ -161,6 +172,12 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
     {//GEN-HEADEREND:event_annuler_buttonActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_annuler_buttonActionPerformed
+
+    private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_valider_buttonActionPerformed
+    {//GEN-HEADEREND:event_valider_buttonActionPerformed
+        Confirmation_Frag_Verticale conf_frag = new Confirmation_Frag_Verticale(table,frag);
+        conf_frag.setVisible(true);
+    }//GEN-LAST:event_valider_buttonActionPerformed
 
     /**
      * @param args the command line arguments
