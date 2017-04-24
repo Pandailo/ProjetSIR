@@ -50,6 +50,11 @@ public class Menu_Principal extends javax.swing.JFrame {
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
         Parametrer.setText("Paramétrer");
+        Parametrer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ParametrerActionPerformed(evt);
+            }
+        });
         jPanel2.add(Parametrer);
 
         Fragmenter.setText("Fragmenter");
@@ -115,6 +120,11 @@ public class Menu_Principal extends javax.swing.JFrame {
         this.Parametrer.setEnabled(true);
         this.Fragmenter.setEnabled(true);
     }//GEN-LAST:event_InitialiserActionPerformed
+
+    private void ParametrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ParametrerActionPerformed
+        Dlg_parametres dlg = new Dlg_parametres();
+        dlg.setVisible(true);
+    }//GEN-LAST:event_ParametrerActionPerformed
 
     /**
      * @param args the command line arguments
