@@ -91,6 +91,7 @@ public class Fragmenter extends javax.swing.JFrame {
     }//GEN-LAST:event_Liste_tablesActionPerformed
 
     private void ValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValiderActionPerformed
+        //Tout doux Ecrire le résultat en JSON
         this.setVisible(false);
     }//GEN-LAST:event_ValiderActionPerformed
 

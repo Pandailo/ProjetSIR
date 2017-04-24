@@ -5,6 +5,8 @@
  */
 package projetsir;
 
+import sun.awt.X11.XConstants;
+
 /**
  *
  * @author profil
@@ -23,8 +25,12 @@ public class BEA
     {
         this.matrice_utilisation = matrice_utilisation;
         this.matrice_distribution = matrice_distribution;
+        System.out.println("mat_ut "+matrice_utilisation.length);
+        System.out.println("mat_ut[0] "+matrice_utilisation[0].length);
+        System.out.println("mat_dis "+matrice_distribution.length);
+        System.out.println("mat_dis[0] "+matrice_distribution[0].length);
         nb_attributs=matrice_utilisation[0].length;
-        nb_sites=matrice_distribution[0].length;
+        nb_sites=matrice_distribution.length;
         nb_requetes=matrice_utilisation.length;
         matrice_affinite=new int[nb_attributs][nb_attributs];
         ordre_colonnes=new int[nb_attributs];

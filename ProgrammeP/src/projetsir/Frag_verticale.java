@@ -1,7 +1,8 @@
 
 package projetsir;
 
-public class Frag_verticale {
+public class Frag_verticale 
+{
     private String nom_table; //Nom de la tables concernée par la fragmentation
     private String[] nom_attributs; //Nom des attributs de la table
     private int nb_attributs; //Nombre d'attributs
@@ -10,7 +11,7 @@ public class Frag_verticale {
     private int[][] matrice_distribution; //Matrice distribution
     private int[][] matrice_utilisation; //Matrice d'utilisation
     private int[][] fragmentation; //Répartition des attributs dans les fragments
-    private BEA bea;
+    private BEA bea; 
     private CAM cam;
     
     public Frag_verticale(String nom_table, String[] nom_attributs, int nb_fragments, int[][] matrice_distribution, int[][] matrice_utilisation)

@@ -14,14 +14,22 @@ import javax.swing.*;
  */
 public class DLG_Frag_Verticale extends javax.swing.JFrame {
     Parametres param;
+    int nbR;
+    int nbS;
+    int nbA;
+    String table;
+    String[] liste_att;
+    int[][] mat_dis=null;
+    int[][] mat_ut=null;
     /**
      * Creates new form DLG_Frag_Verticale
      */
     public DLG_Frag_Verticale(String table) {
+        this.table=table;
         JOptionPane jop = new JOptionPane();
         String nbQ="";
         String message="Nombre de requêtes ?";
-        int nbR=0;
+        nbR=0;
         while(!nbQ.matches("^\\d+$")||nbQ.matches(""))
         {    
             nbQ = jop.showInputDialog(null, message, JOptionPane.QUESTION_MESSAGE);
@@ -33,10 +41,10 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
                 message="Nombre de requêtes en nombre positif ? ";
         }
         param=new Parametres();
-        int nbS=param.get_nb_serveurs();
+        nbS=param.get_nb_serveurs();
         bd_globale bdg=new bd_globale();
-        String[] liste_att=bdg.get_liste_attributs_table(table);
-        int nbA=liste_att.length;
+        liste_att=bdg.get_liste_attributs_table(table);
+        nbA=liste_att.length;
         initComponents();
         nbR++;
         nbS++;
@@ -56,7 +64,8 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         Pan_Ut = new javax.swing.JPanel();
@@ -109,8 +118,10 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
         Quitter_button.setText("Quitter fragmentation");
-        Quitter_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        Quitter_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 Quitter_buttonActionPerformed(evt);
             }
         });
@@ -118,6 +129,13 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
 
         Lancer_button.setText("Lancer fragmentation");
         Lancer_button.setToolTipText("");
+        Lancer_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                Lancer_buttonActionPerformed(evt);
+            }
+        });
         jPanel3.add(Lancer_button);
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
@@ -128,6 +146,64 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
     private void Quitter_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Quitter_buttonActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_Quitter_buttonActionPerformed
+
+    private void Lancer_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Lancer_buttonActionPerformed
+    {//GEN-HEADEREND:event_Lancer_buttonActionPerformed
+        int[][] mat_ut=new int[nbR-1][nbA-1];
+        int[][] mat_dis=new int[nbR-1][nbS-1];
+        int nb_fragments=nbS-1;
+        int u=0;
+        int k=0;
+        for(int i=4;i<nbR*nbA;i++)
+        {
+               if(this.Pan_Ut.getComponent(i).getClass()==JCheckBox.class)
+               {
+                   JCheckBox jb=(JCheckBox)this.Pan_Ut.getComponent(i);
+                   if(jb.isSelected())
+                        mat_ut[u][k]=1;
+                   else
+                        mat_ut[u][k]=0;
+                   k++;
+                   if(k>=nbA-1)
+                   {
+                       u++;
+                       k=0;
+                   }
+               }
+        }  
+        u=0;
+        k=0;
+        for(int i=6;i<nbR*nbS;i++)
+        {
+               if(this.Pan_Dis.getComponent(i).getClass()==JSpinner.class)
+               {
+                   JSpinner js=(JSpinner)this.Pan_Dis.getComponent(i);
+                   mat_dis[u][k]=Integer.parseInt(js.getValue().toString());
+                   k++;
+                   if(k>=nbR-1)
+                   {
+                       u++;
+                       k=0;
+                   }
+               }
+        } 
+        JOptionPane jop = new JOptionPane();
+        String nbFS="";
+        String message="Nombre de fragments ?";
+        int nbF=0;
+        while(!nbFS.matches("^\\d+$") || nbFS.matches("") || nbF>nbA || nbF<=1)
+        {    
+            nbFS = jop.showInputDialog(null, message, JOptionPane.QUESTION_MESSAGE);
+            if(nbFS.matches("^\\d+$") && !nbFS.matches(""))
+            {
+                nbF=Integer.parseInt(nbFS);
+            }
+            else
+                message="Nombre de fragments doit être inférieur au nombre d'attributs.";
+        }
+        Frag_verticale frag=new Frag_verticale(table,liste_att,nbF, mat_dis,mat_ut);
+        
+    }//GEN-LAST:event_Lancer_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -197,6 +273,7 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
                     {
                         SpinnerModel model = new SpinnerNumberModel();
                         JSpinner spin=new JSpinner(model);
+                        spin.setName(""+i+"_"+j);
                         Pan_Dis.add(spin);
                     }
                 }
@@ -242,6 +319,7 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
                     else
                     {
                         JCheckBox ch=new JCheckBox();
+                        ch.setName(""+i+"_"+j);
                         Pan_Ut.add(ch);
                     }
                 }
