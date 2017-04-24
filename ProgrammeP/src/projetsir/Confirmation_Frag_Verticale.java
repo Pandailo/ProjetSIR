@@ -45,7 +45,7 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
                     else
                     {
                         JLabel nomS=new JLabel();
-                        nomS.setText("Site :"+param.get_num_serveur(j));
+                        nomS.setText("Site :"+param.get_num_serveur(j-1));
                         pan_affichage.add(nomS);
                     }
                 }
@@ -88,7 +88,6 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
         pan_affichage = new javax.swing.JPanel();
         nom_table = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridLayout());
 
         pan_principal.setLayout(new java.awt.BorderLayout());
@@ -96,6 +95,13 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
         pan_button.setLayout(new java.awt.GridLayout());
 
         annuler_button.setText("Annuler");
+        annuler_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                annuler_buttonActionPerformed(evt);
+            }
+        });
         pan_button.add(annuler_button);
 
         valider_button.setText("Valider");
@@ -123,6 +129,11 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void annuler_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_annuler_buttonActionPerformed
+    {//GEN-HEADEREND:event_annuler_buttonActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_annuler_buttonActionPerformed
 
     /**
      * @param args the command line arguments
