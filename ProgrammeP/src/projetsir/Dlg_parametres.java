@@ -76,6 +76,9 @@ public class Dlg_parametres extends javax.swing.JFrame {
     {
         JButton jb = (JButton)evt.getSource();
         int num = Integer.parseInt(jb.getName().split("jb")[0]);
+        this.nb_serveurs--;
+        this.num_serveurs.remove((Object)num);
+        this.remplissageServeurs();
     }
     
     /**
@@ -174,7 +177,22 @@ public class Dlg_parametres extends javax.swing.JFrame {
     }//GEN-LAST:event_ValiderActionPerformed
 
     private void AjoutServeurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AjoutServeurActionPerformed
-        // TODO add your handling code here:
+        String numS = "";
+        int num = 0;
+        JOptionPane jop = new JOptionPane();
+        String message = "Entrer le numéro du serveur";
+        //Récupération du numéro de serveur
+        while(!numS.matches("^\\d+$") || numS.matches("") || num<=0 || this.num_serveurs.contains(num))
+        {    
+            numS = jop.showInputDialog(null, message, JOptionPane.QUESTION_MESSAGE);
+            if(numS.matches("^\\d+$"))
+            {
+                num=Integer.parseInt(numS);
+            }
+            else
+                message="Numéro du serveur positif, non nul et non attribué à un autre serveur.";
+        }
+        
     }//GEN-LAST:event_AjoutServeurActionPerformed
 
     /**
