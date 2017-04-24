@@ -29,7 +29,6 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
         String[] attS=bd.get_attributs_non_primaires(table);
         GridLayout gd=new GridLayout(frag.length+1,frag[0].length+1);
         this.pan_frag.setLayout(gd);
-        System.out.println("Taille :"+cleP.length);
         for(int i=0;i<frag.length+1;i++)
         {
             if(i==0)
@@ -84,6 +83,10 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
                         {
                             JCheckBox ch=new JCheckBox();
                             ch.setName(""+i+"_"+j);
+                            if(frag[i-1][j-(cleP.length+1)]!=-1)
+                            {
+                                ch.setSelected(true);
+                            }
                             this.pan_frag.add(ch);
                         }
                     }
@@ -111,7 +114,6 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
         valider_button = new javax.swing.JButton();
         pan_frag = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1080, 700));
         getContentPane().setLayout(new java.awt.GridLayout());
 
@@ -123,6 +125,13 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
         pan_buttons.setLayout(new java.awt.GridLayout());
 
         annuler_button.setText("Annuler");
+        annuler_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                annuler_buttonActionPerformed(evt);
+            }
+        });
         pan_buttons.add(annuler_button);
 
         valider_button.setText("Valider");
@@ -147,6 +156,11 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void annuler_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_annuler_buttonActionPerformed
+    {//GEN-HEADEREND:event_annuler_buttonActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_annuler_buttonActionPerformed
 
     /**
      * @param args the command line arguments
