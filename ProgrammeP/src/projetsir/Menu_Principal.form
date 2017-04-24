@@ -57,6 +57,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Param&#xe9;trer"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ParametrerActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="Fragmenter">
               <Properties>
