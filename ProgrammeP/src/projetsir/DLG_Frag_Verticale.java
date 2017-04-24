@@ -203,6 +203,8 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         }
         Frag_verticale frag=new Frag_verticale(table,liste_att,nbF, mat_dis,mat_ut); 
         int[][] res_frag=frag.get_fragmentation();
+        Verif_Frag_Verticale verif=new Verif_Frag_Verticale(table,res_frag);
+        verif.setVisible(true);
     }//GEN-LAST:event_Lancer_buttonActionPerformed
 
     /**
