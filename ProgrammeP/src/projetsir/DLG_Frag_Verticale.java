@@ -43,7 +43,7 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         param=new Parametres();
         nbS=param.get_nb_serveurs();
         bd_globale bdg=new bd_globale();
-        liste_att=bdg.get_liste_attributs_table(table);
+        liste_att=bdg.get_attributs_non_primaires(table);
         nbA=liste_att.length;
         initComponents();
         nbR++;
@@ -180,7 +180,7 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
                    JSpinner js=(JSpinner)this.Pan_Dis.getComponent(i);
                    mat_dis[u][k]=Integer.parseInt(js.getValue().toString());
                    k++;
-                   if(k>=nbR-1)
+                   if(k>=nbS-1)
                    {
                        u++;
                        k=0;
@@ -191,7 +191,7 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         String nbFS="";
         String message="Nombre de fragments ?";
         int nbF=0;
-        while(!nbFS.matches("^\\d+$") || nbFS.matches("") || nbF>nbA || nbF<=1)
+        while(!nbFS.matches("^\\d+$") || nbFS.matches("") || nbF>=nbA || nbF<=1)
         {    
             nbFS = jop.showInputDialog(null, message, JOptionPane.QUESTION_MESSAGE);
             if(nbFS.matches("^\\d+$") && !nbFS.matches(""))
@@ -201,8 +201,8 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
             else
                 message="Nombre de fragments doit être inférieur au nombre d'attributs.";
         }
-        Frag_verticale frag=new Frag_verticale(table,liste_att,nbF, mat_dis,mat_ut);
-        
+        Frag_verticale frag=new Frag_verticale(table,liste_att,nbF, mat_dis,mat_ut); 
+        int[][] res_frag=frag.get_fragmentation();
     }//GEN-LAST:event_Lancer_buttonActionPerformed
 
     /**

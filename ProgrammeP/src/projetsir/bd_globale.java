@@ -77,6 +77,16 @@ public class bd_globale {
         return attributs;
     }
     
+    public String[] get_attributs_non_primaires(String nom_table)
+    {
+        ArrayList<String> cles_non_primaires = new ArrayList<String>();
+        String[] attributs = this.get_liste_attributs_table(nom_table);
+        for(int i=0; i<attributs.length; i++)
+            if(!this.is_primary_key(nom_table, attributs[i]))
+                cles_non_primaires.add(attributs[i]);
+        return (String[])cles_non_primaires.toArray();
+    }
+    
     public String[] get_cles_primaires(String nom_table)
     {
         ArrayList<String> cles_primaires = new ArrayList<String>();
