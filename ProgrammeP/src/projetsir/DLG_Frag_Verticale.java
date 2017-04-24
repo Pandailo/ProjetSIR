@@ -187,6 +187,7 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
                    }
                }
         } 
+        
         JOptionPane jop = new JOptionPane();
         String nbFS="";
         String message="Nombre de fragments ?";

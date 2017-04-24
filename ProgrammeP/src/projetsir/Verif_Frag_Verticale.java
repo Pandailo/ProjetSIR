@@ -27,14 +27,15 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
         bd_globale bd=new bd_globale();
         String[] cleP=bd.get_cles_primaires(table);
         String[] attS=bd.get_attributs_non_primaires(table);
-        GridLayout gd=new GridLayout(frag.length,attS.length+1);
+        GridLayout gd=new GridLayout(frag.length+1,frag[0].length+1);
         this.pan_frag.setLayout(gd);
-        for(int i=0;i<frag.length;i++)
+        System.out.println("Taille :"+cleP.length);
+        for(int i=0;i<frag.length+1;i++)
         {
             if(i==0)
             {
 
-                for(int j=0;j<attS.length+2;j++)
+                for(int j=0;j<attS.length+cleP.length+1;j++)
                 {
                     if(j==0)
                     {
@@ -44,7 +45,7 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
                     }
                     else
                     {
-                        if(j==1)
+                        if(j<cleP.length+1)
                         {
                             JLabel nomA=new JLabel();
                             nomA.setText("Attribut :"+cleP[j-1]);
@@ -53,7 +54,7 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
                         else
                         {
                             JLabel nomA=new JLabel();
-                            nomA.setText("Attribut :"+attS[j-2]);
+                            nomA.setText("Attribut :"+attS[j-(cleP.length+1)]);
                             pan_frag.add(nomA);
                         }
                     }
@@ -61,7 +62,7 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
             }
             else
             {
-                 for(int j=0;j<attS.length+2;j++)
+                 for(int j=0;j<attS.length+cleP.length+1;j++)
                 {
                     if(j==0)
                     {
@@ -71,10 +72,12 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
                     }
                     else
                     {
-                        if(j==1)
+                        if(j<cleP.length+1)
                         {
                             JCheckBox ch=new JCheckBox();
                             ch.setName("cleP");
+                            ch.setEnabled(false);
+                            ch.setSelected(true);
                             this.pan_frag.add(ch);
                         }
                         else
@@ -109,6 +112,7 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
         pan_frag = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1080, 700));
         getContentPane().setLayout(new java.awt.GridLayout());
 
         pan_principal.setLayout(new java.awt.BorderLayout());
