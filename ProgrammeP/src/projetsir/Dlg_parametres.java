@@ -50,14 +50,14 @@ public class Dlg_parametres extends javax.swing.JFrame {
             {
                 //Ne pas ajouter le serveur si c'est le local
                 JLabel jl = new JLabel();
-                jl.setText("Serveur "+(i+1)+" : ");
+                jl.setText("Serveur "+(this.num_serveurs.get(i))+" : ");
                 SpinnerModel model = new SpinnerNumberModel();
                 JSpinner js = new JSpinner(model);
                 js.setValue(this.num_serveurs.get(i));
-                js.setName("js"+i);
+                js.setName("js "+i);
                 JButton jb = new JButton();
                 jb.setText("Supprimer");
-                jb.setName("jb"+i);
+                jb.setName("jb "+i);
                 //Ajout du listener
                 jb.addActionListener(new java.awt.event.ActionListener() 
                 {
@@ -70,14 +70,16 @@ public class Dlg_parametres extends javax.swing.JFrame {
                 this.Serveurs.add(jb);
             }
         }
+        this.setSize(this.getWidth()+1, this.getHeight()+1);
+        this.setSize(this.getWidth()-1, this.getHeight()-1);
     }
     
     private void supprimerServeur(java.awt.event.ActionEvent evt)
     {
         JButton jb = (JButton)evt.getSource();
-        int num = Integer.parseInt(jb.getName().split("jb")[0]);
+        int num = Integer.parseInt(jb.getName().split(" ")[1]);
         this.nb_serveurs--;
-        this.num_serveurs.remove((Object)num);
+        this.num_serveurs.remove(num);
         this.remplissageServeurs();
     }
     
@@ -173,7 +175,75 @@ public class Dlg_parametres extends javax.swing.JFrame {
     }//GEN-LAST:event_AnnulerActionPerformed
 
     private void ValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValiderActionPerformed
-        // TODO add your handling code here:
+        int num_serveur_local = (int)this.NumLocal.getValue();
+        String port_local = this.PortLocal.getText();
+        String login_bd = this.LoginBD.getText();
+        String mdp_bd = this.MdpBD.getText();
+        boolean valide = true;
+        JOptionPane jop = new JOptionPane();
+        String message = "Erreurs suivantes : ";
+        //Vérification du numéro de serveur local
+        if(num_serveur_local!=this.parametres.get_num_serveur_local())
+        {
+            if(num_serveur_local<0)
+            {
+                message += "\nLe numéro du serveur local doit être un entier positif.";
+                valide = false;
+            }
+            if(this.num_serveurs.contains(num_serveur_local))
+            {
+                message += "\nLe numéro du serveur local est déjà utilisé par un autre serveur.";
+                valide = false;
+            }
+        }
+        //Vérification du port local
+        if(!port_local.equals(""+this.parametres.get_port_serveur_local()))
+        {
+            if(!port_local.matches("[0-9]+"))
+            {
+                message += "\nLe numéro du port local doit être un entier positif.";
+                valide = false;
+            }
+        }
+        //Vérification des numéros de serveurs
+        List<Integer> num_serveurs_temp = new ArrayList<>();
+        if(valide)
+            num_serveurs_temp.add(num_serveur_local);
+        for(int i=1; i<this.Serveurs.getComponentCount(); i=i+3)
+        {
+            JSpinner js = (JSpinner)this.Serveurs.getComponent(i);
+            num_serveurs_temp.add((int)js.getValue());
+        }
+        Object[] num_serveurs_temp_tab = num_serveurs_temp.toArray();
+        for(int i=0; i<num_serveurs_temp_tab.length; i++)
+        {
+            for(int j=i+1; j<num_serveurs_temp_tab.length; j++)
+            {
+                if((int)num_serveurs_temp_tab[i]==(int)num_serveurs_temp_tab[j])
+                {
+                    message += "\nUn numéro de serveur est présent plusieurs fois.";
+                    valide = false;
+                }
+            }
+        }
+        //Ajout des paramètres dans le fichier
+        if(valide)
+        {
+            this.parametres.setNb_serveurs(num_serveurs_temp_tab.length);
+            this.parametres.setNum_serveur_local(num_serveur_local);
+            this.parametres.setPort_serveur_local(Integer.parseInt(port_local));
+            this.parametres.setBD_login(login_bd);
+            this.parametres.setBD_mdp(mdp_bd);
+            int[] new_serveurs = new int[num_serveurs_temp_tab.length];
+            for(int i=0; i<num_serveurs_temp_tab.length; i++)
+                new_serveurs[i] = (int)num_serveurs_temp_tab[i];
+            this.parametres.setNum_serveurs(new_serveurs);
+            this.parametres.ecriture_parametres();
+            System.out.println("Paramètre changés.");
+            this.setVisible(false);
+        }
+        else
+            jop.showMessageDialog(null, message, "Fin de l'initialisation", JOptionPane.INFORMATION_MESSAGE, null);
     }//GEN-LAST:event_ValiderActionPerformed
 
     private void AjoutServeurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AjoutServeurActionPerformed
@@ -181,18 +251,32 @@ public class Dlg_parametres extends javax.swing.JFrame {
         int num = 0;
         JOptionPane jop = new JOptionPane();
         String message = "Entrer le numéro du serveur";
+        boolean continuer = true;
         //Récupération du numéro de serveur
-        while(!numS.matches("^\\d+$") || numS.matches("") || num<=0 || this.num_serveurs.contains(num))
+        while(continuer && (!numS.matches("^\\d+$") || numS.matches("") || num<=0 || this.num_serveurs.contains(num)))
         {    
+            
             numS = jop.showInputDialog(null, message, JOptionPane.QUESTION_MESSAGE);
-            if(numS.matches("^\\d+$"))
+            if(numS!=null)
             {
-                num=Integer.parseInt(numS);
+                if(numS.matches("^\\d+$"))
+                {
+                    num=Integer.parseInt(numS);
+                    if(num<=0 || this.num_serveurs.contains(num))
+                        message="Numéro du serveur positif, non nul et non attribué à un autre serveur.";
+                }
+                else
+                    message="Numéro du serveur positif, non nul et non attribué à un autre serveur.";
             }
             else
-                message="Numéro du serveur positif, non nul et non attribué à un autre serveur.";
+                continuer = false;
         }
-        
+        if(continuer)
+        {
+            this.nb_serveurs++;
+            this.num_serveurs.add(num);
+            this.remplissageServeurs();
+        }
     }//GEN-LAST:event_AjoutServeurActionPerformed
 
     /**
