@@ -84,7 +84,10 @@ public class bd_globale {
         for(int i=0; i<attributs.length; i++)
             if(!this.is_primary_key(nom_table, attributs[i]))
                 cles_non_primaires.add(attributs[i]);
-        return (String[])cles_non_primaires.toArray();
+        String[] res = new String[cles_non_primaires.size()];
+        for(int i=0; i<res.length; i++)
+            res[i] = cles_non_primaires.get(i);
+        return res;
     }
     
     public String[] get_cles_primaires(String nom_table)
@@ -94,7 +97,10 @@ public class bd_globale {
         for(int i=0; i<attributs.length; i++)
             if(this.is_primary_key(nom_table, attributs[i]))
                 cles_primaires.add(attributs[i]);
-        return (String[])cles_primaires.toArray();
+        String[] res = new String[cles_primaires.size()];
+        for(int i=0; i<res.length; i++)
+            res[i] = cles_primaires.get(i);
+        return res;
     }
     
     private int get_indice_attribut(String nom_table, String nom_attribut)
