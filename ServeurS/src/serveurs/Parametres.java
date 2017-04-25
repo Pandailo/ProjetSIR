@@ -199,7 +199,7 @@ public class Parametres {
         contenu += "\n}";
         
         //Ecriture du fichier
-        Gestion_json ecriture = new Gestion_json("test.json", false);
+        Gestion_json ecriture = new Gestion_json("src/parametres/config.json", false);
         succes = ecriture.ecriture_json(contenu);
         
         //Récupération du nouveau fichier
