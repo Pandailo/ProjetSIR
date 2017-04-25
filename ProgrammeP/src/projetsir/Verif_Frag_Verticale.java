@@ -17,7 +17,8 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
 {
     String table;
     int[][] frag;
-
+    int nbS;
+    bd_globale bd;
     /**
      * Creates new form Verif_Frag_Verticale
      */
@@ -28,7 +29,7 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
         this.table=table;
         this.frag=frag;
         //1er fragment,2° attribut, si 1 là
-        bd_globale bd=new bd_globale();
+        bd =new bd_globale();
         String[] cleP=bd.get_cles_primaires(table);
         String[] attS=bd.get_attributs_non_primaires(table);
         GridLayout gd=new GridLayout(frag.length+1,frag[0].length+1);
@@ -51,13 +52,13 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
                         if(j<cleP.length+1)
                         {
                             JLabel nomA=new JLabel();
-                            nomA.setText("Attribut :"+cleP[j-1]);
+                            nomA.setText(""+cleP[j-1]);
                             pan_frag.add(nomA); 
                         }
                         else
                         {
                             JLabel nomA=new JLabel();
-                            nomA.setText("Attribut :"+attS[j-(cleP.length+1)]);
+                            nomA.setText(""+attS[j-(cleP.length+1)]);
                             pan_frag.add(nomA);
                         }
                     }
@@ -97,7 +98,53 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
                 }
             }
         }
-        
+        this.nom_table.setText(table);
+        //1er fragment,2° attribut, si 1 là
+        //bd_globale bd=new bd_globale();
+        Parametres param = new Parametres();
+        nbS = param.get_nb_serveurs();
+        GridLayout gd2=new GridLayout(frag.length+1,nbS+1);
+        this.pan_verif.setLayout(gd2);
+        for(int i=0;i<frag.length+1;i++)
+        {
+            if(i==0)
+            {
+
+                for(int j=0;j<nbS+1;j++)
+                {
+                    if(j==0)
+                    {
+                        JLabel nomS=new JLabel();
+                        nomS.setText("");
+                        pan_verif.add(nomS);
+                    }
+                    else
+                    {
+                        JLabel nomS=new JLabel();
+                        nomS.setText("Site :"+param.get_num_serveur(j-1));
+                        pan_verif.add(nomS);
+                    }
+                }
+            }
+            else
+            {
+                 for(int j=0;j<nbS+1;j++)
+                {
+                    if(j==0)
+                    {
+                        JLabel nomF=new JLabel();
+                        nomF.setText("Fragment "+i);
+                        pan_verif.add(nomF); 
+                    }
+                    else
+                    {
+                        JCheckBox ch=new JCheckBox();
+                        ch.setName(""+i+"_"+j);
+                        this.pan_verif.add(ch);
+                    }
+                }
+            }
+        }
         
     }
 
@@ -113,20 +160,56 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
 
         pan_principal = new javax.swing.JPanel();
         nom_table = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        pan_frag = new javax.swing.JPanel();
+        pan_verif = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         pan_buttons = new javax.swing.JPanel();
         annuler_button = new javax.swing.JButton();
-        valider_button = new javax.swing.JButton();
-        pan_frag = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        valider_button_dis = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1080, 700));
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         pan_principal.setLayout(new java.awt.BorderLayout());
 
         nom_table.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         pan_principal.add(nom_table, java.awt.BorderLayout.NORTH);
 
-        pan_buttons.setLayout(new java.awt.GridLayout());
+        jPanel1.setLayout(new java.awt.GridLayout(1, 2));
+
+        javax.swing.GroupLayout pan_fragLayout = new javax.swing.GroupLayout(pan_frag);
+        pan_frag.setLayout(pan_fragLayout);
+        pan_fragLayout.setHorizontalGroup(
+            pan_fragLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 285, Short.MAX_VALUE)
+        );
+        pan_fragLayout.setVerticalGroup(
+            pan_fragLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 275, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(pan_frag);
+
+        javax.swing.GroupLayout pan_verifLayout = new javax.swing.GroupLayout(pan_verif);
+        pan_verif.setLayout(pan_verifLayout);
+        pan_verifLayout.setHorizontalGroup(
+            pan_verifLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 285, Short.MAX_VALUE)
+        );
+        pan_verifLayout.setVerticalGroup(
+            pan_verifLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 275, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(pan_verif);
+
+        pan_principal.add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        jPanel2.setLayout(new java.awt.GridLayout(1, 2));
+
+        pan_buttons.setLayout(new java.awt.GridLayout(1, 0));
 
         annuler_button.setText("Annuler");
         annuler_button.addActionListener(new java.awt.event.ActionListener()
@@ -138,30 +221,23 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
         });
         pan_buttons.add(annuler_button);
 
-        valider_button.setText("Valider");
-        valider_button.addActionListener(new java.awt.event.ActionListener()
+        jPanel3.setLayout(new java.awt.GridLayout());
+
+        valider_button_dis.setText("Valider distribution");
+        valider_button_dis.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                valider_buttonActionPerformed(evt);
+                valider_button_disActionPerformed(evt);
             }
         });
-        pan_buttons.add(valider_button);
+        jPanel3.add(valider_button_dis);
 
-        pan_principal.add(pan_buttons, java.awt.BorderLayout.SOUTH);
+        pan_buttons.add(jPanel3);
 
-        javax.swing.GroupLayout pan_fragLayout = new javax.swing.GroupLayout(pan_frag);
-        pan_frag.setLayout(pan_fragLayout);
-        pan_fragLayout.setHorizontalGroup(
-            pan_fragLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        pan_fragLayout.setVerticalGroup(
-            pan_fragLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 275, Short.MAX_VALUE)
-        );
+        jPanel2.add(pan_buttons);
 
-        pan_principal.add(pan_frag, java.awt.BorderLayout.CENTER);
+        pan_principal.add(jPanel2, java.awt.BorderLayout.SOUTH);
 
         getContentPane().add(pan_principal);
 
@@ -173,11 +249,52 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
         this.setVisible(false);
     }//GEN-LAST:event_annuler_buttonActionPerformed
 
-    private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_valider_buttonActionPerformed
-    {//GEN-HEADEREND:event_valider_buttonActionPerformed
-        Confirmation_Frag_Verticale conf_frag = new Confirmation_Frag_Verticale(table,frag);
-        conf_frag.setVisible(true);
-    }//GEN-LAST:event_valider_buttonActionPerformed
+    private void valider_button_disActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_valider_button_disActionPerformed
+    {//GEN-HEADEREND:event_valider_button_disActionPerformed
+        int[][] distri=new int[frag.length][nbS];
+        int u=0;
+        int k=0;
+        for(int i=nbS+2;i<(nbS+1)*(frag.length+1);i++)
+        {
+               if(this.pan_verif.getComponent(i).getClass()==JCheckBox.class)
+               {
+                   JCheckBox jb=(JCheckBox)this.pan_verif.getComponent(i);
+                   if(jb.isSelected())
+                        distri[u][k]=1;
+                   else
+                        distri[u][k]=0;
+                   k++;
+                   if(k>=nbS)
+                   {
+                       u++;
+                       k=0;
+                   }
+               }
+        }  
+        int nbA=bd.get_nb_attributs(table);
+        int[][] mat_frag=new int[frag.length][nbA];
+        String[] att=bd.get_liste_attributs_table(table);
+        u=0;
+        k=0;
+        for(int i=nbA+2;i<(nbA+1)*(frag.length+1);i++)
+        {
+               if(this.pan_frag.getComponent(i).getClass()==JCheckBox.class)
+               {
+                   JCheckBox jb=(JCheckBox)this.pan_frag.getComponent(i);
+                   if(jb.isSelected())
+                        mat_frag[u][k]=1;
+                   else
+                        mat_frag[u][k]=0;
+                   k++;
+                   if(k>=nbA)
+                   {
+                       u++;
+                       k=0;
+                   }
+               }
+        }  
+        
+    }//GEN-LAST:event_valider_button_disActionPerformed
 
     /**
      * @param args the command line arguments
@@ -224,10 +341,14 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton annuler_button;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel nom_table;
     private javax.swing.JPanel pan_buttons;
     private javax.swing.JPanel pan_frag;
     private javax.swing.JPanel pan_principal;
-    private javax.swing.JButton valider_button;
+    private javax.swing.JPanel pan_verif;
+    private javax.swing.JButton valider_button_dis;
     // End of variables declaration//GEN-END:variables
 }

@@ -42,7 +42,7 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
         Parametres param = new Parametres();
         int nbS = param.get_nb_serveurs();
         GridLayout gd=new GridLayout(frag.length+1,nbS+1);
-        this.pan_affichage.setLayout(gd);
+        this.pan_verif.setLayout(gd);
         for(int i=0;i<frag.length+1;i++)
         {
             if(i==0)
@@ -54,13 +54,13 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
                     {
                         JLabel nomS=new JLabel();
                         nomS.setText("");
-                        pan_affichage.add(nomS);
+                        pan_verif.add(nomS);
                     }
                     else
                     {
                         JLabel nomS=new JLabel();
                         nomS.setText("Site :"+param.get_num_serveur(j-1));
-                        pan_affichage.add(nomS);
+                        pan_verif.add(nomS);
                     }
                 }
             }
@@ -72,13 +72,13 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
                     {
                         JLabel nomF=new JLabel();
                         nomF.setText("Fragment "+i);
-                        pan_affichage.add(nomF); 
+                        pan_verif.add(nomF); 
                     }
                     else
                     {
                         JCheckBox ch=new JCheckBox();
                         ch.setName(""+i+"_"+j);
-                        this.pan_affichage.add(ch);
+                        this.pan_verif.add(ch);
                     }
                 }
             }
@@ -98,8 +98,8 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
         pan_principal = new javax.swing.JPanel();
         pan_button = new javax.swing.JPanel();
         annuler_button = new javax.swing.JButton();
-        valider_button = new javax.swing.JButton();
-        pan_affichage = new javax.swing.JPanel();
+        valider_button_dis = new javax.swing.JButton();
+        pan_verif = new javax.swing.JPanel();
         nom_table = new javax.swing.JLabel();
 
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
@@ -118,30 +118,30 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
         });
         pan_button.add(annuler_button);
 
-        valider_button.setText("Valider");
-        valider_button.addActionListener(new java.awt.event.ActionListener()
+        valider_button_dis.setText("Valider");
+        valider_button_dis.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                valider_buttonActionPerformed(evt);
+                valider_button_disActionPerformed(evt);
             }
         });
-        pan_button.add(valider_button);
+        pan_button.add(valider_button_dis);
 
         pan_principal.add(pan_button, java.awt.BorderLayout.PAGE_END);
 
-        javax.swing.GroupLayout pan_affichageLayout = new javax.swing.GroupLayout(pan_affichage);
-        pan_affichage.setLayout(pan_affichageLayout);
-        pan_affichageLayout.setHorizontalGroup(
-            pan_affichageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pan_verifLayout = new javax.swing.GroupLayout(pan_verif);
+        pan_verif.setLayout(pan_verifLayout);
+        pan_verifLayout.setHorizontalGroup(
+            pan_verifLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)
         );
-        pan_affichageLayout.setVerticalGroup(
-            pan_affichageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pan_verifLayout.setVerticalGroup(
+            pan_verifLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 275, Short.MAX_VALUE)
         );
 
-        pan_principal.add(pan_affichage, java.awt.BorderLayout.CENTER);
+        pan_principal.add(pan_verif, java.awt.BorderLayout.CENTER);
 
         nom_table.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         pan_principal.add(nom_table, java.awt.BorderLayout.PAGE_START);
@@ -156,12 +156,12 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
         this.setVisible(false);
     }//GEN-LAST:event_annuler_buttonActionPerformed
 
-    private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_valider_buttonActionPerformed
-    {//GEN-HEADEREND:event_valider_buttonActionPerformed
+    private void valider_button_disActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_valider_button_disActionPerformed
+    {//GEN-HEADEREND:event_valider_button_disActionPerformed
         
-    }//GEN-LAST:event_valider_buttonActionPerformed
+    }//GEN-LAST:event_valider_button_disActionPerformed
 
-    private String construction_table(String table,int[][] sel)
+    private String construction_table(String table,int[][] sel,String[] frags,String[] atts)
     {
         Parametres parametres = new Parametres();
         String login = parametres.getBD_login();
@@ -274,9 +274,9 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton annuler_button;
     private javax.swing.JLabel nom_table;
-    private javax.swing.JPanel pan_affichage;
     private javax.swing.JPanel pan_button;
     private javax.swing.JPanel pan_principal;
-    private javax.swing.JButton valider_button;
+    private javax.swing.JPanel pan_verif;
+    private javax.swing.JButton valider_button_dis;
     // End of variables declaration//GEN-END:variables
 }

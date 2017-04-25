@@ -154,7 +154,7 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         int nb_fragments=nbS-1;
         int u=0;
         int k=0;
-        for(int i=4;i<nbR*nbA;i++)
+        for(int i=nbA+2;i<nbR*nbA;i++)
         {
                if(this.Pan_Ut.getComponent(i).getClass()==JCheckBox.class)
                {
