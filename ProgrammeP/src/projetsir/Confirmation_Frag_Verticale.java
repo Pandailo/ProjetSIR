@@ -6,6 +6,20 @@
 package projetsir;
 
 import java.awt.GridLayout;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Array;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
@@ -88,11 +102,11 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
         pan_affichage = new javax.swing.JPanel();
         nom_table = new javax.swing.JLabel();
 
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         pan_principal.setLayout(new java.awt.BorderLayout());
 
-        pan_button.setLayout(new java.awt.GridLayout());
+        pan_button.setLayout(new java.awt.GridLayout(1, 0));
 
         annuler_button.setText("Annuler");
         annuler_button.addActionListener(new java.awt.event.ActionListener()
@@ -105,6 +119,13 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
         pan_button.add(annuler_button);
 
         valider_button.setText("Valider");
+        valider_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                valider_buttonActionPerformed(evt);
+            }
+        });
         pan_button.add(valider_button);
 
         pan_principal.add(pan_button, java.awt.BorderLayout.PAGE_END);
@@ -135,6 +156,79 @@ public class Confirmation_Frag_Verticale extends javax.swing.JFrame
         this.setVisible(false);
     }//GEN-LAST:event_annuler_buttonActionPerformed
 
+    private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_valider_buttonActionPerformed
+    {//GEN-HEADEREND:event_valider_buttonActionPerformed
+        
+    }//GEN-LAST:event_valider_buttonActionPerformed
+
+    private String construction_table(String table,int[][] sel)
+    {
+        Parametres parametres = new Parametres();
+        String login = parametres.getBD_login();
+        String mdp = parametres.getBD_mdp();
+        int num_serveur = parametres.get_num_serveur_local();
+        bd_globale bd=new bd_globale();
+        String s ="\t\t{\n\t\t\t\"nom\":\""+table+"\",\n";
+        s += "\t\t\t\"fragmentation\":\"verticale\",\n";
+        s += "\t\t\t\"attributs\":\n\t\t\t[\n";
+        Connection connect=null;
+        String url;
+        try 
+        {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            url = "jdbc:oracle:thin:@butor:1521:ensb2016";
+            connect = DriverManager.getConnection(url, login, mdp);
+            System.out.println("Connecté à la BD depuis la fac.");
+        } 
+        catch (SQLException ex) 
+        {
+            url = "jdbc:oracle:thin:@ufrsciencestech.u-bourgogne.fr:25561:ensb2016";
+            try 
+            {
+                connect = DriverManager.getConnection(url, login, mdp);
+                System.out.println("Connecté à la BD depuis l'extérieur de la fac.");
+            } 
+            catch (SQLException ex1) 
+            {
+                Logger.getLogger(Initialisation.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Initialisation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try 
+        {
+            String[] cles_primaires = bd.get_cles_primaires(table);
+            List<String> pks=Arrays.asList(cles_primaires);
+            Statement stmt = connect.createStatement();
+            ResultSet res = stmt.executeQuery("SELECT * FROM "+table);
+            ResultSetMetaData rsmd = res.getMetaData();
+            int nb_attributs = rsmd.getColumnCount();
+            String nom_attribut = "";
+            for(int i=1; i<=nb_attributs; i++)
+            {
+                nom_attribut = rsmd.getColumnName(i);
+                s += "\t\t\t\t{\n\t\t\t\t\t\"nom_attribut\":\""+nom_attribut+"\",\n";
+                s+= "\t\t\t\t\t\"cle_primaire\":";
+                if(pks.contains(nom_attribut))
+                    s += "\"oui\",\n";
+                else
+                    s += "\"non\",\n";
+                s += "\t\t\t\t\t\"type\":\""+rsmd.getColumnTypeName(i)+"("+rsmd.getPrecision(i)+")\",\n";
+                s += "\t\t\t\t\t\"serveurs\":\n\t\t\t\t\t[\n\t\t\t\t\t\t{\n";
+                s += "\t\t\t\t\t\t\t\"num_serveur\":"+num_serveur+"\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n";
+                s += "\t\t\t\t}";
+                if(i<nb_attributs)
+                    s += ",";
+                s += "\n";
+            }    
+        } 
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(Initialisation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        s += "\t\t\t]\n\t\t}";
+        return s;
+    }
     /**
      * @param args the command line arguments
      */
