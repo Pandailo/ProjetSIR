@@ -44,6 +44,11 @@ public class Menu extends javax.swing.JFrame {
         jPanel1.setLayout(new java.awt.GridLayout(1, 2));
 
         param_button.setText("Paramétrer");
+        param_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                param_buttonActionPerformed(evt);
+            }
+        });
         jPanel1.add(param_button);
 
         request_button.setText("Faire une requête");
@@ -75,6 +80,11 @@ public class Menu extends javax.swing.JFrame {
         DLG_Requete dlg_r=new DLG_Requete();
         dlg_r.setVisible(true);
     }//GEN-LAST:event_request_buttonActionPerformed
+
+    private void param_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_param_buttonActionPerformed
+        Dlg_parametres dlg = new Dlg_parametres();
+        dlg.setVisible(true);
+    }//GEN-LAST:event_param_buttonActionPerformed
 
     /**
      * @param args the command line arguments
