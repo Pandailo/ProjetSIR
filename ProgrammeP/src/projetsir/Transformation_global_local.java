@@ -5,6 +5,11 @@
  */
 package projetsir;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Annabelle
@@ -26,19 +31,49 @@ public class Transformation_global_local
         {
             this.num_serveur = this.parametres.get_num_serveur(i);
             contenu = this.creer_local();
-            System.out.println(contenu);
+            this.ecrire_fichier(contenu);
         }
     }
     
-    public String creer_local()
+    private void ecrire_fichier(String contenu)
+    {
+        String chemin_schemas = this.parametres.get_chemin_schemas();
+        try
+        {
+            FileWriter file_writer = new FileWriter(chemin_schemas+"/local_"+this.num_serveur+".json");
+            file_writer.write(contenu);
+            file_writer.close();
+            System.out.println("Fichier local_"+this.num_serveur+" écrit.");
+        } 
+        catch (IOException ex)
+        {
+            Logger.getLogger(Transformation_global_local.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private String creer_local()
     {
         String contenu = "";
-        contenu += "{\n\t\"tables\":\n\t[\n;";
+        contenu += "{\n\t\"tables\":\n\t[\n";
+        String a_ecrire = "";
+        boolean virgule = false;
         for(int i=0; i<this.nom_tables.length; i++)
         {
-            //vérifier le type de la fragmentation
+            if(this.bd.get_fragmentation_table(this.nom_tables[i]).equals("verticale"))
+                a_ecrire += this.construction_table_frag_verticale(this.nom_tables[i]);
+            else
+                a_ecrire += this.construction_table_frag_horizontale(this.nom_tables[i]);
+            if(!a_ecrire.equals(""))
+            {
+                if(virgule)
+                    contenu += ",";
+                contenu += "\n";
+                contenu += a_ecrire;
+                a_ecrire = "";
+                virgule = true;
+            }
         }
-        contenu += "\t]\n}";
+        contenu += "\n\t]\n}";
         return contenu;
     }
     
@@ -53,10 +88,11 @@ public class Transformation_global_local
         boolean ecrire_attribut = false;
         for(int i=0; i<nb_attributs; i++)
         {
+            nom_attribut = attributs[i];
             ecrire_attribut = false;
             serveurs = this.bd.get_num_serveurs(table, nom_attribut);
             for(int j=0; j<serveurs.length; j++)
-                if(serveurs[i]==this.num_serveur)
+                if(serveurs[j]==this.num_serveur)
                 {
                     j = serveurs.length;
                     ecrire_attribut = true;
@@ -88,7 +124,7 @@ public class Transformation_global_local
             }
         }
         if(attributs_concernes>0)
-            s += "\t\t\t]\n\t\t}";
+            s += "\n\t\t\t]\n\t\t}";
         return s;
     }
     
@@ -129,12 +165,12 @@ public class Transformation_global_local
                     s += "\"non\",\n";
                 s += "\t\t\t\t\t\"type\":\""+this.bd.get_type_attribut(table, nom_attribut)+"\"\n";
                 s += "\t\t\t\t}";
-                if(i<nb_attributs)
+                if(i<nb_attributs-1)
                     s += ",";
                 s += "\n";
             }
             s += "\t\t\t],\n";
-            s += "\t\t\t\"fragments\":\n\t\t\t[\n";
+            
             //Ecriture fragments
             String[][] fragment;
             int fragments_concernes = 0;
@@ -155,42 +191,26 @@ public class Transformation_global_local
                 {
                     if(fragments_concernes==1)
                     {
-                        s += "\t\t\t\t{\n\t\t\t\t\t\"fragments\":\""+nom_attribut+"\",\n";
-                        s += "\t\t\t\t\t[\n\t\t\t\t\t\t{\n";
+                        s += "\t\t\t\"fragments\":\n\t\t\t[\n";
+                        s += "\t\t\t\t{";
                     }
                     else
-                    {
                         s += ",";
-                        s += "\n";
-                    }
-                    /*"attributs":
-                    [
-                        {
-                            "attribut":"nom_attribut1",
-                            "signe":"<",
-                            "valeur":"val_1"
-                        },
-                        {
-                            "attribut":"nom_attribut2",
-                            "signe":"==",
-                            "valeur":"val_2"
-                        }
-                    ]*/
-                    s += "\n\t\t\t\t\t\t\t\"attributs\":\n";
-                    s += "\n\t\t\t\t\t\t\t[\n";
+                    s += "\n\t\t\t\t\t\"attributs\":";
+                    s += "\n\t\t\t\t\t[\n";
                     
                     for(int j=0; j<fragment.length; j++)
                     {
-                        s += "\t\t\t\t\t\t\t{\n";
-                        s += "\t\t\t\t\t\t\t\t\"attribut\":"+fragment[j][0]+"\",\n";
-                        s += "\t\t\t\t\t\t\t\t\"signe\":"+fragment[j][1]+"\",\n";
-                        s += "\t\t\t\t\t\t\t\t\"valeur\":"+fragment[j][2]+"\"\n";
-                        s += "\t\t\t\t\t\t\t}\n";
-                        if(i<fragment.length-1)
+                        s += "\t\t\t\t\t\t{\n";
+                        s += "\t\t\t\t\t\t\t\"attribut\":\""+fragment[j][0]+"\",\n";
+                        s += "\t\t\t\t\t\t\t\"signe\":\""+fragment[j][1]+"\",\n";
+                        s += "\t\t\t\t\t\t\t\"valeur\":\""+fragment[j][2]+"\"\n";
+                        s += "\t\t\t\t\t\t}";
+                        if(j<fragment.length-1)
                             s += ",";
                         s += "\n";
                     }
-                    s += "\n\t\t\t\t\t\t\t]";
+                    s += "\t\t\t\t\t]\n\t\t\t\t}";
                 }
             }  
             s += "\n\t\t\t]\n\t\t}";

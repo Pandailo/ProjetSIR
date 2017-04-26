@@ -55,6 +55,11 @@ public class bd_globale {
         return -1;
     }
     
+    public String get_fragmentation_table(String nom_table)
+    {
+        int i = this.get_indice_table(nom_table);
+        return this.g_json.get_attribut_tableau("tables", i, "fragmentation").toString();
+    }
     
     public int get_nb_attributs(String nom_table)
     {
