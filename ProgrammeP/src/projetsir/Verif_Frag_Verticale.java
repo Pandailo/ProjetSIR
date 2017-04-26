@@ -174,7 +174,7 @@ private void construction_fichier(String chemin_schemas)
         FileWriter out = null;
         try
         {
-            out = new FileWriter(new File(chemin_schemas+"/tablefrag.json"));
+            out = new FileWriter(new File(chemin_schemas));
             out.write(contenu);
             out.close();
             System.out.println("Fichier créé.");
@@ -186,95 +186,55 @@ private void construction_fichier(String chemin_schemas)
     }
     private String construction_table(String table, int[][] site_att)
     {
-        String login = parametres.getBD_login();
-        String mdp = parametres.getBD_mdp();
-        String url;
         String s ="\t\t{\n\t\t\t\"nom\":\""+table+"\",\n";
         s += "\t\t\t\"fragmentation\":\"verticale\",\n";
         s += "\t\t\t\"attributs\":\n\t\t\t[\n";
-        
-        try 
+
+        String[] pk = bd.get_cles_primaires(table);
+        List<String> cles_primaires =Arrays.asList(pk);
+        String[] att = new String[cleP.length+attS.length];
+        for(int i=0;i<cleP.length;i++)
         {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            url = "jdbc:oracle:thin:@butor:1521:ensb2016";
-            connect = DriverManager.getConnection(url, login, mdp);
-            System.out.println("Connecté à la BD depuis la fac.");
-        } 
-        catch (SQLException ex) 
-        {
-            url = "jdbc:oracle:thin:@ufrsciencestech.u-bourgogne.fr:25561:ensb2016";
-            try 
-            {
-                this.connect = DriverManager.getConnection(url, login, mdp);
-                System.out.println("Connecté à la BD depuis l'extérieur de la fac.");
-            } 
-            catch (SQLException ex1) 
-            {
-                Logger.getLogger(Initialisation.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-        } 
-        catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(Initialisation.class.getName()).log(Level.SEVERE, null, ex);
+            att[i]=cleP[i];
         }
-        
-        try 
+        for(int i=cleP.length;i<cleP.length+attS.length;i++)
         {
-            String[] pk = bd.get_cles_primaires(table);
-            List<String> cles_primaires =Arrays.asList(pk);
-            Statement stmt = this.connect.createStatement();
-            
-            
-            ResultSet res = stmt.executeQuery("SELECT * FROM "+table);
-            ResultSetMetaData rsmd = res.getMetaData();
-            int nb_attributs = rsmd.getColumnCount();
-            String[] att = new String[cleP.length+attS.length];
-            for(int i=0;i<cleP.length;i++)
+            att[i]=attS[i-cleP.length];
+        }
+
+        String nom_attribut = "";
+        for(int i=1; i<=nbA; i++)
+        {
+            nom_attribut = att[i-1];
+            s += "\t\t\t\t{\n\t\t\t\t\t\"nom_attribut\":\""+nom_attribut+"\",\n";
+            s+= "\t\t\t\t\t\"cle_primaire\":";
+            if(cles_primaires.contains(nom_attribut))
+                s += "\"oui\",\n";
+            else
+                s += "\"non\",\n";
+            s += "\t\t\t\t\t\"type\":\""+bd.get_type_attribut(table, nom_attribut)+"\",\n";
+            s += "\t\t\t\t\t\"serveurs\":\n\t\t\t\t\t[";
+            int cpt=0;
+            for (int si=1;si<=nbS;si++)
             {
-                att[i]=cleP[i];
-            }
-            for(int i=cleP.length;i<cleP.length+attS.length;i++)
-            {
-                att[i]=attS[i-cleP.length];
-            }
-            
-            String nom_attribut = "";
-            for(int i=1; i<=nbA; i++)
-            {
-                nom_attribut = att[i-1];
-                s += "\t\t\t\t{\n\t\t\t\t\t\"nom_attribut\":\""+nom_attribut+"\",\n";
-                s+= "\t\t\t\t\t\"cle_primaire\":";
-                if(cles_primaires.contains(nom_attribut))
-                    s += "\"oui\",\n";
-                else
-                    s += "\"non\",\n";
-                s += "\t\t\t\t\t\"type\":\""+rsmd.getColumnTypeName(i)+"("+rsmd.getPrecision(i)+")\",\n";
-                s += "\t\t\t\t\t\"serveurs\":\n\t\t\t\t\t[";
-                int cpt=0;
-                for (int si=1;si<=nbS;si++)
+                if (site_att[si-1][i-1]==1)
                 {
-                    if (site_att[si-1][i-1]==1)
-                    {
-                        if(cpt>0)
-                            s+=",";
-                        s+="\n\t\t\t\t\t\t{\n";
-                        s+="\t\t\t\t\t\t\t\"num_serveur\":"+si;
-                        s+="\n\t\t\t\t\t\t}";
-                        cpt++;
-                    }
+                    if(cpt>0)
+                        s+=",";
+                    s+="\n\t\t\t\t\t\t{\n";
+                    s+="\t\t\t\t\t\t\t\"num_serveur\":"+si;
+                    s+="\n\t\t\t\t\t\t}";
+                    cpt++;
                 }
-                s+="\n\t\t\t\t\t]\n";
-                //s += "\t\t\t\t\t\t\t\"num_serveur\":"+this.num_serveur+"\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n";
-                s += "\t\t\t\t}";
-                if(i<att.length)
-                    s += ",";
-                s += "\n";
-            }    
-        } 
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(Initialisation.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            }
+            s+="\n\t\t\t\t\t]\n";
+            //s += "\t\t\t\t\t\t\t\"num_serveur\":"+this.num_serveur+"\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n";
+            s += "\t\t\t\t}";
+            if(i<att.length)
+                s += ",";
+            s += "\n";
+        }    
+
         s += "\t\t\t]\n\t\t}";
         return s;
     }
@@ -286,7 +246,8 @@ private void construction_fichier(String chemin_schemas)
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         pan_principal = new javax.swing.JPanel();
         nom_table = new javax.swing.JLabel();
@@ -342,8 +303,10 @@ private void construction_fichier(String chemin_schemas)
         pan_buttons.setLayout(new java.awt.GridLayout(1, 0));
 
         annuler_button.setText("Annuler");
-        annuler_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        annuler_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 annuler_buttonActionPerformed(evt);
             }
         });
@@ -352,8 +315,10 @@ private void construction_fichier(String chemin_schemas)
         jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         valider_button_dis.setText("Valider distribution");
-        valider_button_dis.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        valider_button_dis.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 valider_button_disActionPerformed(evt);
             }
         });
@@ -436,7 +401,7 @@ private void construction_fichier(String chemin_schemas)
         }
         
         parametres = new Parametres();
-        this.construction_fichier(parametres.get_chemin_schemas());
+        this.construction_fichier("src/fragmentation_temporaire/"+table+".txt");
     }//GEN-LAST:event_valider_button_disActionPerformed
 
     /**
