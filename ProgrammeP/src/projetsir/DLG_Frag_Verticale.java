@@ -64,8 +64,7 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         Pan_Ut = new javax.swing.JPanel();
@@ -118,10 +117,8 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
         Quitter_button.setText("Quitter fragmentation");
-        Quitter_button.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        Quitter_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Quitter_buttonActionPerformed(evt);
             }
         });
@@ -129,10 +126,8 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
 
         Lancer_button.setText("Lancer fragmentation");
         Lancer_button.setToolTipText("");
-        Lancer_button.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        Lancer_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Lancer_buttonActionPerformed(evt);
             }
         });
@@ -206,6 +201,7 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         int[][] res_frag=frag.get_fragmentation();
         Verif_Frag_Verticale verif=new Verif_Frag_Verticale(table,res_frag);
         verif.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_Lancer_buttonActionPerformed
 
     /**

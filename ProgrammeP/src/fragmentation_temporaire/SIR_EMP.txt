@@ -9,18 +9,6 @@
 					"type":"NUMBER(38)",
 					"serveurs":
 					[
-						{
-							"num_serveur":1
-						},
-						{
-							"num_serveur":2
-						},
-						{
-							"num_serveur":3
-						},
-						{
-							"num_serveur":4
-						}
 					]
 				},
 				{
@@ -29,9 +17,6 @@
 					"type":"VARCHAR2(25)",
 					"serveurs":
 					[
-						{
-							"num_serveur":4
-						}
 					]
 				},
 				{
@@ -40,9 +25,6 @@
 					"type":"VARCHAR2(25)",
 					"serveurs":
 					[
-						{
-							"num_serveur":4
-						}
 					]
 				},
 				{
@@ -51,9 +33,6 @@
 					"type":"NUMBER(38)",
 					"serveurs":
 					[
-						{
-							"num_serveur":4
-						}
 					]
 				},
 				{
@@ -62,9 +41,6 @@
 					"type":"VARCHAR2(25)",
 					"serveurs":
 					[
-						{
-							"num_serveur":1
-						}
 					]
 				},
 				{
@@ -73,12 +49,6 @@
 					"type":"VARCHAR2(25)",
 					"serveurs":
 					[
-						{
-							"num_serveur":2
-						},
-						{
-							"num_serveur":3
-						}
 					]
 				}
 			]

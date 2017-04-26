@@ -5,6 +5,11 @@
  */
 package projetsir;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  *
  * @author yv965015
@@ -21,6 +26,7 @@ public class Fragmenter extends javax.swing.JFrame {
         Liste_tables.removeAllItems();
         for(int i=0;i<l_tables.length;i++)
         {
+            
             Liste_tables.addItem(l_tables[i]);
         }
     }
@@ -35,25 +41,27 @@ public class Fragmenter extends javax.swing.JFrame {
     private void initComponents() {
 
         Titre = new javax.swing.JLabel();
-        Liste_tables = new javax.swing.JComboBox<String>();
+        Liste_tables = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         f_verticale = new javax.swing.JButton();
         f_horizontale = new javax.swing.JButton();
         Valider = new javax.swing.JButton();
 
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
         getContentPane().setLayout(new java.awt.BorderLayout(0, 2));
 
         Titre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Titre.setText("Fragmenter");
         getContentPane().add(Titre, java.awt.BorderLayout.NORTH);
 
-        Liste_tables.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        Liste_tables.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Liste_tablesActionPerformed(evt);
-            }
-        });
+        Liste_tables.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         getContentPane().add(Liste_tables, java.awt.BorderLayout.CENTER);
 
         jPanel1.setLayout(new java.awt.GridLayout(2, 1));
@@ -86,13 +94,10 @@ public class Fragmenter extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void Liste_tablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Liste_tablesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Liste_tablesActionPerformed
-
     private void ValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValiderActionPerformed
         //Tout doux Ecrire le résultat en JSON
         this.setVisible(false);
+        
     }//GEN-LAST:event_ValiderActionPerformed
 
     private void f_verticaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_f_verticaleActionPerformed
@@ -103,6 +108,27 @@ public class Fragmenter extends javax.swing.JFrame {
         //Nb site/att -> JSON , nbs = param, nbatt fichier global(fonction de la table -> changer constructeur)
     }//GEN-LAST:event_f_verticaleActionPerformed
 
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        File repertoire = new File("src/fragmentation_temporaire");
+        File[] files=repertoire.listFiles();
+        String nomfich="";
+        List<String> tables=new ArrayList<>();
+        for(int i=0;i<this.Liste_tables.getItemCount();i++)
+        {
+            tables.add(this.Liste_tables.getItemAt(i));
+        }
+        List<File> lfiles= Arrays.asList(files);
+        for(int i=0;i<lfiles.size();i++)
+        {
+            nomfich=lfiles.get(i).getName();
+            if(tables.contains(nomfich))
+            {
+                this.Liste_tables.setSelectedIndex(0);
+                this.Liste_tables.removeItem(nomfich);
+            }
+        }
+    }//GEN-LAST:event_formWindowGainedFocus
+    
     /**
      * @param args the command line arguments
      */
