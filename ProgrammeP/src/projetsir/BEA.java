@@ -5,7 +5,6 @@
  */
 package projetsir;
 
-import sun.awt.X11.XConstants;
 
 /**
  *
