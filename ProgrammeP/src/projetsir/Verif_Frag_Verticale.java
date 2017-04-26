@@ -6,6 +6,19 @@
 package projetsir;
 
 import java.awt.GridLayout;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
@@ -16,9 +29,13 @@ import javax.swing.JLabel;
 public class Verif_Frag_Verticale extends javax.swing.JFrame
 {
     String table;
+    String[] cleP,attS;
     int[][] frag;
-    int nbS;
+    int[][] site_att;
+    int nbS, nbA;
     bd_globale bd;
+    private Connection connect;
+    private Parametres parametres;
     /**
      * Creates new form Verif_Frag_Verticale
      */
@@ -30,8 +47,8 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
         this.frag=frag;
         //1er fragment,2° attribut, si 1 là
         bd =new bd_globale();
-        String[] cleP=bd.get_cles_primaires(table);
-        String[] attS=bd.get_attributs_non_primaires(table);
+        cleP=bd.get_cles_primaires(table);
+        attS=bd.get_attributs_non_primaires(table);
         GridLayout gd=new GridLayout(frag.length+1,frag[0].length+1);
         this.pan_frag.setLayout(gd);
         for(int i=0;i<frag.length+1;i++)
@@ -147,7 +164,121 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
         }
         
     }
+private void construction_fichier(String chemin_schemas)
+    {
+        String contenu = "";
 
+            contenu += this.construction_table(table,site_att);
+
+        //Ecriture sur tablefrag.json
+        FileWriter out = null;
+        try
+        {
+            out = new FileWriter(new File(chemin_schemas+"/tablefrag.json"));
+            out.write(contenu);
+            out.close();
+            System.out.println("Fichier créé.");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    private String construction_table(String table, int[][] site_att)
+    {
+        String login = parametres.getBD_login();
+        String mdp = parametres.getBD_mdp();
+        String url;
+        String s ="\t\t{\n\t\t\t\"nom\":\""+table+"\",\n";
+        s += "\t\t\t\"fragmentation\":\"verticale\",\n";
+        s += "\t\t\t\"attributs\":\n\t\t\t[\n";
+        
+        try 
+        {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            url = "jdbc:oracle:thin:@butor:1521:ensb2016";
+            connect = DriverManager.getConnection(url, login, mdp);
+            System.out.println("Connecté à la BD depuis la fac.");
+        } 
+        catch (SQLException ex) 
+        {
+            url = "jdbc:oracle:thin:@ufrsciencestech.u-bourgogne.fr:25561:ensb2016";
+            try 
+            {
+                this.connect = DriverManager.getConnection(url, login, mdp);
+                System.out.println("Connecté à la BD depuis l'extérieur de la fac.");
+            } 
+            catch (SQLException ex1) 
+            {
+                Logger.getLogger(Initialisation.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } 
+        catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(Initialisation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try 
+        {
+            String[] pk = bd.get_cles_primaires(table);
+            List<String> cles_primaires =Arrays.asList(pk);
+            Statement stmt = this.connect.createStatement();
+            
+            
+            ResultSet res = stmt.executeQuery("SELECT * FROM "+table);
+            ResultSetMetaData rsmd = res.getMetaData();
+            int nb_attributs = rsmd.getColumnCount();
+            String[] att = new String[cleP.length+attS.length];
+            for(int i=0;i<cleP.length;i++)
+            {
+                att[i]=cleP[i];
+            }
+            for(int i=cleP.length;i<cleP.length+attS.length;i++)
+            {
+                att[i]=attS[i-cleP.length];
+            }
+            
+            String nom_attribut = "";
+            for(int i=1; i<=nbA; i++)
+            {
+                nom_attribut = att[i-1];
+                s += "\t\t\t\t{\n\t\t\t\t\t\"nom_attribut\":\""+nom_attribut+"\",\n";
+                s+= "\t\t\t\t\t\"cle_primaire\":";
+                if(cles_primaires.contains(nom_attribut))
+                    s += "\"oui\",\n";
+                else
+                    s += "\"non\",\n";
+                s += "\t\t\t\t\t\"type\":\""+rsmd.getColumnTypeName(i)+"("+rsmd.getPrecision(i)+")\",\n";
+                s += "\t\t\t\t\t\"serveurs\":\n\t\t\t\t\t[";
+                int cpt=0;
+                for (int si=1;si<=nbS;si++)
+                {
+                    if (site_att[si-1][i-1]==1)
+                    {
+                        if(cpt>0)
+                            s+=",";
+                        s+="\n\t\t\t\t\t\t{\n";
+                        s+="\t\t\t\t\t\t\t\"num_serveur\":"+si;
+                        s+="\n\t\t\t\t\t\t}";
+                        cpt++;
+                    }
+                }
+                s+="\n\t\t\t\t\t]\n";
+                //s += "\t\t\t\t\t\t\t\"num_serveur\":"+this.num_serveur+"\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n";
+                s += "\t\t\t\t}";
+                if(i<att.length)
+                    s += ",";
+                s += "\n";
+            }    
+        } 
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(Initialisation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        s += "\t\t\t]\n\t\t}";
+        return s;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -155,8 +286,7 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         pan_principal = new javax.swing.JPanel();
         nom_table = new javax.swing.JLabel();
@@ -212,22 +342,18 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
         pan_buttons.setLayout(new java.awt.GridLayout(1, 0));
 
         annuler_button.setText("Annuler");
-        annuler_button.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        annuler_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 annuler_buttonActionPerformed(evt);
             }
         });
         pan_buttons.add(annuler_button);
 
-        jPanel3.setLayout(new java.awt.GridLayout());
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         valider_button_dis.setText("Valider distribution");
-        valider_button_dis.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        valider_button_dis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 valider_button_disActionPerformed(evt);
             }
         });
@@ -271,7 +397,7 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
                    }
                }
         }  
-        int nbA=bd.get_nb_attributs(table);
+        nbA=bd.get_nb_attributs(table);
         int[][] mat_frag=new int[frag.length][nbA];
         String[] att=bd.get_liste_attributs_table(table);
         u=0;
@@ -293,7 +419,24 @@ public class Verif_Frag_Verticale extends javax.swing.JFrame
                    }
                }
         }  
+       
+        site_att = new int[nbS][nbA];
+        for (int f=0; f<frag.length;f++)
+        {
+            for (int s=0; s<nbS;s++)
+            {
+                if (distri[f][s]==1)
+                {
+                    for (int a=0; a<nbA;a++)
+                    {
+                        site_att[s][a]=mat_frag[f][a];
+                    }
+                }
+            }
+        }
         
+        parametres = new Parametres();
+        this.construction_fichier(parametres.get_chemin_schemas());
     }//GEN-LAST:event_valider_button_disActionPerformed
 
     /**
