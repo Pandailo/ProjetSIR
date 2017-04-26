@@ -6,9 +6,18 @@
 package projetsir;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -95,11 +104,62 @@ public class Fragmenter extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValiderActionPerformed
-        //Tout doux Ecrire le résultat en JSON
+        //Tout doux Ecrire le résultat en JSO\N
+        File repertoire = new File("src/fragmentation_temporaire");
+        File[] files=repertoire.listFiles();
+        String ajoutF="{\n\t\"tables\":\n\t[";
+        String finFich="\t]\n}";
+        FileOutputStream fos = null;
+        for(int i=0;i<files.length;i++)
+        {
+            try {
+                ajoutF+=this.lire_fichier(files[i]);
+            } catch (IOException ex) {
+                Logger.getLogger(Fragmenter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           if(i!=files.length-1)
+               ajoutF+=",";
+        }
+        ajoutF+=finFich;
+        this.EcrireFichier(new File("src/fragmentation_temporaire/globaltest.json"), ajoutF);
         this.setVisible(false);
+        for(int i=0;i<files.length;i++)
+        {
+            if(files[i].getName()!="globaltest")
+            files[i].delete();
+        }
         
     }//GEN-LAST:event_ValiderActionPerformed
+    private void EcrireFichier(File f,String s)
+    {
+        try{
+            FileWriter ffw=new FileWriter(f);
+            ffw.write(s);  // écrire une ligne dans le fichier resultat.txt
+            ffw.close(); // fermer le fichier à la fin des traitements
+            } catch (Exception e) {}
 
+    }
+    private String lire_fichier(File f) throws IOException
+    {
+        FileReader in = null;
+        String contenu="";
+        try
+        {
+            in = new FileReader(f);
+            //Envoi du fichier
+            int c;
+            contenu = "";
+            //int taille = in.available();
+            while((c=in.read())!=-1)
+                contenu += (char)c;
+            in.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return contenu;
+    }
     private void f_verticaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_f_verticaleActionPerformed
         //recup nb query
         DLG_Frag_Verticale dlgV=new DLG_Frag_Verticale((String) Liste_tables.getSelectedItem());

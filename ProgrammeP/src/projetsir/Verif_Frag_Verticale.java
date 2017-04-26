@@ -246,8 +246,7 @@ private void construction_fichier(String chemin_schemas)
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         pan_principal = new javax.swing.JPanel();
         nom_table = new javax.swing.JLabel();
@@ -303,10 +302,8 @@ private void construction_fichier(String chemin_schemas)
         pan_buttons.setLayout(new java.awt.GridLayout(1, 0));
 
         annuler_button.setText("Annuler");
-        annuler_button.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        annuler_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 annuler_buttonActionPerformed(evt);
             }
         });
@@ -315,10 +312,8 @@ private void construction_fichier(String chemin_schemas)
         jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         valider_button_dis.setText("Valider distribution");
-        valider_button_dis.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        valider_button_dis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 valider_button_disActionPerformed(evt);
             }
         });
@@ -402,6 +397,7 @@ private void construction_fichier(String chemin_schemas)
         
         parametres = new Parametres();
         this.construction_fichier("src/fragmentation_temporaire/"+table);
+        this.setVisible(false);
     }//GEN-LAST:event_valider_button_disActionPerformed
 
     /**
