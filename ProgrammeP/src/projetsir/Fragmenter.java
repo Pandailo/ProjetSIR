@@ -125,7 +125,7 @@ public class Fragmenter extends javax.swing.JFrame {
         this.setVisible(false);
         for(int i=0;i<files.length;i++)
         {
-            if(files[i].getName()!="globaltest")
+            if(!files[i].getName().equals("globaltest.json"))
             files[i].delete();
         }
         

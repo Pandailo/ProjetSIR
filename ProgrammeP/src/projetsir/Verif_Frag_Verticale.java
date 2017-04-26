@@ -340,6 +340,9 @@ private void construction_fichier(String chemin_schemas)
         int[][] distri=new int[frag.length][nbS];
         int u=0;
         int k=0;
+        boolean flag2=true;
+        boolean flag=false;
+        boolean flag3=true;
         for(int i=nbS+2;i<(nbS+1)*(frag.length+1);i++)
         {
                if(this.pan_verif.getComponent(i).getClass()==JCheckBox.class)
@@ -368,7 +371,11 @@ private void construction_fichier(String chemin_schemas)
                {
                    JCheckBox jb=(JCheckBox)this.pan_frag.getComponent(i);
                    if(jb.isSelected())
+                   {
                         mat_frag[u][k]=1;
+                        
+                   }
+                       
                    else
                         mat_frag[u][k]=0;
                    k++;
@@ -383,21 +390,73 @@ private void construction_fichier(String chemin_schemas)
         site_att = new int[nbS][nbA];
         for (int f=0; f<frag.length;f++)
         {
+            flag=false;
             for (int s=0; s<nbS;s++)
             {
                 if (distri[f][s]==1)
                 {
+                    flag=true;
                     for (int a=0; a<nbA;a++)
                     {
                         site_att[s][a]=mat_frag[f][a];
                     }
                 }
+                
+            }
+            if(!flag)
+            {
+                    flag2=false;
+            }
+        }
+         for (int f=0; f<nbA;f++)
+        {
+            flag=false;
+            for (int s=0; s<mat_frag.length;s++)
+            {
+                if (mat_frag[s][f]==1)
+                {
+                    flag=true;
+                }
+                
+            }
+            if(!flag)
+            {
+                    flag3=false;
             }
         }
         
-        parametres = new Parametres();
-        this.construction_fichier("src/fragmentation_temporaire/"+table);
-        this.setVisible(false);
+        if(flag2)
+        {
+            if(flag3)
+            {
+                 parametres = new Parametres();
+                this.construction_fichier("src/fragmentation_temporaire/"+table);
+                this.setVisible(false);
+            }
+             else
+            {
+                String msg="merci de bien distribuer les attributs";
+                String title="Erreur de distribution"; {
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    msg,
+                    title,
+                    javax.swing.JOptionPane.WARNING_MESSAGE);
+                    }
+        }
+           
+        }
+        else
+        {
+            String msg="merci de bien distribuer les fragments";
+            String title="Erreur de distribution"; {
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    msg,
+                    title,
+                    javax.swing.JOptionPane.WARNING_MESSAGE);
+                    }
+        }
     }//GEN-LAST:event_valider_button_disActionPerformed
 
     /**
