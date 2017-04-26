@@ -414,7 +414,7 @@ private void construction_fichier(String chemin_schemas)
             for (int s=0; s<mat_frag.length;s++)
             {
                 if (mat_frag[s][f]==1)
-                {
+                {   
                     flag=true;
                 }
                 
