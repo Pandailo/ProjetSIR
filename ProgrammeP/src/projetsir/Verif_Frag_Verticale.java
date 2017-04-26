@@ -401,7 +401,7 @@ private void construction_fichier(String chemin_schemas)
         }
         
         parametres = new Parametres();
-        this.construction_fichier("src/fragmentation_temporaire/"+table+".txt");
+        this.construction_fichier("src/fragmentation_temporaire/"+table);
     }//GEN-LAST:event_valider_button_disActionPerformed
 
     /**
