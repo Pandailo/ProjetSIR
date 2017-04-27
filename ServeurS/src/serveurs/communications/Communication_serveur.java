@@ -335,7 +335,7 @@ class Accepter_client implements Runnable {
         }
         
         //Exécution de la requête
-        Communication_BD com_BD = new Communication_BD(this.parametres.getBD_login(), this.parametres.getBD_mdp());
+        Communication_BD com_BD = new Communication_BD();
         
         //Envoi du résultat
         try 
@@ -353,7 +353,7 @@ class Accepter_client implements Runnable {
         Schema_local bd_actuelle = new Schema_local(true);
         Schema_local bd_nouvelle = new Schema_local(false);
         //TODO: automatisation pour savoir si la co se fait à la fac ou non
-        Communication_BD com_BD = new Communication_BD(this.parametres.getBD_login(), this.parametres.getBD_mdp());
+        Communication_BD com_BD = new Communication_BD();
         
         //Construction des tables qui n'existent pas
         this.construction_tables(bd_actuelle, bd_nouvelle);

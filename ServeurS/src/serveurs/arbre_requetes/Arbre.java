@@ -6,6 +6,8 @@
 package serveurs.arbre_requetes;
 
 import java.util.*;
+import javax.sql.rowset.CachedRowSet;
+import serveurs.*;
 
 /**
  *
@@ -99,8 +101,8 @@ public class Arbre
     
     public void construction_selections()
     {
-        for(int i=0;i<this.l_att.size();i++)
-            this.racine = new Noeud(this.l_att.get(i), this.racine, null, "selection");
+        /*for(int i=0;i<this.l_att.size();i++)
+            this.racine = new Noeud(this.l_att.get(i), this.racine, null, "selection");*/
     }
     
     @Override
@@ -109,4 +111,12 @@ public class Arbre
         return this.racine.toString();
     }
     
+    public CachedRowSet lireArbre()
+    {
+        CachedRowSet crs=null;
+        Schema_global global=new Schema_global();
+        Schema_local local=new Schema_local(true);
+        
+        return crs;
+    }
 }

@@ -97,8 +97,6 @@ public class DLG_Requete extends javax.swing.JFrame {
         quitter_button = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         reset_button = new javax.swing.JButton();
-        pan_update = new javax.swing.JPanel();
-        pan_delete = new javax.swing.JPanel();
 
         setTitle("Creation requete");
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
@@ -258,32 +256,6 @@ public class DLG_Requete extends javax.swing.JFrame {
         pan_select.add(jPanel8);
 
         jTabbedPane2.addTab("Select", pan_select);
-
-        javax.swing.GroupLayout pan_updateLayout = new javax.swing.GroupLayout(pan_update);
-        pan_update.setLayout(pan_updateLayout);
-        pan_updateLayout.setHorizontalGroup(
-            pan_updateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1128, Short.MAX_VALUE)
-        );
-        pan_updateLayout.setVerticalGroup(
-            pan_updateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 496, Short.MAX_VALUE)
-        );
-
-        jTabbedPane2.addTab("Update", pan_update);
-
-        javax.swing.GroupLayout pan_deleteLayout = new javax.swing.GroupLayout(pan_delete);
-        pan_delete.setLayout(pan_deleteLayout);
-        pan_deleteLayout.setHorizontalGroup(
-            pan_deleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1128, Short.MAX_VALUE)
-        );
-        pan_deleteLayout.setVerticalGroup(
-            pan_deleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 496, Short.MAX_VALUE)
-        );
-
-        jTabbedPane2.addTab("Delete", pan_delete);
 
         getContentPane().add(jTabbedPane2);
 
@@ -450,9 +422,7 @@ public class DLG_Requete extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JPanel pan_delete;
     private javax.swing.JPanel pan_select;
-    private javax.swing.JPanel pan_update;
     private javax.swing.JButton quitter_button;
     private javax.swing.JButton reset_button;
     private javax.swing.JTextArea ta_from;

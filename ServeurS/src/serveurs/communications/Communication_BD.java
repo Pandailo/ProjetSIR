@@ -9,6 +9,7 @@ import com.sun.rowset.*;
 import java.sql.*;
 import java.util.logging.*;
 import javax.sql.rowset.*;
+import serveurs.Parametres;
 
 /**
  *
@@ -21,10 +22,11 @@ public class Communication_BD
     private String url;
     private Connection connect;
     
-    public Communication_BD(String login, String mdp)
+    public Communication_BD()
     {
-        this.login = login;
-        this.mdp = mdp;
+        Parametres parametres = new Parametres();
+        this.login = parametres.getBD_login();
+        this.mdp = parametres.getBD_mdp();
         try 
         {
             Class.forName("oracle.jdbc.driver.OracleDriver");
