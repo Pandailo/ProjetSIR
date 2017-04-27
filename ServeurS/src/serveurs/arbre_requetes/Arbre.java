@@ -22,6 +22,10 @@ public class Arbre
         this.l_att = l_att;
         this.l_con = l_con;
         racine=null;
+        this.construction_jointures();
+        this.construction_conditions();
+        this.construction_selections();
+        System.out.println(this.toString());
     }
     
     public void construction_jointures()
@@ -40,12 +44,11 @@ public class Arbre
                 att2=split[3];
                 if(split[0].equals("J"))
                 {
-                    //cé jw1tur ont rékupaientre
                     if(racine==null)
                     {
-                        Noeud fg = new Noeud(att1.split("\\.")[0], null, null);
-                        Noeud fd = new Noeud(att2.split("\\.")[0], null, null);
-                        this.racine = new Noeud(att1+";"+signe+";"+att2, fg, fd);
+                        Noeud fg = new Noeud(att1.split("\\.")[0], null, null, "table");
+                        Noeud fd = new Noeud(att2.split("\\.")[0], null, null, "table");
+                        this.racine = new Noeud(att1+";"+signe+";"+att2, fg, fd, "jointure");
                         tables_utilisees.add(att1.split("\\.")[0]);
                         tables_utilisees.add(att2.split("\\.")[0]);
                         this.l_con.remove(i);
@@ -54,8 +57,8 @@ public class Arbre
                     {
                         if(tables_utilisees.contains(att2.split("\\.")[0]))
                         {
-                            Noeud fg = new Noeud(att1.split("\\.")[0], null, null);
-                            this.racine = new Noeud(att1+";"+signe+";"+att2, fg, this.racine);
+                            Noeud fg = new Noeud(att1.split("\\.")[0], null, null, "table");
+                            this.racine = new Noeud(att1+";"+signe+";"+att2, fg, this.racine, "jointure");
                             tables_utilisees.add(att1.split("\\.")[0]);
                             tables_utilisees.add(att2.split("\\.")[0]);
                             this.l_con.remove(i);
@@ -66,6 +69,44 @@ public class Arbre
                 }
             }
         }
+    }
+    
+    public void construction_conditions()
+    {
+        for(int i=0;i<l_con.size();i++)
+        {
+            String[] split=l_con.get(i).split(";");
+            String att1,att2,signe;
+            att1=split[1];
+            signe=split[2];
+            att2=split[3];
+            if(split[0].equals("C"))
+            {
+                if(racine==null)
+                {
+                    Noeud fg = new Noeud(att1+";"+signe+";"+att2, this.racine, null, "condition");
+                    this.racine = new Noeud(att1+";"+signe+";"+att2, fg, null, "condition");
+                    this.l_con.remove(i);
+                }
+                else
+                {
+                    this.racine = new Noeud(att1+";"+signe+";"+att2, this.racine, null, "condition");
+                    this.l_con.remove(i);
+                }
+            }
+        }   
+    }
+    
+    public void construction_selections()
+    {
+        for(int i=0;i<this.l_att.size();i++)
+            this.racine = new Noeud(this.l_att.get(i), this.racine, null, "selection");
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.racine.toString();
     }
     
 }

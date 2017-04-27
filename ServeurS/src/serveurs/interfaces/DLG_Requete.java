@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
 import serveurs.Schema_global;
+import serveurs.arbre_requetes.Arbre;
 
 /**
  *
@@ -221,6 +222,13 @@ public class DLG_Requete extends javax.swing.JFrame {
         jPanel7.setLayout(new java.awt.GridLayout(1, 2));
 
         valider_button.setText("Valider");
+        valider_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                valider_buttonActionPerformed(evt);
+            }
+        });
         jPanel7.add(valider_button);
 
         quitter_button.setText("Quitter");
@@ -347,7 +355,7 @@ public class DLG_Requete extends javax.swing.JFrame {
             {
                 JOptionPane jop2 = new JOptionPane();
                 att2 = jop2.showInputDialog(null,"Valeur ?", JOptionPane.QUESTION_MESSAGE);
-                cond="C"+att1+";"+signe+";"+att2;
+                cond="C;"+att1+";"+signe+";"+att2;
             }
             else
             {
@@ -373,6 +381,12 @@ public class DLG_Requete extends javax.swing.JFrame {
             jop.showMessageDialog(null, "Vous n'avez rien sélectionné", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
         }
     }//GEN-LAST:event_ajouter_condition_buttonActionPerformed
+
+    private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_valider_buttonActionPerformed
+    {//GEN-HEADEREND:event_valider_buttonActionPerformed
+        Arbre arbre = new Arbre(l_attributs,l_cond);
+        this.setVisible(false);
+    }//GEN-LAST:event_valider_buttonActionPerformed
 
     /**
      * @param args the command line arguments

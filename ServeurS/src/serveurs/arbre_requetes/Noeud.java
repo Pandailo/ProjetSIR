@@ -11,44 +11,40 @@ package serveurs.arbre_requetes;
  */
 public class Noeud
 {
-    private boolean feuille;
+    private boolean table;
     private boolean jointure;
+    private boolean condition;
     private boolean selection;
     private String contenu;
     private Noeud filsG;
     private Noeud filsD;
     
-    public Noeud(String contenu,Noeud filsD,Noeud filsG)
+    public Noeud(String contenu,Noeud filsD,Noeud filsG, String type)
     {
         this.contenu=contenu;
         this.filsD=filsD;
         this.filsG=filsG;
-        if(this.filsD==null&&this.filsG==null)
+        this.table = false;
+        this.jointure = false;
+        this.condition = false;
+        this.selection = false;
+        switch(type)
         {
-            this.feuille=true;
-            this.jointure=this.selection=false;
+            case "table" : this.table = true; break;
+            case "jointure" : this.jointure = true; break;
+            case "condition" : this.jointure = true; break;
+            case "selection" : this.selection = true; break;
         }
-        else
-            if(this.filsD==null||this.filsG==null)
-            {
-                this.feuille=this.selection=false;
-                this.jointure=true;
-            }
-            else
-            {
-                this.feuille=this.jointure=false;
-                this.selection=true;
-            }
     }
 
-    public boolean isFeuille()
+    public boolean isTable()
     {
-        return feuille;
+        return table;
     }
 
-    public void setFeuille(boolean feuille)
+    public void setTable(boolean table)
     {
-        this.feuille = feuille;
+        this.table = table;
     }
 
     public boolean isJointure()
@@ -101,4 +97,22 @@ public class Noeud
         this.filsD = filsD;
     }
     
+    @Override
+    public String toString()
+    {
+        String s = this.contenu;
+        if(table)
+            s += " Type : table ";
+        if(jointure)
+            s += " Type : jointure ";
+        if(condition)
+            s += " Type : condition ";
+        if(selection)
+            s += " Type : selection ";
+        if(this.filsD!=null)
+            s += " Fils droit : "+this.filsD.toString();
+        if(this.filsG!=null)
+            s += " Fils gauche : "+this.filsG.toString();
+        return s;
+    }
 }

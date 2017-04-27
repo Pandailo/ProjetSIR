@@ -121,7 +121,6 @@ public class Communication_BD
     //Extraction des tuples correspondants à la condition
     public CachedRowSet requete(String tables, String attributs, String conditions)
     {
-        ResultSet res = null;
         CachedRowSet crs = null;
         try 
         {
