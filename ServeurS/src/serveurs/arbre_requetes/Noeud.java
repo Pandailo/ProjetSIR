@@ -5,9 +5,12 @@
  */
 package serveurs.arbre_requetes;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sql.rowset.CachedRowSet;
 import serveurs.Parametres;
 import serveurs.Schema_global;
@@ -131,6 +134,7 @@ public class Noeud
             else
             {
                 String[] attributs = global.get_liste_attributs_table(table);
+                String[] cles_primaires = global.get_cles_primaires(table);
                 boolean[] attributs_recuperes = new boolean[attributs.length];
                 List<String> attributs_a_recuperer = new ArrayList<>();
                 boolean recup_finie = false;
@@ -161,6 +165,8 @@ public class Noeud
                     if(attributs_a_recuperer.size()>0)
                     {
                         String requete_attributs = "";
+                        for(int k=0; k<cles_primaires.length; k++)
+                            attributs_a_recuperer.add(cles_primaires[k]);
                         for(int k=0; k<attributs_a_recuperer.size(); k++)
                         {
                             requete_attributs += attributs_a_recuperer.get(k);
@@ -207,29 +213,183 @@ public class Noeud
                 n = this.filsD;
             if(this.filsG!=null)
                 n = this.filsG;
-            crs = this.appliquer_condition(n.lireNoeud(), split[1]+""+split[2]+""+split[3]);
+            crs = this.appliquer_condition(n.lireNoeud(), split[1]+";"+split[2]+";"+split[3]);
         }
         return crs;
     }
     
     public CachedRowSet appliquer_condition(CachedRowSet crs, String condition)
     {
-        CachedRowSet crs_res = null;
-        
-        return crs_res;
+        try 
+        {
+            String[] split = condition.split(";");
+            String attribut = split[0];
+            String signe = split[1];
+            boolean att2 = false;
+            String valeur = split[2];
+            if(valeur.contains("."))
+            {
+                if(attribut.split("\\.")[0].equals(valeur.split("\\.")[0]))
+                    valeur = valeur.split("\\.")[1];
+            }
+            attribut = attribut.split("\\.")[1];
+            //Application de la condition
+            crs.beforeFirst();
+            while(crs.next()) 
+            {
+                String val_tuple_s = crs.getString(attribut);
+                Double val_tuple_d = null;
+                boolean a_supprimer = false;
+                try
+                {
+                    val_tuple_d = Double.parseDouble(val_tuple_s);
+                    Double val_2 = Double.parseDouble(valeur);
+                    switch(signe)
+                    {
+                        case "=" : 
+                            if(val_tuple_d==val_2)
+                                a_supprimer = true; 
+                            break;
+                        case "<>" : 
+                            if(val_tuple_d!=val_2)
+                                a_supprimer = true; 
+                            break;
+                        case ">" : 
+                            if(val_tuple_d>val_2)
+                                a_supprimer = true; 
+                            break;
+                        case "<" : 
+                            if(val_tuple_d<val_2)
+                                a_supprimer = true; 
+                            break;
+                        case ">=" : 
+                            if(val_tuple_d>=val_2)
+                                a_supprimer = true; 
+                            break;
+                        case "<=" :
+                            if(val_tuple_d<=val_2)
+                                a_supprimer = true; 
+                            break;
+                    }
+                }
+                catch(NumberFormatException ex)
+                {
+                    switch(signe)
+                    {
+                        case "=" : 
+                            if(val_tuple_s.equals(valeur))
+                                a_supprimer = true; 
+                            break;
+                        case "<>" : 
+                            if(!val_tuple_s.equals(valeur))
+                                a_supprimer = true; 
+                            break;
+                        case ">" : 
+                            if(val_tuple_s.compareTo(valeur)>0)
+                                a_supprimer = true; 
+                            break;
+                        case "<" : 
+                            if(val_tuple_s.compareTo(valeur)<0)
+                                a_supprimer = true; 
+                            break;
+                        case ">=" : 
+                            if(val_tuple_s.compareTo(valeur)>=0)
+                                a_supprimer = true; 
+                            break;
+                        case "<=" :
+                            if(val_tuple_s.compareTo(valeur)<=0)
+                                a_supprimer = true; 
+                            break;
+                    }
+                }
+                if(a_supprimer)
+                    crs.deleteRow();
+            }
+        }
+        catch (SQLException ex)
+        {
+            Logger.getLogger(Noeud.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return crs;
     }
     
     public CachedRowSet ajout_attributs(CachedRowSet crs1, CachedRowSet crs2)
     {
         CachedRowSet crs = null;
-        
+        List<String> attributs = new ArrayList<>();
+        try
+        {
+            String[] cles_primaires = new Schema_global().get_cles_primaires(crs1.getTableName());
+            String[] val_cles_primaires = new String[cles_primaires.length];
+            crs1.beforeFirst();
+            while(crs1.next())
+            {
+                attributs.clear();
+                for(int i=0; i<val_cles_primaires.length; i++)
+                    val_cles_primaires[i] = crs1.getString(cles_primaires[i]);
+                crs2.beforeFirst();
+                boolean correspondance_trouvee = false;
+                while(!correspondance_trouvee && crs2.next())
+                {
+                    for(int i=0; i<=val_cles_primaires.length; i++)
+                    {
+                        if(i==val_cles_primaires.length)
+                            correspondance_trouvee = true;
+                        else
+                        {
+                            if(!val_cles_primaires[i].equals(crs2.getString(cles_primaires[i])))
+                                i = val_cles_primaires.length + 1;
+                        }
+                    }
+                    if(correspondance_trouvee)
+                    {
+                        int nb_colonnes_crs1 = crs1.getMetaData().getColumnCount();
+                        int nb_colonnes_crs2 = crs2.getMetaData().getColumnCount();
+                        for(int i=0; i<nb_colonnes_crs1; i++)
+                        {
+                            //Ajouter dans la liste attributs l'attribut ajouté
+                            //Ajouter l'attribut dans le crs
+                        }
+                        for(int i=0; i<nb_colonnes_crs2; i++)
+                        {
+                            
+                        }
+                        /*crs.moveToInsertRow();
+                        crs.updateInt("ITEM_ID", 1);
+                        crs.updateString("ITEM_NAME", "TableCloth");
+                        crs.updateInt("SUP_ID", 927);
+                        crs.updateInt("QUAN", 14);
+                        crs.insertRow();
+                        crs.moveToCurrentRow();*/
+                    }
+                }
+            }
+        }
+        catch (SQLException ex)
+        {
+            Logger.getLogger(Noeud.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return crs;
     }
     
     public CachedRowSet ajout_tuples(CachedRowSet crs1, CachedRowSet crs2)
     {
         CachedRowSet crs = null;
-        
+        /*
+        crs.moveToInsertRow();
+        crs.updateInt("ITEM_ID", newItemId);
+        crs.updateString("ITEM_NAME", "TableCloth");
+        crs.updateInt("SUP_ID", 927);
+        crs.updateInt("QUAN", 14);
+        Calendar timeStamp;
+        timeStamp = new GregorianCalendar();
+        timeStamp.set(2006, 4, 1);
+        crs.updateTimestamp(
+            "DATE_VAL",
+            new Timestamp(timeStamp.getTimeInMillis()));
+        crs.insertRow();
+        crs.moveToCurrentRow();
+        */
         return crs;
     }
     
