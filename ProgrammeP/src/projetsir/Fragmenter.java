@@ -128,7 +128,10 @@ public class Fragmenter extends javax.swing.JFrame {
             if(!files[i].getName().equals("globaltest.json"))
             files[i].delete();
         }
-        
+        //TO DO : Enregistrer en new Parametres().get_chemin_schemas()+"/global.json"
+        //new Transformation_global_local();
+        //Communication c = new Communication(0);
+        //c.start();
     }//GEN-LAST:event_ValiderActionPerformed
     private void EcrireFichier(File f,String s)
     {
@@ -161,11 +164,8 @@ public class Fragmenter extends javax.swing.JFrame {
         return contenu;
     }
     private void f_verticaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_f_verticaleActionPerformed
-        //recup nb query
         DLG_Frag_Verticale dlgV=new DLG_Frag_Verticale((String) Liste_tables.getSelectedItem());
         dlgV.setVisible(true);
-        //ON A BESOIN DU NB DE REQUETES
-        //Nb site/att -> JSON , nbs = param, nbatt fichier global(fonction de la table -> changer constructeur)
     }//GEN-LAST:event_f_verticaleActionPerformed
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
