@@ -184,7 +184,7 @@ public class DLG_Requete extends javax.swing.JFrame {
         cb_att1.setToolTipText("");
         jPanel3.add(cb_att1);
 
-        cb_condition.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "=", "<>", ">", ">=", "<", "<=", "LIKE" }));
+        cb_condition.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "=", "<>", ">", ">=", "<", "<=", "LIKE", "NOT LIKE" }));
         cb_condition.setSelectedIndex(-1);
         jPanel3.add(cb_condition);
 
@@ -356,7 +356,7 @@ public class DLG_Requete extends javax.swing.JFrame {
                     cond="J"+";"+att1+";"+signe+";"+att2;
                 }
                 else
-                    cond="C"+att1+";"+signe+";"+att2;
+                    cond="C"+";"+att1+";"+signe+";"+att2;
             }
             if(ta_where.getText().length()!=0)
             {
