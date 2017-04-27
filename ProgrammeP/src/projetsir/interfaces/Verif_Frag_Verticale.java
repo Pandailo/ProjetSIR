@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projetsir;
+package projetsir.interfaces;
 
 import java.awt.GridLayout;
 import java.io.File;
@@ -21,6 +21,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import projetsir.Parametres;
+import projetsir.bd_globale;
 
 /**
  *
@@ -246,7 +248,8 @@ private void construction_fichier(String chemin_schemas)
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         pan_principal = new javax.swing.JPanel();
         nom_table = new javax.swing.JLabel();
@@ -259,7 +262,6 @@ private void construction_fichier(String chemin_schemas)
         jPanel3 = new javax.swing.JPanel();
         valider_button_dis = new javax.swing.JButton();
 
-        setPreferredSize(new java.awt.Dimension(1080, 700));
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         pan_principal.setLayout(new java.awt.BorderLayout());
@@ -302,8 +304,10 @@ private void construction_fichier(String chemin_schemas)
         pan_buttons.setLayout(new java.awt.GridLayout(1, 0));
 
         annuler_button.setText("Annuler");
-        annuler_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        annuler_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 annuler_buttonActionPerformed(evt);
             }
         });
@@ -312,8 +316,10 @@ private void construction_fichier(String chemin_schemas)
         jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         valider_button_dis.setText("Valider distribution");
-        valider_button_dis.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        valider_button_dis.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 valider_button_disActionPerformed(evt);
             }
         });

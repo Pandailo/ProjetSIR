@@ -3,10 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projetsir;
+package projetsir.interfaces;
 
 import java.io.File;
 import javax.swing.JOptionPane;
+import projetsir.Communication;
+import projetsir.Initialisation;
+import projetsir.Parametres;
 
 /**
  *
@@ -28,7 +31,8 @@ public class Menu_Principal extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -50,16 +54,20 @@ public class Menu_Principal extends javax.swing.JFrame {
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
         Parametrer.setText("Paramétrer");
-        Parametrer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        Parametrer.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ParametrerActionPerformed(evt);
             }
         });
         jPanel2.add(Parametrer);
 
         Fragmenter.setText("Fragmenter");
-        Fragmenter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        Fragmenter.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 FragmenterActionPerformed(evt);
             }
         });
@@ -70,8 +78,10 @@ public class Menu_Principal extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         Initialiser.setText("Initialiser");
-        Initialiser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        Initialiser.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 InitialiserActionPerformed(evt);
             }
         });

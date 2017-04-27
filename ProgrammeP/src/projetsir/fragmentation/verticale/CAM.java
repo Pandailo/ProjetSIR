@@ -1,6 +1,6 @@
 
 
-package projetsir;
+package projetsir.fragmentation.verticale;
 
 import static java.lang.Math.*;
 import java.util.*;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projetsir;
+package projetsir.interfaces;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import projetsir.bd_globale;
 
 /**
  *
@@ -47,7 +48,8 @@ public class Fragmenter extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         Titre = new javax.swing.JLabel();
         Liste_tables = new javax.swing.JComboBox<>();
@@ -57,11 +59,14 @@ public class Fragmenter extends javax.swing.JFrame {
         f_horizontale = new javax.swing.JButton();
         Valider = new javax.swing.JButton();
 
-        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
-            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+        addWindowFocusListener(new java.awt.event.WindowFocusListener()
+        {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt)
+            {
                 formWindowGainedFocus(evt);
             }
-            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            public void windowLostFocus(java.awt.event.WindowEvent evt)
+            {
             }
         });
         getContentPane().setLayout(new java.awt.BorderLayout(0, 2));
@@ -78,8 +83,10 @@ public class Fragmenter extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
         f_verticale.setText("Fragmentation verticale");
-        f_verticale.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        f_verticale.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 f_verticaleActionPerformed(evt);
             }
         });
@@ -91,8 +98,10 @@ public class Fragmenter extends javax.swing.JFrame {
         jPanel1.add(jPanel3);
 
         Valider.setText("Valider");
-        Valider.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        Valider.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ValiderActionPerformed(evt);
             }
         });

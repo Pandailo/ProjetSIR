@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projetsir;
+package projetsir.interfaces;
 
 import java.awt.GridLayout;
 import java.io.File;
@@ -22,6 +22,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import projetsir.Initialisation;
+import projetsir.Parametres;
+import projetsir.bd_globale;
 
 /**
  *

@@ -3,10 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projetsir;
+package projetsir.interfaces;
 
+import projetsir.fragmentation.verticale.Frag_verticale;
 import java.awt.GridLayout;
 import javax.swing.*;
+import projetsir.Parametres;
+import projetsir.bd_globale;
 
 /**
  *
@@ -64,7 +67,8 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         Pan_Ut = new javax.swing.JPanel();
@@ -77,7 +81,6 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         Lancer_button = new javax.swing.JButton();
 
         setTitle("Fragmentation verticale");
-        setPreferredSize(new java.awt.Dimension(900, 600));
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -117,8 +120,10 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
         Quitter_button.setText("Quitter fragmentation");
-        Quitter_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        Quitter_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 Quitter_buttonActionPerformed(evt);
             }
         });
@@ -126,8 +131,10 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
 
         Lancer_button.setText("Lancer fragmentation");
         Lancer_button.setToolTipText("");
-        Lancer_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        Lancer_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 Lancer_buttonActionPerformed(evt);
             }
         });

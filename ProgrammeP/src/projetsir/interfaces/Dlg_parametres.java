@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projetsir;
+package projetsir.interfaces;
 
 import java.awt.GridLayout;
 import java.util.*;
 import javax.swing.*;
+import projetsir.Parametres;
 
 /**
  *
@@ -90,7 +91,8 @@ public class Dlg_parametres extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -133,8 +135,10 @@ public class Dlg_parametres extends javax.swing.JFrame {
         jPanel2.add(jLabel5);
 
         AjoutServeur.setText("Ajouter un serveur");
-        AjoutServeur.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        AjoutServeur.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AjoutServeurActionPerformed(evt);
             }
         });
@@ -150,16 +154,20 @@ public class Dlg_parametres extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
         Annuler.setText("Annuler");
-        Annuler.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        Annuler.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AnnulerActionPerformed(evt);
             }
         });
         jPanel3.add(Annuler);
 
         Valider.setText("Valider");
-        Valider.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        Valider.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ValiderActionPerformed(evt);
             }
         });
