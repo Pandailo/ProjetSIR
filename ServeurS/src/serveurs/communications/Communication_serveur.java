@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package serveurs;
+package serveurs.communications;
 
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.logging.*;
+import serveurs.Parametres;
+import serveurs.Schema_global;
+import serveurs.Schema_local;
 /**
  *
  * @author Annabelle

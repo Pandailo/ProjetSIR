@@ -1,6 +1,8 @@
 
 package serveurs;
 
+import serveurs.interfaces.Menu;
+
 public class ServeurS {
 
     /**

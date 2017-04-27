@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package serveurs;
+package serveurs.interfaces;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
+import serveurs.Schema_global;
 
 /**
  *
@@ -59,7 +60,8 @@ public class DLG_Requete extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jTabbedPane2 = new javax.swing.JTabbedPane();
         pan_select = new javax.swing.JPanel();
@@ -110,8 +112,10 @@ public class DLG_Requete extends javax.swing.JFrame {
         jPanel1.add(cb_tables);
 
         ajouter_table_button.setText("Ajouter");
-        ajouter_table_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ajouter_table_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ajouter_table_buttonActionPerformed(evt);
             }
         });
@@ -144,8 +148,10 @@ public class DLG_Requete extends javax.swing.JFrame {
         jPanel2.add(cb_attributs);
 
         ajouter_attribut_button.setText("Ajouter");
-        ajouter_attribut_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ajouter_attribut_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ajouter_attribut_buttonActionPerformed(evt);
             }
         });
@@ -185,8 +191,10 @@ public class DLG_Requete extends javax.swing.JFrame {
         jPanel3.add(cb_att2);
 
         ajouter_condition_button.setText("Ajouter");
-        ajouter_condition_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ajouter_condition_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ajouter_condition_buttonActionPerformed(evt);
             }
         });
@@ -216,8 +224,10 @@ public class DLG_Requete extends javax.swing.JFrame {
         jPanel7.add(valider_button);
 
         quitter_button.setText("Quitter");
-        quitter_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        quitter_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 quitter_buttonActionPerformed(evt);
             }
         });
@@ -228,8 +238,10 @@ public class DLG_Requete extends javax.swing.JFrame {
         jPanel8.setLayout(new java.awt.GridLayout(1, 0));
 
         reset_button.setText("Réinitialiser");
-        reset_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        reset_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 reset_buttonActionPerformed(evt);
             }
         });

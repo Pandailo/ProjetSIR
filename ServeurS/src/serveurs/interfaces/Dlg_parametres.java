@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package serveurs;
+package serveurs.interfaces;
 
 import java.awt.GridLayout;
 import java.util.*;
 import javax.swing.*;
+import serveurs.Parametres;
 /**
  *
  * @author ag092850
@@ -105,7 +106,8 @@ public class Dlg_parametres extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel3 = new javax.swing.JPanel();
         Annuler = new javax.swing.JButton();
@@ -124,21 +126,23 @@ public class Dlg_parametres extends javax.swing.JFrame {
         AjoutServeur = new javax.swing.JButton();
         Serveurs = new javax.swing.JPanel();
 
-        setPreferredSize(new java.awt.Dimension(700, 400));
-
         jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
         Annuler.setText("Annuler");
-        Annuler.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        Annuler.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AnnulerActionPerformed(evt);
             }
         });
         jPanel3.add(Annuler);
 
         Valider.setText("Valider");
-        Valider.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        Valider.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ValiderActionPerformed(evt);
             }
         });
@@ -170,8 +174,10 @@ public class Dlg_parametres extends javax.swing.JFrame {
         jPanel2.add(jLabel5);
 
         AjoutServeur.setText("Ajouter un serveur");
-        AjoutServeur.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        AjoutServeur.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AjoutServeurActionPerformed(evt);
             }
         });

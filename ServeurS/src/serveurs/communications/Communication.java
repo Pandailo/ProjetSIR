@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package serveurs;
+package serveurs.communications;
 
 import java.io.*;
 import javax.sql.rowset.CachedRowSet;
+import serveurs.Parametres;
 
 /**
  *
