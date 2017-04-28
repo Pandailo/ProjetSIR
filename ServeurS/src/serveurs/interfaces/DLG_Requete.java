@@ -266,6 +266,9 @@ public class DLG_Requete extends javax.swing.JFrame {
     }//GEN-LAST:event_quitter_buttonActionPerformed
 
     private void reset_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_buttonActionPerformed
+        l_attributs=new ArrayList<String>();
+        l_tables=new ArrayList<String>();
+        l_cond=new ArrayList<String>();
         this.initialiserCB();
     }//GEN-LAST:event_reset_buttonActionPerformed
 
@@ -355,8 +358,30 @@ public class DLG_Requete extends javax.swing.JFrame {
 
     private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_valider_buttonActionPerformed
     {//GEN-HEADEREND:event_valider_buttonActionPerformed
-        Arbre arbre = new Arbre(l_attributs,l_cond);
-        this.setVisible(false);
+        String table = "";
+        if(this.l_cond.size()<=0 && this.l_tables.size()==1)
+        {
+            table = this.l_tables.get(0);
+            Arbre arbre = new Arbre(l_attributs,l_cond, table);
+            Dlg_resultat_requete dlg = new Dlg_resultat_requete(arbre);
+            dlg.setVisible(true);
+            this.setVisible(false);
+        }
+        else
+        {
+            if(this.l_cond.size()>0)
+            {
+                Arbre arbre = new Arbre(l_attributs,l_cond, table);
+                Dlg_resultat_requete dlg = new Dlg_resultat_requete(arbre);
+                dlg.setVisible(true);
+                this.setVisible(false);
+            }
+            else
+            {
+                JOptionPane jop = new JOptionPane();    	
+                jop.showMessageDialog(null, "Vous avez sélectionné plusieurs tables sans faire de jointure.", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
+            }
+        }
     }//GEN-LAST:event_valider_buttonActionPerformed
 
     /**

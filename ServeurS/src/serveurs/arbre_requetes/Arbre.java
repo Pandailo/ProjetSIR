@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.rowset.CachedRowSet;
+import serveurs.Schema_global;
 
 /**
  *
@@ -22,14 +23,20 @@ public class Arbre
     private ArrayList<String> l_con; 
     private Noeud racine;
 
-    public Arbre(ArrayList<String> l_att, ArrayList<String> l_con)
+    public Arbre(ArrayList<String> l_att, ArrayList<String> l_con, String table)
     {
         this.l_att = l_att;
         this.l_con = l_con;
         racine=null;
-        this.construction_jointures();
-        this.construction_conditions();
-        System.out.println(this.toString());
+        if(l_con.size()>0)
+        {
+            this.construction_jointures();
+            this.construction_conditions();
+        }
+        else
+        {
+            this.racine = new Noeud(table, null, null, "table");
+        }
     }
     
     public void construction_jointures()
@@ -111,26 +118,56 @@ public class Arbre
     {
         List<String> resultat = new ArrayList<>();
         CachedRowSet crs = this.racine.lireNoeud();
+        Schema_global global = new Schema_global();
         try 
         {
             ResultSetMetaData rsmd = crs.getMetaData();
+            List<String> rsmd_colonnes = new ArrayList<>();
             String contenu = "";
-            for(int i=0; i<this.l_att.size(); i++)
+            if(this.l_att.size()>0)
             {
-                contenu += l_att.get(i);
-                if(i<this.l_att.size()-1)
-                    contenu += ";";
+                for(int i=0; i<this.l_att.size(); i++)
+                {
+                    contenu += l_att.get(i);
+                    if(i<this.l_att.size()-1)
+                        contenu += ";";
+                }
+            }
+            else
+            {
+                for(int i=0; i<rsmd.getColumnCount(); i++)
+                {
+                    if(!rsmd_colonnes.contains(rsmd.getColumnName(i+1)))
+                    {
+                        rsmd_colonnes.add(rsmd.getColumnName(i+1));
+                        contenu += rsmd.getColumnName(i+1);
+                        if(i<rsmd.getColumnCount()-1)
+                            contenu += ";";
+                    }
+                }
             }
             resultat.add(contenu);
             crs.beforeFirst();
             while(crs.next())
             {
                 contenu = "";
-                for(int i=0; i<this.l_att.size(); i++)
+                if(this.l_att.size()>0)
                 {
-                    contenu += crs.getObject(this.l_att.get(i)).toString();
-                    if(i<this.l_att.size()-1)
-                        contenu += ";";
+                    for(int i=0; i<this.l_att.size(); i++)
+                    {
+                        contenu += crs.getObject(this.l_att.get(i).split("\\.")[1]).toString();
+                        if(i<this.l_att.size()-1)
+                            contenu += ";";
+                    }
+                }
+                else
+                {
+                    for(int i=0; i<rsmd_colonnes.size(); i++)
+                    {
+                        contenu += crs.getObject(rsmd.getColumnName(i+1)).toString();
+                        if(i<rsmd.getColumnCount()-1)
+                            contenu += ";";
+                    }
                 }
                 resultat.add(contenu);
             }

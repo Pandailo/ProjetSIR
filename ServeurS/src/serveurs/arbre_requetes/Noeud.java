@@ -48,7 +48,7 @@ public class Noeud
         {
             case "table" : this.table = true; break;
             case "jointure" : this.jointure = true; break;
-            case "condition" : this.jointure = true; break;
+            case "condition" : this.condition = true; break;
         }
     }
 
@@ -208,17 +208,28 @@ public class Noeud
         if(this.jointure)
         {
             String[] split = this.contenu.split(";");
-            crs = this.jointure(this.filsD.lireNoeud(), split[1].split("\\.")[1], this.filsG.lireNoeud(), split[3].split("\\.")[1]);
+            for(int i=0; i<split.length; i++)
+                System.out.println(split[i]);
+            crs = this.jointure(this.filsD.lireNoeud(), split[0].split("\\.")[1], this.filsG.lireNoeud(), split[2].split("\\.")[1]);
         }
         if(this.condition)
         {
             String[] split = this.contenu.split(";");
+            CachedRowSet crs_table = null;
             Noeud n = null;
             if(this.filsD!=null)
                 n = this.filsD;
             if(this.filsG!=null)
                 n = this.filsG;
-            crs = this.appliquer_condition(n.lireNoeud(), split[1]+";"+split[2]+";"+split[3]);
+            if(n==null)
+            {
+                String table = split[0].split("\\.")[0];
+                Communication_BD com_bd = new Communication_BD();
+                crs_table = com_bd.requete(table, "*", "1=1");
+            }
+            else
+                crs_table = n.lireNoeud();
+            crs = this.appliquer_condition(crs_table, split[0]+";"+split[1]+";"+split[2]);
         }
         return crs;
     }
@@ -319,6 +330,10 @@ public class Noeud
     
     public CachedRowSet ajout_attributs(CachedRowSet crs1, CachedRowSet crs2)
     {
+        if(crs1==null && crs2!=null)
+            return crs2;
+        if(crs1!=null && crs2==null)
+            return crs1;
         CachedRowSet crs = null;
         try 
         {
@@ -342,6 +357,10 @@ public class Noeud
     
     public CachedRowSet ajout_tuples(CachedRowSet crs1, CachedRowSet crs2)
     {
+        if(crs1==null && crs2!=null)
+            return crs2;
+        if(crs1!=null && crs2==null)
+            return crs1;
         CachedRowSet crs = crs1;
         try 
         {
@@ -365,6 +384,10 @@ public class Noeud
     
     public CachedRowSet jointure(CachedRowSet crs1, String attribut1, CachedRowSet crs2, String attribut2)
     {
+        if(crs1==null && crs2!=null)
+            return crs2;
+        if(crs1!=null && crs2==null)
+            return crs1;
         CachedRowSet crs = null;
         try 
         {
