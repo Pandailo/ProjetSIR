@@ -5,9 +5,12 @@
  */
 package serveurs.arbre_requetes;
 
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sql.rowset.CachedRowSet;
-import serveurs.*;
 
 /**
  *
@@ -26,7 +29,6 @@ public class Arbre
         racine=null;
         this.construction_jointures();
         this.construction_conditions();
-        this.construction_selections();
         System.out.println(this.toString());
     }
     
@@ -99,24 +101,44 @@ public class Arbre
         }   
     }
     
-    public void construction_selections()
-    {
-        /*for(int i=0;i<this.l_att.size();i++)
-            this.racine = new Noeud(this.l_att.get(i), this.racine, null, "selection");*/
-    }
-    
     @Override
     public String toString()
     {
         return this.racine.toString();
     }
     
-    public CachedRowSet lireArbre()
+    public List<String> lireArbre()
     {
-        CachedRowSet crs=null;
-        Schema_global global=new Schema_global();
-        Schema_local local=new Schema_local(true);
-        
-        return crs;
+        List<String> resultat = new ArrayList<>();
+        CachedRowSet crs = this.racine.lireNoeud();
+        try 
+        {
+            ResultSetMetaData rsmd = crs.getMetaData();
+            String contenu = "";
+            for(int i=0; i<this.l_att.size(); i++)
+            {
+                contenu += l_att.get(i);
+                if(i<this.l_att.size()-1)
+                    contenu += ";";
+            }
+            resultat.add(contenu);
+            crs.beforeFirst();
+            while(crs.next())
+            {
+                contenu = "";
+                for(int i=0; i<this.l_att.size(); i++)
+                {
+                    contenu += crs.getObject(this.l_att.get(i)).toString();
+                    if(i<this.l_att.size()-1)
+                        contenu += ";";
+                }
+                resultat.add(contenu);
+            }
+        } 
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(Arbre.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resultat;
     }
 }
