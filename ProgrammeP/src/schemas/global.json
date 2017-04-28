@@ -175,9 +175,20 @@
 					]
 				},
 				{
-					"nom_attribut":"DATEP",
+					"nom_attribut":"MOIS",
 					"cle_primaire":"non",
-					"type":"DATE(0)",
+					"type":"VARCHAR2(25)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"ANNEE",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)",
 					"serveurs":
 					[
 						{
@@ -196,6 +207,17 @@
 					"nom_attribut":"TITRE",
 					"cle_primaire":"oui",
 					"type":"VARCHAR2(25)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"ID",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)",
 					"serveurs":
 					[
 						{

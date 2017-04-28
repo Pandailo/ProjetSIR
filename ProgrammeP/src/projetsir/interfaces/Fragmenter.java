@@ -93,6 +93,13 @@ public class Fragmenter extends javax.swing.JFrame {
         jPanel3.add(f_verticale);
 
         f_horizontale.setText("Fragmentation horizontale");
+        f_horizontale.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                f_horizontaleActionPerformed(evt);
+            }
+        });
         jPanel3.add(f_horizontale);
 
         jPanel1.add(jPanel3);
@@ -197,6 +204,12 @@ public class Fragmenter extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_formWindowGainedFocus
+
+    private void f_horizontaleActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_f_horizontaleActionPerformed
+    {//GEN-HEADEREND:event_f_horizontaleActionPerformed
+        new DLG_Frag_Horizontale().setVisible(true);
+        
+    }//GEN-LAST:event_f_horizontaleActionPerformed
     
     /**
      * @param args the command line arguments
