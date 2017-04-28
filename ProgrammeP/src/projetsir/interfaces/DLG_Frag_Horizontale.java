@@ -18,6 +18,7 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
 {
     bd_globale bdg;
     ArrayList<String> fragments;
+    String temp;
     /**
      * Creates new form DLG_Frag_Horizontale
      */
@@ -28,6 +29,7 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         String[] l_tables=bdg.get_liste_nom_tables();
         cb_tables.removeAllItems();
         fragments=new ArrayList();
+        temp="";
         for (String l_table : l_tables)
         {
             cb_tables.addItem(l_table);
@@ -62,8 +64,6 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         jPanel8 = new javax.swing.JPanel();
         annuler_button = new javax.swing.JButton();
         valider_button = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -167,7 +167,11 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
 
     private void Valider_frag_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Valider_frag_buttonActionPerformed
     {//GEN-HEADEREND:event_Valider_frag_buttonActionPerformed
-        System.out.println(this.fragments.size());
+       if(temp!="")
+       {
+           this.fragments.add(temp);
+           temp="";
+       }
         if(this.fragments.size()>0)
         {
             this.resume_frag_h.removeAll();
@@ -182,15 +186,21 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
                 JTextField tf=new JTextField();
                 tf.setEnabled(false);
                 String text="";
-                String[] split=this.fragments.get(i).split(";");
-                for(int j=0;j<split.length;j++)
+                String[] split1=this.fragments.get(i).split("@");
+                for(int k=0;k<split1.length;k++)
                 {
-                    if(j==0)
+                    String[] split=split1[k].split(";");
+                    for(int j=0;j<split.length;j++)
                     {
-                        text+=split[j]+".";
+                        if(j==0)
+                        {
+                            text+=split[j]+".";
+                        }
+                        else
+                            text+=split[j]+" ";
                     }
-                    else
-                        text+=split[j]+" ";
+                    if(k!=split1.length-1)
+                        text+=" AND ";
                 }
                 tf.setText(text);
                 this.resume_frag_h.add(tf);
@@ -237,18 +247,49 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
                     att=this.cb_comp_att.getSelectedItem().toString();
                     System.out.println(bdg.get_type_attribut(table, att));
                     String[] split=bdg.get_type_attribut(table, att).split("\\(");
+                    String val="";
+                    boolean continuer=true;
+                    String mes="Valeur (entier)?";
                     if(split[0].equals("NUMBER"))
                     {
                         JOptionPane jop2 = new JOptionPane();
-                        valInt = Integer.parseInt(jop2.showInputDialog(null,"Valeur (entier)?", JOptionPane.QUESTION_MESSAGE));
-                        System.out.println(this.cb_comp_signe.getSelectedItem().toString());
-                        this.fragments.add(table+";"+att+";"+this.cb_comp_signe.getSelectedItem().toString()+";"+valInt);
+                        while(continuer&&valInt<0)
+                        {
+                            val = jop2.showInputDialog(null,mes, JOptionPane.QUESTION_MESSAGE);
+                            if(val!=null)
+                            {
+                                try{
+                                    valInt=Integer.parseInt(val);
+                                    temp+=(table+";"+att+";"+this.cb_comp_signe.getSelectedItem().toString()+";"+valInt+"@");
+                                }catch(NumberFormatException e)
+                                {
+                                    mes="Valeur ? Merci de mettre un entier positif !";
+                                }
+                                 mes="Valeur ? Merci de mettre un entier positif !";
+                            }
+                            else
+                            {
+                                continuer=false;
+                            }
+                                
+                        }
                     }
                     else
                     {
                         JOptionPane jop2 = new JOptionPane();
-                        valS = jop2.showInputDialog(null,"Valeur (chaine de caractère)?", JOptionPane.QUESTION_MESSAGE);
-                        this.fragments.add(table+";"+att+";"+this.cb_comp_signe.getSelectedItem().toString()+";"+valS);
+                         while(continuer)
+                        {
+                            val = jop2.showInputDialog(null,mes, JOptionPane.QUESTION_MESSAGE);
+                            if(val!=null)
+                            {
+                                valS = jop2.showInputDialog(null,"Valeur (chaine de caractère)?", JOptionPane.QUESTION_MESSAGE);
+                                temp+=(table+";"+att+";"+this.cb_comp_signe.getSelectedItem().toString()+";"+valS+"@");
+                                continuer=false;
+                            }
+                            else
+                                mes="Valeurs ? Merci de mettre une chaine valable!";
+                        }
+                      
                     }
                 }
             }
