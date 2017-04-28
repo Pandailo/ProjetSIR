@@ -129,6 +129,7 @@ public class Communication_BD
             crs = new CachedRowSetImpl();
             crs.setCommand("SELECT "+attributs+" FROM "+tables+" WHERE "+conditions);
             crs.execute(this.connect);
+            crs = crs.createCopy();
         }
         catch (SQLException ex) 
         {

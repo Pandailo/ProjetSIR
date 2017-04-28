@@ -5,13 +5,18 @@
  */
 package serveurs.arbre_requetes;
 
+import com.sun.rowset.CachedRowSetImpl;
+import com.sun.rowset.JoinRowSetImpl;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.JoinRowSet;
 import serveurs.Parametres;
 import serveurs.Schema_global;
 import serveurs.Schema_local;
@@ -31,7 +36,7 @@ public class Noeud
     private Noeud filsG;
     private Noeud filsD;
     
-    public Noeud(String contenu,Noeud filsD,Noeud filsG, String type)
+    public Noeud(String contenu, Noeud filsD, Noeud filsG, String type)
     {
         this.contenu=contenu;
         this.filsD=filsD;
@@ -225,7 +230,6 @@ public class Noeud
             String[] split = condition.split(";");
             String attribut = split[0];
             String signe = split[1];
-            boolean att2 = false;
             String valeur = split[2];
             if(valeur.contains("."))
             {
@@ -237,7 +241,7 @@ public class Noeud
             crs.beforeFirst();
             while(crs.next()) 
             {
-                String val_tuple_s = crs.getString(attribut);
+                String val_tuple_s = crs.getObject(attribut).toString();
                 Double val_tuple_d = null;
                 boolean a_supprimer = false;
                 try
@@ -247,27 +251,27 @@ public class Noeud
                     switch(signe)
                     {
                         case "=" : 
-                            if(val_tuple_d==val_2)
+                            if(!Objects.equals(val_tuple_d, val_2))
                                 a_supprimer = true; 
                             break;
                         case "<>" : 
-                            if(val_tuple_d!=val_2)
+                            if(Objects.equals(val_tuple_d, val_2))
                                 a_supprimer = true; 
                             break;
                         case ">" : 
-                            if(val_tuple_d>val_2)
+                            if(val_tuple_d<=val_2)
                                 a_supprimer = true; 
                             break;
                         case "<" : 
-                            if(val_tuple_d<val_2)
-                                a_supprimer = true; 
-                            break;
-                        case ">=" : 
                             if(val_tuple_d>=val_2)
                                 a_supprimer = true; 
                             break;
+                        case ">=" : 
+                            if(val_tuple_d<val_2)
+                                a_supprimer = true; 
+                            break;
                         case "<=" :
-                            if(val_tuple_d<=val_2)
+                            if(val_tuple_d>val_2)
                                 a_supprimer = true; 
                             break;
                     }
@@ -277,27 +281,27 @@ public class Noeud
                     switch(signe)
                     {
                         case "=" : 
-                            if(val_tuple_s.equals(valeur))
-                                a_supprimer = true; 
-                            break;
-                        case "<>" : 
                             if(!val_tuple_s.equals(valeur))
                                 a_supprimer = true; 
                             break;
+                        case "<>" : 
+                            if(val_tuple_s.equals(valeur))
+                                a_supprimer = true; 
+                            break;
                         case ">" : 
-                            if(val_tuple_s.compareTo(valeur)>0)
+                            if(val_tuple_s.compareTo(valeur)<=0)
                                 a_supprimer = true; 
                             break;
                         case "<" : 
-                            if(val_tuple_s.compareTo(valeur)<0)
-                                a_supprimer = true; 
-                            break;
-                        case ">=" : 
                             if(val_tuple_s.compareTo(valeur)>=0)
                                 a_supprimer = true; 
                             break;
+                        case ">=" : 
+                            if(val_tuple_s.compareTo(valeur)<0)
+                                a_supprimer = true; 
+                            break;
                         case "<=" :
-                            if(val_tuple_s.compareTo(valeur)<=0)
+                            if(val_tuple_s.compareTo(valeur)>0)
                                 a_supprimer = true; 
                             break;
                     }
@@ -316,56 +320,20 @@ public class Noeud
     public CachedRowSet ajout_attributs(CachedRowSet crs1, CachedRowSet crs2)
     {
         CachedRowSet crs = null;
-        List<String> attributs = new ArrayList<>();
-        try
+        try 
         {
-            String[] cles_primaires = new Schema_global().get_cles_primaires(crs1.getTableName());
-            String[] val_cles_primaires = new String[cles_primaires.length];
-            crs1.beforeFirst();
-            while(crs1.next())
-            {
-                attributs.clear();
-                for(int i=0; i<val_cles_primaires.length; i++)
-                    val_cles_primaires[i] = crs1.getString(cles_primaires[i]);
-                crs2.beforeFirst();
-                boolean correspondance_trouvee = false;
-                while(!correspondance_trouvee && crs2.next())
-                {
-                    for(int i=0; i<=val_cles_primaires.length; i++)
-                    {
-                        if(i==val_cles_primaires.length)
-                            correspondance_trouvee = true;
-                        else
-                        {
-                            if(!val_cles_primaires[i].equals(crs2.getString(cles_primaires[i])))
-                                i = val_cles_primaires.length + 1;
-                        }
-                    }
-                    if(correspondance_trouvee)
-                    {
-                        int nb_colonnes_crs1 = crs1.getMetaData().getColumnCount();
-                        int nb_colonnes_crs2 = crs2.getMetaData().getColumnCount();
-                        for(int i=0; i<nb_colonnes_crs1; i++)
-                        {
-                            //Ajouter dans la liste attributs l'attribut ajouté
-                            //Ajouter l'attribut dans le crs
-                        }
-                        for(int i=0; i<nb_colonnes_crs2; i++)
-                        {
-                            
-                        }
-                        /*crs.moveToInsertRow();
-                        crs.updateInt("ITEM_ID", 1);
-                        crs.updateString("ITEM_NAME", "TableCloth");
-                        crs.updateInt("SUP_ID", 927);
-                        crs.updateInt("QUAN", 14);
-                        crs.insertRow();
-                        crs.moveToCurrentRow();*/
-                    }
-                }
-            }
-        }
-        catch (SQLException ex)
+            Communication_BD com_bd = new Communication_BD();
+            Schema_global global = new Schema_global();
+            String[] cles_primaires = global.get_cles_primaires(crs1.getTableName());
+            JoinRowSet jrs = new JoinRowSetImpl();
+            crs1.setMatchColumn(cles_primaires);
+            jrs.addRowSet(crs1);
+            crs2.setMatchColumn(cles_primaires);
+            jrs.addRowSet(crs2);
+            crs = jrs.toCachedRowSet();
+            crs.setTableName(crs1.getTableName());
+        } 
+        catch (SQLException ex) 
         {
             Logger.getLogger(Noeud.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -374,29 +342,46 @@ public class Noeud
     
     public CachedRowSet ajout_tuples(CachedRowSet crs1, CachedRowSet crs2)
     {
-        CachedRowSet crs = null;
-        /*
-        crs.moveToInsertRow();
-        crs.updateInt("ITEM_ID", newItemId);
-        crs.updateString("ITEM_NAME", "TableCloth");
-        crs.updateInt("SUP_ID", 927);
-        crs.updateInt("QUAN", 14);
-        Calendar timeStamp;
-        timeStamp = new GregorianCalendar();
-        timeStamp.set(2006, 4, 1);
-        crs.updateTimestamp(
-            "DATE_VAL",
-            new Timestamp(timeStamp.getTimeInMillis()));
-        crs.insertRow();
-        crs.moveToCurrentRow();
-        */
+        CachedRowSet crs = crs1;
+        try 
+        {
+            ResultSetMetaData rsmd = crs.getMetaData();
+            crs2.beforeFirst();
+            while(crs2.next())
+            {
+                crs.moveToInsertRow();
+                for(int i=0; i<rsmd.getColumnCount(); i++)
+                    crs.updateObject(i+1, crs2.getObject(i+1));
+                crs.insertRow();
+                crs.moveToCurrentRow();
+            }
+        } 
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(Noeud.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return crs;
     }
     
-    public CachedRowSet jointure(CachedRowSet t_gauche, String attribut_gauche, CachedRowSet t_droite, String attribut_droit)
+    public CachedRowSet jointure(CachedRowSet crs1, String attribut1, CachedRowSet crs2, String attribut2)
     {
         CachedRowSet crs = null;
-        
+        try 
+        {
+            Communication_BD com_bd = new Communication_BD();
+            Schema_global global = new Schema_global();
+            JoinRowSet jrs = new JoinRowSetImpl();
+            crs1.setMatchColumn(attribut1);
+            jrs.addRowSet(crs1);
+            crs2.setMatchColumn(attribut2);
+            jrs.addRowSet(crs2);
+            crs = jrs.toCachedRowSet();
+            crs.setTableName(crs1.getTableName());
+        } 
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(Noeud.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return crs;
     }
     
