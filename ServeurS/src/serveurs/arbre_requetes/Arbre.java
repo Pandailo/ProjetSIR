@@ -55,7 +55,7 @@ public class Arbre
                 att2=split[3];
                 if(split[0].equals("J"))
                 {
-                    if(racine==null)
+                    if(this.racine==null)
                     {
                         Noeud fg = new Noeud(att1.split("\\.")[0], null, null, "table");
                         Noeud fd = new Noeud(att2.split("\\.")[0], null, null, "table");
@@ -63,6 +63,7 @@ public class Arbre
                         tables_utilisees.add(att1.split("\\.")[0]);
                         tables_utilisees.add(att2.split("\\.")[0]);
                         this.l_con.remove(i);
+                        i--;
                     }
                     else
                     {
@@ -71,11 +72,22 @@ public class Arbre
                             Noeud fg = new Noeud(att1.split("\\.")[0], null, null, "table");
                             this.racine = new Noeud(att1+";"+signe+";"+att2, fg, this.racine, "jointure");
                             tables_utilisees.add(att1.split("\\.")[0]);
-                            tables_utilisees.add(att2.split("\\.")[0]);
                             this.l_con.remove(i);
+                            i--;
                         }
                         else
-                            jointures_restantes = true;
+                        {
+                            if(tables_utilisees.contains(att1.split("\\.")[0]))
+                            {
+                                Noeud fd = new Noeud(att2.split("\\.")[0], null, null, "table");
+                                this.racine = new Noeud(att1+";"+signe+";"+att2, this.racine, fd, "jointure");
+                                tables_utilisees.add(att2.split("\\.")[0]);
+                                this.l_con.remove(i);
+                                i--;
+                            }
+                            else
+                                jointures_restantes = true;
+                        }
                     }
                 }
             }
@@ -118,7 +130,6 @@ public class Arbre
     {
         List<String> resultat = new ArrayList<>();
         CachedRowSet crs = this.racine.lireNoeud();
-        Schema_global global = new Schema_global();
         try 
         {
             ResultSetMetaData rsmd = crs.getMetaData();

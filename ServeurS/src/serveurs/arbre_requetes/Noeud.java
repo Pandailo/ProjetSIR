@@ -9,7 +9,6 @@ import com.sun.rowset.CachedRowSetImpl;
 import com.sun.rowset.JoinRowSetImpl;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -208,8 +207,6 @@ public class Noeud
         if(this.jointure)
         {
             String[] split = this.contenu.split(";");
-            for(int i=0; i<split.length; i++)
-                System.out.println(split[i]);
             crs = this.jointure(this.filsD.lireNoeud(), split[0].split("\\.")[1], this.filsG.lireNoeud(), split[2].split("\\.")[1]);
         }
         if(this.condition)
@@ -337,7 +334,6 @@ public class Noeud
         CachedRowSet crs = null;
         try 
         {
-            Communication_BD com_bd = new Communication_BD();
             Schema_global global = new Schema_global();
             String[] cles_primaires = global.get_cles_primaires(crs1.getTableName());
             JoinRowSet jrs = new JoinRowSetImpl();
@@ -391,8 +387,6 @@ public class Noeud
         CachedRowSet crs = null;
         try 
         {
-            Communication_BD com_bd = new Communication_BD();
-            Schema_global global = new Schema_global();
             JoinRowSet jrs = new JoinRowSetImpl();
             crs1.setMatchColumn(attribut1);
             jrs.addRowSet(crs1);

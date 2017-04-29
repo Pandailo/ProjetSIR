@@ -175,9 +175,20 @@
 					]
 				},
 				{
-					"nom_attribut":"DATEP",
+					"nom_attribut":"MOIS",
 					"cle_primaire":"non",
-					"type":"DATE(0)",
+					"type":"VARCHAR2(25)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"ANNEE",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)",
 					"serveurs":
 					[
 						{
@@ -204,78 +215,20 @@
 					]
 				},
 				{
+					"nom_attribut":"ID",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
 					"nom_attribut":"SALAIRE",
 					"cle_primaire":"non",
 					"type":"NUMBER(38)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
-				}
-			]
-		},
-		{
-			"nom":"SIR_TEST",
-			"fragmentation":"verticale",
-			"attributs":
-			[
-				{
-					"nom_attribut":"ID",
-					"cle_primaire":"oui",
-					"type":"NUMBER(38)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
-				},
-				{
-					"nom_attribut":"ATT_2",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(30)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
-				}
-			]
-		},
-		{
-			"nom":"SIR_TEST2",
-			"fragmentation":"verticale",
-			"attributs":
-			[
-				{
-					"nom_attribut":"ID1",
-					"cle_primaire":"oui",
-					"type":"NUMBER(38)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
-				},
-				{
-					"nom_attribut":"ID2",
-					"cle_primaire":"oui",
-					"type":"NUMBER(38)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
-				},
-				{
-					"nom_attribut":"ATT",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(50)",
 					"serveurs":
 					[
 						{

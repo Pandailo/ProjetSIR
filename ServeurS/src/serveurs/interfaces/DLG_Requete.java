@@ -68,7 +68,7 @@ public class DLG_Requete extends javax.swing.JFrame {
         pan_select = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        cb_tables = new javax.swing.JComboBox<>();
+        cb_tables = new javax.swing.JComboBox<String>();
         ajouter_table_button = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -76,7 +76,7 @@ public class DLG_Requete extends javax.swing.JFrame {
         ta_select = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        cb_attributs = new javax.swing.JComboBox<>();
+        cb_attributs = new javax.swing.JComboBox<String>();
         ajouter_attribut_button = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -84,9 +84,9 @@ public class DLG_Requete extends javax.swing.JFrame {
         ta_from = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        cb_att1 = new javax.swing.JComboBox<>();
-        cb_condition = new javax.swing.JComboBox<>();
-        cb_att2 = new javax.swing.JComboBox<>();
+        cb_att1 = new javax.swing.JComboBox<String>();
+        cb_condition = new javax.swing.JComboBox<String>();
+        cb_att2 = new javax.swing.JComboBox<String>();
         ajouter_condition_button = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -99,6 +99,7 @@ public class DLG_Requete extends javax.swing.JFrame {
         reset_button = new javax.swing.JButton();
 
         setTitle("Creation requete");
+        setMinimumSize(new java.awt.Dimension(1800, 138));
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         pan_select.setLayout(new java.awt.GridLayout(4, 2));
@@ -129,7 +130,6 @@ public class DLG_Requete extends javax.swing.JFrame {
         jPanel5.add(jLabel4);
 
         ta_select.setColumns(20);
-        ta_select.setForeground(new java.awt.Color(0, 0, 0));
         ta_select.setRows(5);
         ta_select.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         ta_select.setEnabled(false);
@@ -165,7 +165,6 @@ public class DLG_Requete extends javax.swing.JFrame {
         jPanel4.add(jLabel6);
 
         ta_from.setColumns(20);
-        ta_from.setForeground(new java.awt.Color(0, 0, 0));
         ta_from.setRows(5);
         ta_from.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         ta_from.setEnabled(false);
@@ -183,7 +182,7 @@ public class DLG_Requete extends javax.swing.JFrame {
         cb_att1.setToolTipText("");
         jPanel3.add(cb_att1);
 
-        cb_condition.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "=", "<>", ">", ">=", "<", "<=" }));
+        cb_condition.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "=", "<>", ">", ">=", "<", "<=" }));
         jPanel3.add(cb_condition);
 
         jPanel3.add(cb_att2);
@@ -324,7 +323,7 @@ public class DLG_Requete extends javax.swing.JFrame {
             String att1=(String)cb_att1.getSelectedItem();
             String att2=(String)cb_att2.getSelectedItem();
             String signe=(String)cb_condition.getSelectedItem();
-             String cond="";
+            String cond="";
             if(att2.equals("valeur"))
             {
                 JOptionPane jop2 = new JOptionPane();
@@ -334,20 +333,24 @@ public class DLG_Requete extends javax.swing.JFrame {
             else
             {
                 if(!(att1.split("\\.")[0].equals(att2.split("\\.")[0])))
-                {
-                    cond="J"+";"+att1+";"+signe+";"+att2;
-                }
+                        cond="J"+";"+att1+";"+signe+";"+att2;
                 else
                     cond="C"+";"+att1+";"+signe+";"+att2;
             }
-            if(ta_where.getText().length()!=0)
+            if(cond.split(";")[0].equals("J") && !signe.equals("="))
             {
-                ta_where.append(", ");
+                JOptionPane jop = new JOptionPane();    	
+                jop.showMessageDialog(null, "La jointure n'est disponible qu'avec le signe =", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
             }
-            ta_where.append(att1+signe+att2);
-            l_cond.add(cond);
-            
-            
+            else
+            {
+                if(ta_where.getText().length()!=0)
+                {
+                    ta_where.append(" AND ");
+                }
+                ta_where.append(att1+signe+att2);
+                l_cond.add(cond);
+            }
         }
         else
         {

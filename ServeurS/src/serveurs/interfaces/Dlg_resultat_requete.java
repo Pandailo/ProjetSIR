@@ -92,26 +92,33 @@ public class Dlg_resultat_requete extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         NouvelleRequete = new javax.swing.JButton();
         RetourMenu = new javax.swing.JButton();
         ResultatRequete = new javax.swing.JPanel();
 
+        setPreferredSize(new java.awt.Dimension(1500, 300));
+
         jPanel1.setLayout(new java.awt.GridLayout(1, 2));
 
         NouvelleRequete.setText("Nouvelle requête");
-        NouvelleRequete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        NouvelleRequete.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 NouvelleRequeteActionPerformed(evt);
             }
         });
         jPanel1.add(NouvelleRequete);
 
         RetourMenu.setText("Revenir au menu principal");
-        RetourMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        RetourMenu.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 RetourMenuActionPerformed(evt);
             }
         });
