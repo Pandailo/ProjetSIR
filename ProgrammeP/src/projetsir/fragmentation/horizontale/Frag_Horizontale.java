@@ -73,11 +73,10 @@ public class Frag_Horizontale
                 s += ",";
             s += "\n";
         }
-        s += "\t\t\t],";
+        s += "\t\t\t],\n";
         //Ecriture des fragments
         s += "\t\t\t\"fragments\":\n\t\t\t[\n";
         String[] conditions;
-        String[] serveurs_fragment;
         for(int i=0; i<this.fragments.size(); i++)
         {
             s += "\t\t\t\t{\n";
