@@ -430,7 +430,7 @@ class Accepter_client implements Runnable {
                 creation_attributs += creation_pk+")";
                 System.out.println("Création de la table "+tables_nouvelles[i]+".");
                 System.out.println(creation_attributs);
-                //com_BD.ajoutTable(tables_nouvelles[i], null);
+                new Communication_BD().ajoutTable(tables_nouvelles[i], null);
             }
         }
     }
@@ -470,7 +470,7 @@ class Accepter_client implements Runnable {
                     if(creation)
                     {
                         System.out.println("Ajout de la colonne "+attributs_nouveaux[j]+" type "+bd_nouvelle.get_type_attribut(tables_nouvelles[i], attributs_nouveaux[j])+" à la table "+tables_nouvelles[i]+".");
-                        //com_BD.ajoutColonne(tables_nouvelles[i], attributs_nouveaux[j], bd_nouvelle.get_type_attribut(tables_nouvelles[i], attributs_nouveaux[j]));
+                        new Communication_BD().ajoutColonne(tables_nouvelles[i], attributs_nouveaux[j], bd_nouvelle.get_type_attribut(tables_nouvelles[i], attributs_nouveaux[j]));
                     }
                 }
             }
@@ -542,8 +542,8 @@ class Accepter_client implements Runnable {
                     {
                         System.out.println("Requete au serveur "+liste_serveurs.get(j)+" : Table "+tables+", attributs : "+attributs);
                         System.out.println("Conditions : "+conditions);
-                        /*com_BD.ajoutTuples(this.communication.envoi_requete(liste_serveurs.get(j), tables, attributs, conditions), 
-                                tables, bd_nouvelle.get_cles_primaires(tables));*/
+                        new Communication_BD().ajoutTuples(this.communication.envoi_requete(liste_serveurs.get(j), tables, attributs, conditions), 
+                                tables, bd_nouvelle.get_cles_primaires(tables));
                     }
                 }
             }
@@ -591,8 +591,8 @@ class Accepter_client implements Runnable {
                         {
                             System.out.println("Requete au serveur "+num_serveur_envoi_requete+" : Table "+tables+", attributs : "+attributs);
                             System.out.println("Conditions : "+conditions);
-                            /*com_BD.ajoutTuples(this.communication.envoi_requete(num_serveur_envoi_requete, tables, attributs, conditions), 
-                                    tables, bd_nouvelle.get_cles_primaires(tables));*/
+                            new Communication_BD().ajoutTuples(this.communication.envoi_requete(num_serveur_envoi_requete, tables, attributs, conditions), 
+                                    tables, bd_nouvelle.get_cles_primaires(tables));
                         }
                     }
                 }
@@ -629,7 +629,7 @@ class Accepter_client implements Runnable {
                     
                 }
                 System.out.println("Table : "+tables+", suppression : "+conditions);
-                //com_BD.suppressionTuples(tables, conditions);
+                new Communication_BD().suppressionTuples(tables, conditions);
             }
         }
     }
@@ -669,7 +669,7 @@ class Accepter_client implements Runnable {
                     if(suppression)
                     {
                         System.out.println("Suppression de la colonne "+attributs_nouveaux[j]+" de la table "+tables_nouvelles[i]+".");
-                        //com_BD.suppressionColonne(tables_nouvelles[i], attributs_nouveaux[j]);
+                        new Communication_BD().suppressionColonne(tables_nouvelles[i], attributs_nouveaux[j]);
                     }
                 }
             }
@@ -696,7 +696,7 @@ class Accepter_client implements Runnable {
             if(suppression)
             {
                 System.out.println("Suppression de la table "+tables_actuelles[i]+".");
-                //com_BD.suppressionTable(tables_nouvelles[i]);
+                new Communication_BD().suppressionTable(tables_nouvelles[i]);
             }
         }
     }
