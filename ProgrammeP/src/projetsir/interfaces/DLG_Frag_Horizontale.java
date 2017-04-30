@@ -228,7 +228,6 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
                 if(this.cb_comp_att2.getSelectedIndex()!=-1)
                 {
                     att=this.cb_comp_att.getSelectedItem().toString();
-                    System.out.println(bdg.get_type_attribut(this.table, att));
                     String[] split=bdg.get_type_attribut(table, att).split("\\(");
                     String val="";
                     boolean continuer=true;
@@ -280,7 +279,6 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
                     String le_temporaire="";
                     for(int j=0;j<split1.length;j++)
                     {
-                        System.out.println(split1[j]);
                         split2=split1[j].split(";");
                         for(int i=0;i<split2.length;i++)
                         {

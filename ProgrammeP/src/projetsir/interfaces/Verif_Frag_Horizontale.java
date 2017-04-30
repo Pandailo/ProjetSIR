@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.*;
 import projetsir.Parametres;
+import projetsir.fragmentation.horizontale.Frag_Horizontale;
 
 /**
  *
@@ -21,6 +22,7 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
     ArrayList<String> list_select=new ArrayList();
     int nbT;
     ArrayList<String> list_frag=new ArrayList();
+    String table;
     /**
      * Creates new form Verif_Frag_Horizontale
      */
@@ -52,7 +54,7 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         for(int i=0;i<list_select.size();i++)
         {
             splitA=list_select.get(i).split("@");
-            cpt=splitA.length*2;
+            cpt+=splitA.length*2;
         }
         GridLayout gd=new GridLayout(nbF+1,cpt+1);
         this.pan_dis_f.setLayout(gd);
@@ -61,6 +63,8 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
             splitA=list_select.get(i).split("@");
             for(int j=-1;j<splitA.length;j++)
             {
+                if(i>0)
+                    j++;
                 if(j==-1)
                 {
                     JLabel lab=new JLabel();
@@ -71,7 +75,7 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
                 {
                     splitB=splitA[j].split(";");
                     signe=splitB[2];
-                    
+                    table=splitB[0];
                     signe2=this.inverse_signe(signe);   
                     JLabel lab=new JLabel();
                     lab.setName(splitB[0]+";"+splitB[1]+";"+signe+";"+splitB[3]);
@@ -258,7 +262,8 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
     }//GEN-LAST:event_annuler_buttonActionPerformed
 
     private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valider_buttonActionPerformed
-        this.list_select.clear();
+        this.list_frag.clear();
+        
         int[][] distri=new int[nbF][nbS];
         
         int u=0;
@@ -283,11 +288,12 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         //récup fragments prédicats
         boolean valide=true;
         String contenu="";
-        for(int i=0;i<(nbT+1)*(nbF+1);i++)
+        boolean pair=true;
+        for(int i=nbT+2;i<(nbT+1)*(nbF+1);i++)
         {
             if(this.pan_dis_f.getComponent(i).getClass()==JCheckBox.class)
             {
-                if(i%1==0)
+                if(((i%2==0)&&pair)||((i%2==1)&&!pair))
                 {
                     if(((JCheckBox)this.pan_dis_f.getComponent(i)).isSelected())
                     {
@@ -305,22 +311,47 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
                     {
                         if(((JCheckBox)this.pan_dis_f.getComponent(i+1)).isSelected())
                         {
-                            String name=((JLabel)(this.pan_dis_f.getComponent(i%(nbT+1)))).getName();
+                            String name=((JLabel)(this.pan_dis_f.getComponent((i+1)%(nbT+1)))).getName();
                             contenu+=name+"@";
                         }
                     }
                 }
             }
-            if(i%(nbS+1)==0)
+            else
             {
                this.list_frag.add(contenu);
                 contenu=""; 
+                pair=!pair;
             }
             
         }
-        for(int i=0;i<this.list_frag.size();i++)
-            System.out.println(this.list_frag.get(i)+" ");
-        
+        boolean flag=false;
+        for(int i=1;i<nbT+1;i++)
+        {
+            flag=false;
+            for(int j=1;j<nbF+1;j++)
+            {
+                if(((JCheckBox)this.pan_dis_f.getComponent(i+(j*(nbT+1)))).isSelected())
+                {
+                    flag=true;
+                }
+            }
+            if(!flag)
+            {
+                valide=false;
+                i=nbT+1;
+            }
+        }
+        System.out.println("flag :"+flag);
+        this.list_frag.add(contenu);
+        contenu=""; 
+        if(valide)
+        {
+            new Frag_Horizontale(this.list_frag,distri,this.table).construction_fichier();
+        }
+        else
+            System.out.println("Gg vous avez raté !");
+        //TODO A CHANGER
     }//GEN-LAST:event_valider_buttonActionPerformed
     private String inverse_signe(String signe)
     {

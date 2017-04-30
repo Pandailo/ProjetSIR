@@ -30,7 +30,7 @@ public class Frag_Horizontale
         this.nom_table = nom_table;
     }
    
-    private void construction_fichier()
+    public void construction_fichier()
     {
         String contenu = "";
         contenu = this.construction_schema_table();
