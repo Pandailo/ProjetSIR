@@ -8,23 +8,32 @@ package projetsir.interfaces;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.*;
+import projetsir.Parametres;
 
 /**
  *
  * @author yann
  */
 public class Verif_Frag_Horizontale extends javax.swing.JFrame {
-
+    int nbS;
+    Parametres param;
+    int nbF;
+    ArrayList<String> list_select;
+    int nbT;
+    ArrayList<String> list_frag;
     /**
      * Creates new form Verif_Frag_Horizontale
      */
     public Verif_Frag_Horizontale(ArrayList<String> list_select,JPanel pan) {
         initComponents();
         int cpt=0;
+        param=new Parametres();
+        this.list_select=list_select;
+        nbS=param.get_nb_serveurs();
         JOptionPane jop = new JOptionPane();
         String nbFS="";
         String message="Nombre de fragments ?";
-        int nbF=0;
+        nbF=0;
         while(!nbFS.matches("^\\d+$") || nbFS.matches("") || nbF<=1)
         {    
             nbFS = jop.showInputDialog(null, message, JOptionPane.QUESTION_MESSAGE);
@@ -88,6 +97,49 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
                 this.pan_dis_f.add(osef);
             }
         }
+        nbT=cpt;
+        GridLayout gd2=new GridLayout(nbF+1,nbS+1);
+        this.pan_dis_s.setLayout(gd2);
+        int cptS=1;
+        cptF=1;
+        for(int i=0;i<(nbS+1)*(nbF+1);i++)
+        {
+            if(i<nbS+1)
+            {
+                System.out.println("PIPI");
+                if(i==0)
+                {
+                    JLabel jl=new JLabel();
+                    jl.setText("");
+                    this.pan_dis_s.add(jl);
+                }
+                else
+                {
+                    JLabel jl=new JLabel();
+                    jl.setText("Site "+param.get_num_serveur(cptS-1));
+                    this.pan_dis_s.add(jl);
+                    cptS++;
+                }
+            }
+            else
+            {
+                System.out.println("CACA");
+                if((i%(nbS+1))==0)
+                {
+                    System.out.println("BITE");
+                    JLabel jl=new JLabel();
+                    jl.setText("Fragment "+cptF);
+                    this.pan_dis_s.add(jl);
+                    cptF++;
+                
+                }
+                else
+                {
+                    JCheckBox osef=new JCheckBox();
+                    this.pan_dis_s.add(osef);
+                }
+            }
+        }
     }
 
     /**
@@ -113,9 +165,19 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         jPanel1.setLayout(new java.awt.GridLayout(1, 3));
 
         annuler_button.setText("Annuler");
+        annuler_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                annuler_buttonActionPerformed(evt);
+            }
+        });
         jPanel1.add(annuler_button);
 
         reinit_button.setText("Reinitialiser");
+        reinit_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reinit_buttonActionPerformed(evt);
+            }
+        });
         jPanel1.add(reinit_button);
 
         valider_button.setText("Valider");
@@ -125,7 +187,7 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 3));
 
-        resume_mint.setLayout(new java.awt.GridLayout());
+        resume_mint.setLayout(new java.awt.GridLayout(1, 0));
         jPanel2.add(resume_mint);
 
         javax.swing.GroupLayout pan_dis_fLayout = new javax.swing.GroupLayout(pan_dis_f);
@@ -158,6 +220,37 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void reinit_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reinit_buttonActionPerformed
+        for(int i=0;i<(nbT+1)*(nbF+1);i++)
+        {
+            if(this.pan_dis_f.getComponent(i).getClass()==JCheckBox.class)
+            {
+                 JCheckBox jb=(JCheckBox)this.pan_dis_f.getComponent(i);
+                   if(jb.isSelected())
+                   {
+                        jb.setSelected(false);
+                        
+                   }
+            }
+        }
+        for(int i=0;i<(nbS+1)*(nbF+1);i++)
+        {
+            if(this.pan_dis_s.getComponent(i).getClass()==JCheckBox.class)
+            {
+                 JCheckBox jb=(JCheckBox)this.pan_dis_s.getComponent(i);
+                   if(jb.isSelected())
+                   {
+                        jb.setSelected(false);
+                        
+                   }
+            }
+        }
+    }//GEN-LAST:event_reinit_buttonActionPerformed
+
+    private void annuler_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_annuler_buttonActionPerformed
+            this.setVisible(false);
+    }//GEN-LAST:event_annuler_buttonActionPerformed
     private String inverse_signe(String signe)
     {
         String res = "";
