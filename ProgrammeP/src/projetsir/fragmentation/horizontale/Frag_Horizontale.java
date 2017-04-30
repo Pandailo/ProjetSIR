@@ -37,7 +37,7 @@ public class Frag_Horizontale
         FileWriter out = null;
         try
         {
-            out = new FileWriter(new File("fragmentation_temporaire/"+this.nom_table));
+            out = new FileWriter(new File("src/fragmentation_temporaire/"+this.nom_table));
             out.write(contenu);
             out.close();
             System.out.println("Fichier créé.");
