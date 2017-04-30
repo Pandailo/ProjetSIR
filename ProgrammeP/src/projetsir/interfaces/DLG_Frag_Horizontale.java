@@ -76,6 +76,11 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
 
         cb_comp_signe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "=", "<", ">", "<=", ">=", "<>" }));
         cb_comp_signe.setSelectedIndex(-1);
+        cb_comp_signe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_comp_signeActionPerformed(evt);
+            }
+        });
         jPanel4.add(cb_comp_signe);
 
         cb_comp_att2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "valeur" }));
@@ -144,6 +149,11 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         jPanel8.add(annuler_button);
 
         valider_button.setText("Valider");
+        valider_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                valider_buttonActionPerformed(evt);
+            }
+        });
         jPanel8.add(valider_button);
 
         getContentPane().add(jPanel8, java.awt.BorderLayout.SOUTH);
@@ -166,7 +176,7 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
             for(int i=0;i<this.fragments.size();i++)
             {
                 JLabel lab=new JLabel();
-                String nom="Fragment "+i;
+                String nom="Minterme "+i;
                 lab.setText(nom);
                 this.resume_frag_h.add(lab);
                 JTextField tf=new JTextField();
@@ -192,13 +202,14 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
                 this.resume_frag_h.add(tf);
                 
             }
-             this.setSize(this.getWidth()+1, this.getHeight()+1);
+           
+        this.setSize(this.getWidth()+1, this.getHeight()+1);
         this.setSize(this.getWidth()-1, this.getHeight()-1);
         this.ta_resum_fragment_actuel.setText("");
         }
         
     }//GEN-LAST:event_Valider_frag_buttonActionPerformed
-
+    
     private void cb_comp_att2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cb_comp_att2ActionPerformed
     {//GEN-HEADEREND:event_cb_comp_att2ActionPerformed
         // TODO add your handling code here:
@@ -287,6 +298,14 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
             }
         }
     }//GEN-LAST:event_ajouter_buttonActionPerformed
+
+    private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valider_buttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_valider_buttonActionPerformed
+
+    private void cb_comp_signeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_comp_signeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cb_comp_signeActionPerformed
 
     /**
      * @param args the command line arguments
