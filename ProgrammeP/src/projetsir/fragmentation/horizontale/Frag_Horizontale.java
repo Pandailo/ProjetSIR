@@ -20,11 +20,11 @@ public class Frag_Horizontale
 {
     private int nb_frag;
     private List<String> fragments;
-    private List<String> serveurs;
+    private int[][] serveurs;
     private String nom_table;
     
     
-    public Frag_Horizontale(ArrayList<String> fragments, List<String> serveurs, String nom_table)
+    public Frag_Horizontale(ArrayList<String> fragments, int[][] serveurs, String nom_table)
     {
         this.fragments = fragments;
         this.serveurs = serveurs;
@@ -107,7 +107,6 @@ public class Frag_Horizontale
             conditions = this.fragments.get(i).split("@");
             for(int j=0; j<conditions.length; j++)
             {
-                
                 s += "\t\t\t\t\t\t{\n";
                 s += "\t\t\t\t\t\t\t\"attribut\":\""+conditions[j].split(";")[1]+"\",\n";
                 s += "\t\t\t\t\t\t\t\"signe\":\""+conditions[j].split(";")[2]+"\",\n";
@@ -115,22 +114,30 @@ public class Frag_Horizontale
                 s += "\t\t\t\t\t\t}";
                 if(j<conditions.length-1)
                     s += ",";
-                else
-                    s += "\n";
+                s += "\n";
             }
             s += "\t\t\t\t\t],\n";
-            s += "\t\t\t\t\t\"serveurs\":\n\t\t\t\t\t[\n";
-            serveurs_fragment = this.serveurs.get(i).split(";");
-            for(int j=0; j<serveurs_fragment.length; j++)
+            s += "\t\t\t\t\t\"serveurs\":\n\t\t\t\t\t[";
+            boolean virgule = false;
+            for(int j=0; j<this.serveurs[0].length; j++)
             {
-                s += "\t\t\t\t\t\t{\n";
-                s += "\t\t\t\t\t\t\t\"num_serveur\":"+serveurs_fragment[j]+"\n";
-                s += "\t\t\t\t\t\t}";
-                if(j<serveurs_fragment.length-1)
-                    s += ",";
-                else
+                if(this.serveurs[i][j]==1)
+                {
+                    if(virgule)
+                        s += ",";
+                    else
+                        virgule = true;
                     s += "\n";
+                    s += "\t\t\t\t\t\t{\n";
+                    s += "\t\t\t\t\t\t\t\"num_serveur\":"+serveurs[i][j]+"\n";
+                    s += "\t\t\t\t\t\t}";
+                }
             }
+            s += "\n\t\t\t\t\t]";
+            s += "\n\t\t\t\t}";
+            if(i<this.fragments.size()-1)
+                s += ",";
+            s += "\n";
         }
         s += "\t\t\t]\n\t\t}";
         return s;
