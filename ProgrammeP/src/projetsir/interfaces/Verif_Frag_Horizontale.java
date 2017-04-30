@@ -18,9 +18,9 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
     int nbS;
     Parametres param;
     int nbF;
-    ArrayList<String> list_select;
+    ArrayList<String> list_select=new ArrayList();
     int nbT;
-    ArrayList<String> list_frag;
+    ArrayList<String> list_frag=new ArrayList();
     /**
      * Creates new form Verif_Frag_Horizontale
      */
@@ -71,11 +71,14 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
                 {
                     splitB=splitA[j].split(";");
                     signe=splitB[2];
+                    
                     signe2=this.inverse_signe(signe);   
                     JLabel lab=new JLabel();
+                    lab.setName(splitB[0]+";"+splitB[1]+";"+signe+";"+splitB[3]);
                     lab.setText(splitB[1]+signe+splitB[3]);
                     this.pan_dis_f.add(lab);
                     JLabel lab2=new JLabel();
+                    lab2.setName(splitB[0]+";"+splitB[1]+";"+signe2+";"+splitB[3]);
                     lab2.setText(splitB[1]+signe2+splitB[3]);
                     this.pan_dis_f.add(lab2);
                 }
@@ -106,7 +109,6 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         {
             if(i<nbS+1)
             {
-                System.out.println("PIPI");
                 if(i==0)
                 {
                     JLabel jl=new JLabel();
@@ -123,10 +125,8 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
             }
             else
             {
-                System.out.println("CACA");
                 if((i%(nbS+1))==0)
                 {
-                    System.out.println("BITE");
                     JLabel jl=new JLabel();
                     jl.setText("Fragment "+cptF);
                     this.pan_dis_s.add(jl);
@@ -181,6 +181,11 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         jPanel1.add(reinit_button);
 
         valider_button.setText("Valider");
+        valider_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                valider_buttonActionPerformed(evt);
+            }
+        });
         jPanel1.add(valider_button);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
@@ -251,6 +256,72 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
     private void annuler_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_annuler_buttonActionPerformed
             this.setVisible(false);
     }//GEN-LAST:event_annuler_buttonActionPerformed
+
+    private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valider_buttonActionPerformed
+        this.list_select.clear();
+        int[][] distri=new int[nbF][nbS];
+        
+        int u=0;
+        int k=0;
+        for(int i=nbS+2;i<(nbS+1)*(nbF+1);i++)
+        {
+               if(this.pan_dis_s.getComponent(i).getClass()==JCheckBox.class)
+               {
+                   JCheckBox jb=(JCheckBox)this.pan_dis_s.getComponent(i);
+                   if(jb.isSelected())
+                        distri[u][k]=1;
+                   else
+                        distri[u][k]=0;
+                   k++;
+                   if(k>=nbS)
+                   {
+                       u++;
+                       k=0;
+                   }
+               }
+        }  
+        //récup fragments prédicats
+        boolean valide=true;
+        String contenu="";
+        for(int i=0;i<(nbT+1)*(nbF+1);i++)
+        {
+            if(this.pan_dis_f.getComponent(i).getClass()==JCheckBox.class)
+            {
+                if(i%1==0)
+                {
+                    if(((JCheckBox)this.pan_dis_f.getComponent(i)).isSelected())
+                    {
+                        if(!((JCheckBox)this.pan_dis_f.getComponent(i+1)).isSelected())
+                        {
+                            String name=((JLabel)(this.pan_dis_f.getComponent(i%(nbT+1)))).getName();
+                            contenu+=name+"@";
+                        }
+                        else
+                        {
+                            valide=false;
+                        }
+                    }
+                    else
+                    {
+                        if(((JCheckBox)this.pan_dis_f.getComponent(i+1)).isSelected())
+                        {
+                            String name=((JLabel)(this.pan_dis_f.getComponent(i%(nbT+1)))).getName();
+                            contenu+=name+"@";
+                        }
+                    }
+                }
+            }
+            if(i%(nbS+1)==0)
+            {
+               this.list_frag.add(contenu);
+                contenu=""; 
+            }
+            
+        }
+        for(int i=0;i<this.list_frag.size();i++)
+            System.out.println(this.list_frag.get(i)+" ");
+        
+    }//GEN-LAST:event_valider_buttonActionPerformed
     private String inverse_signe(String signe)
     {
         String res = "";
