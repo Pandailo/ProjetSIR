@@ -207,7 +207,8 @@ public class Fragmenter extends javax.swing.JFrame {
 
     private void f_horizontaleActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_f_horizontaleActionPerformed
     {//GEN-HEADEREND:event_f_horizontaleActionPerformed
-        new DLG_Frag_Horizontale().setVisible(true);
+        if(this.Liste_tables.getSelectedIndex()!=-1)
+        new DLG_Frag_Horizontale(this.Liste_tables.getSelectedItem().toString()).setVisible(true);
         
     }//GEN-LAST:event_f_horizontaleActionPerformed
     

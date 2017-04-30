@@ -19,21 +19,23 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
     bd_globale bdg;
     ArrayList<String> fragments;
     String temp;
+    String table="";
     /**
      * Creates new form DLG_Frag_Horizontale
      */
-    public DLG_Frag_Horizontale()
+    public DLG_Frag_Horizontale(String table)
     {
         initComponents();
         bdg=new bd_globale();
-        String[] l_tables=bdg.get_liste_nom_tables();
-        cb_tables.removeAllItems();
+        this.table=table;
         fragments=new ArrayList();
         temp="";
-        for (String l_table : l_tables)
-        {
-            cb_tables.addItem(l_table);
-        }
+        String[] l_atts=bdg.get_liste_attributs_table(table);
+            this.cb_comp_att.removeAllItems();
+            for(String l_att : l_atts)
+            {
+                this.cb_comp_att.addItem(l_att);
+            }
        
     }
 
@@ -44,14 +46,10 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        cb_tables = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         cb_comp_att = new javax.swing.JComboBox<>();
         cb_comp_signe = new javax.swing.JComboBox<>();
@@ -60,6 +58,9 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         reinit_button = new javax.swing.JButton();
         ajouter_button = new javax.swing.JButton();
         Valider_frag_button = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        ta_resum_fragment_actuel = new javax.swing.JTextArea();
         resume_frag_h = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         annuler_button = new javax.swing.JButton();
@@ -68,25 +69,6 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         jPanel1.setLayout(new java.awt.GridLayout(1, 2));
 
         jPanel5.setLayout(new java.awt.GridLayout(3, 1));
-
-        jPanel2.setLayout(new java.awt.GridLayout(1, 2));
-
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Tables");
-        jLabel1.setFocusable(false);
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel2.add(jLabel1);
-
-        cb_tables.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                cb_tablesActionPerformed(evt);
-            }
-        });
-        jPanel2.add(cb_tables);
-
-        jPanel5.add(jPanel2);
 
         jPanel4.setLayout(new java.awt.GridLayout(1, 3));
 
@@ -97,10 +79,8 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         jPanel4.add(cb_comp_signe);
 
         cb_comp_att2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "valeur" }));
-        cb_comp_att2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        cb_comp_att2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cb_comp_att2ActionPerformed(evt);
             }
         });
@@ -114,26 +94,32 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         jPanel7.add(reinit_button);
 
         ajouter_button.setText("Ajouter condition dans fragment");
-        ajouter_button.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        ajouter_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ajouter_buttonActionPerformed(evt);
             }
         });
         jPanel7.add(ajouter_button);
 
         Valider_frag_button.setText("Valider fragment");
-        Valider_frag_button.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        Valider_frag_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Valider_frag_buttonActionPerformed(evt);
             }
         });
         jPanel7.add(Valider_frag_button);
 
         jPanel5.add(jPanel7);
+
+        jPanel2.setLayout(new java.awt.GridLayout());
+
+        ta_resum_fragment_actuel.setColumns(20);
+        ta_resum_fragment_actuel.setRows(5);
+        jScrollPane1.setViewportView(ta_resum_fragment_actuel);
+
+        jPanel2.add(jScrollPane1);
+
+        jPanel5.add(jPanel2);
 
         jPanel1.add(jPanel5);
 
@@ -145,14 +131,14 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         );
         resume_frag_hLayout.setVerticalGroup(
             resume_frag_hLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 471, Short.MAX_VALUE)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
 
         jPanel1.add(resume_frag_h);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        jPanel8.setLayout(new java.awt.GridLayout());
+        jPanel8.setLayout(new java.awt.GridLayout(1, 0));
 
         annuler_button.setText("Annuler");
         jPanel8.add(annuler_button);
@@ -208,23 +194,10 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
             }
              this.setSize(this.getWidth()+1, this.getHeight()+1);
         this.setSize(this.getWidth()-1, this.getHeight()-1);
+        this.ta_resum_fragment_actuel.setText("");
         }
         
     }//GEN-LAST:event_Valider_frag_buttonActionPerformed
-
-    private void cb_tablesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cb_tablesActionPerformed
-    {//GEN-HEADEREND:event_cb_tablesActionPerformed
-        if(cb_tables.getSelectedIndex()!=-1)
-        {
-            String table=cb_tables.getSelectedItem().toString();
-            String[] l_atts=bdg.get_liste_attributs_table(table);
-            this.cb_comp_att.removeAllItems();
-            for(String l_att : l_atts)
-            {
-                this.cb_comp_att.addItem(l_att);
-            }
-        }
-    }//GEN-LAST:event_cb_tablesActionPerformed
 
     private void cb_comp_att2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cb_comp_att2ActionPerformed
     {//GEN-HEADEREND:event_cb_comp_att2ActionPerformed
@@ -234,7 +207,7 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
     private void ajouter_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ajouter_buttonActionPerformed
     {//GEN-HEADEREND:event_ajouter_buttonActionPerformed
         int valInt=-1;
-        String table,att="";
+        String att="";
         String valS="";
         
         if(this.cb_comp_att.getSelectedIndex()!=-1)
@@ -243,9 +216,8 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
             {
                 if(this.cb_comp_att2.getSelectedIndex()!=-1)
                 {
-                    table=this.cb_tables.getSelectedItem().toString();
                     att=this.cb_comp_att.getSelectedItem().toString();
-                    System.out.println(bdg.get_type_attribut(table, att));
+                    System.out.println(bdg.get_type_attribut(this.table, att));
                     String[] split=bdg.get_type_attribut(table, att).split("\\(");
                     String val="";
                     boolean continuer=true;
@@ -291,6 +263,26 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
                         }
                       
                     }
+                    String[] split1;
+                    String[] split2;
+                    split1=temp.split("@");
+                    String le_temporaire="";
+                    for(int j=0;j<split1.length;j++)
+                    {
+                        System.out.println(split1[j]);
+                        split2=split1[j].split(";");
+                        for(int i=0;i<split2.length;i++)
+                        {
+                            if(i==0)
+                                le_temporaire+=split2[i]+".";
+                            else
+                                le_temporaire+=(split2[i]+" ");
+                        }
+                       le_temporaire+=("\n");
+                    }
+                    this.ta_resum_fragment_actuel.setText(le_temporaire);
+                    
+                    
                 }
             }
         }
@@ -336,13 +328,7 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new DLG_Frag_Horizontale().setVisible(true);
-            }
-        });
+       
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -352,16 +338,16 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
     private javax.swing.JComboBox<String> cb_comp_att;
     private javax.swing.JComboBox<String> cb_comp_att2;
     private javax.swing.JComboBox<String> cb_comp_signe;
-    private javax.swing.JComboBox<String> cb_tables;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton reinit_button;
     private javax.swing.JPanel resume_frag_h;
+    private javax.swing.JTextArea ta_resum_fragment_actuel;
     private javax.swing.JButton valider_button;
     // End of variables declaration//GEN-END:variables
 }
