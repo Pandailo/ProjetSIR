@@ -5,8 +5,10 @@
  */
 package projetsir.fragmentation.horizontale;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import projetsir.bd_globale;
 
@@ -17,13 +19,15 @@ import projetsir.bd_globale;
 public class Frag_Horizontale 
 {
     private int nb_frag;
-    private ArrayList<String> fragments;
+    private List<String> fragments;
+    private List<String> serveurs;
     private String nom_table;
     
     
-    public Frag_Horizontale(ArrayList<String> fragments, String nom_table)
+    public Frag_Horizontale(ArrayList<String> fragments, List<String> serveurs, String nom_table)
     {
         this.fragments = fragments;
+        this.serveurs = serveurs;
         this.nb_frag = fragments.size();
         this.nom_table = nom_table;
     }
@@ -38,7 +42,7 @@ public class Frag_Horizontale
         this.nb_frag = nb_frag;
     }
 
-    public ArrayList<String> getFragments()
+    public List<String> getFragments()
     {
         return this.fragments;
     }
@@ -47,8 +51,26 @@ public class Frag_Horizontale
     {
         this.fragments = fragments;
     }
+   
+    private void construction_fichier()
+    {
+        String contenu = "";
+        contenu = this.construction_schema_table();
+        FileWriter out = null;
+        try
+        {
+            out = new FileWriter(new File("fragmentation_temporaire/"+this.nom_table));
+            out.write(contenu);
+            out.close();
+            System.out.println("Fichier créé.");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
     
-    public String construction_schema_table(List<String> serveurs)
+    public String construction_schema_table()
     {
         String s ="\t\t{\n\t\t\t\"nom\":\""+this.nom_table+"\",\n";
         s += "\t\t\t\"fragmentation\":\"horizontale\",\n";
@@ -98,13 +120,13 @@ public class Frag_Horizontale
             }
             s += "\t\t\t\t\t],\n";
             s += "\t\t\t\t\t\"serveurs\":\n\t\t\t\t\t[\n";
-            serveurs_fragment = serveurs.get(i).split(";");
+            serveurs_fragment = this.serveurs.get(i).split(";");
             for(int j=0; j<serveurs_fragment.length; j++)
             {
                 s += "\t\t\t\t\t\t{\n";
                 s += "\t\t\t\t\t\t\t\"num_serveur\":"+serveurs_fragment[j]+"\n";
                 s += "\t\t\t\t\t\t}";
-                if(j<serveurs.size()-1)
+                if(j<serveurs_fragment.length-1)
                     s += ",";
                 else
                     s += "\n";
