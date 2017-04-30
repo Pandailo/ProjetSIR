@@ -11,7 +11,6 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.util.List;
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
 import serveurs.arbre_requetes.Arbre;
 
 /**
@@ -80,11 +79,6 @@ public class Dlg_resultat_requete extends javax.swing.JFrame {
         }
     }
     
-    
-    private void scroll_synchronise(java.awt.event.AdjustmentEvent evt)
-    {
-        
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

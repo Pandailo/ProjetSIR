@@ -11,7 +11,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.rowset.CachedRowSet;
-import serveurs.Schema_global;
 
 /**
  *
@@ -175,7 +174,7 @@ public class Arbre
                 {
                     for(int i=0; i<rsmd_colonnes.size(); i++)
                     {
-                        contenu += crs.getObject(rsmd.getColumnName(i+1)).toString();
+                        contenu += crs.getObject(rsmd_colonnes.get(i)).toString();
                         if(i<rsmd.getColumnCount()-1)
                             contenu += ";";
                     }
