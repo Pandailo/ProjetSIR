@@ -18,7 +18,6 @@ import projetsir.bd_globale;
  */
 public class Frag_Horizontale 
 {
-    private int nb_frag;
     private List<String> fragments;
     private int[][] serveurs;
     private String nom_table;
@@ -28,28 +27,7 @@ public class Frag_Horizontale
     {
         this.fragments = fragments;
         this.serveurs = serveurs;
-        this.nb_frag = fragments.size();
         this.nom_table = nom_table;
-    }
-
-    public int getNb_frag()
-    {
-        return nb_frag;
-    }
-
-    public void setNb_frag(int nb_frag)
-    {
-        this.nb_frag = nb_frag;
-    }
-
-    public List<String> getFragments()
-    {
-        return this.fragments;
-    }
-
-    public void setFragments(ArrayList<String> fragments)
-    {
-        this.fragments = fragments;
     }
    
     private void construction_fichier()
