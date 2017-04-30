@@ -7,7 +7,7 @@ package projetsir.interfaces;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 /**
  *
@@ -18,14 +18,14 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
     /**
      * Creates new form Verif_Frag_Horizontale
      */
-    public Verif_Frag_Horizontale(ArrayList<String> list_select) {
+    public Verif_Frag_Horizontale(ArrayList<String> list_select,JPanel pan) {
         initComponents();
         int cpt=0;
         JOptionPane jop = new JOptionPane();
         String nbFS="";
         String message="Nombre de fragments ?";
         int nbF=0;
-        while(!nbFS.matches("^\\d+$") || nbFS.matches("") || nbF>=2 || nbF<=1)
+        while(!nbFS.matches("^\\d+$") || nbFS.matches("") || nbF<=1)
         {    
             nbFS = jop.showInputDialog(null, message, JOptionPane.QUESTION_MESSAGE);
             if(nbFS.matches("^\\d+$") && !nbFS.matches(""))
@@ -35,6 +35,7 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
             else
                 message="Nombre de fragments doit être supérieur à 2.";
         }
+        this.resume_mint.add(pan);
         String splitA[];
         String splitB[];
         String signe;
@@ -42,21 +43,49 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         for(int i=0;i<list_select.size();i++)
         {
             splitA=list_select.get(i).split("@");
-            for(int j=0;j<splitA.length;i++)
-            {
-               cpt++;
-            }
+            cpt=splitA.length*2;
         }
-        GridLayout gd=new GridLayout(nbF,cpt);
-        this.pan_dis.setLayout(gd);
+        GridLayout gd=new GridLayout(nbF+1,cpt+1);
+        this.pan_dis_f.setLayout(gd);
         for(int i=0;i<list_select.size();i++)
         {
             splitA=list_select.get(i).split("@");
-            for(int j=0;j<splitA.length;i++)
+            for(int j=-1;j<splitA.length;j++)
             {
-                splitB=splitA[j].split(";");
-                signe=splitB[2];
-                signe2=this.inverse_signe(signe);
+                if(j==-1)
+                {
+                    JLabel lab=new JLabel();
+                    lab.setText("");
+                    this.pan_dis_f.add(lab);
+                }
+                else
+                {
+                    splitB=splitA[j].split(";");
+                    signe=splitB[2];
+                    signe2=this.inverse_signe(signe);   
+                    JLabel lab=new JLabel();
+                    lab.setText(splitB[1]+signe+splitB[3]);
+                    this.pan_dis_f.add(lab);
+                    JLabel lab2=new JLabel();
+                    lab2.setText(splitB[1]+signe2+splitB[3]);
+                    this.pan_dis_f.add(lab2);
+                }
+            }
+        }
+        int cptF=1;
+        for(int i=cpt+1;i<(nbF+1)*(cpt+1);i++)
+        {
+            if((i%(cpt+1))==0)
+            {
+                JLabel lab=new JLabel();
+                lab.setText("Fragment "+cptF);
+                this.pan_dis_f.add(lab);
+                cptF++;
+            }
+            else
+            {
+                JCheckBox osef=new JCheckBox();
+                this.pan_dis_f.add(osef);
             }
         }
     }
@@ -70,23 +99,62 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pan_dis = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        annuler_button = new javax.swing.JButton();
+        reinit_button = new javax.swing.JButton();
+        valider_button = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        resume_mint = new javax.swing.JPanel();
+        pan_dis_f = new javax.swing.JPanel();
+        pan_dis_s = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridLayout());
 
-        javax.swing.GroupLayout pan_disLayout = new javax.swing.GroupLayout(pan_dis);
-        pan_dis.setLayout(pan_disLayout);
-        pan_disLayout.setHorizontalGroup(
-            pan_disLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        jPanel1.setLayout(new java.awt.GridLayout(1, 3));
+
+        annuler_button.setText("Annuler");
+        jPanel1.add(annuler_button);
+
+        reinit_button.setText("Reinitialiser");
+        jPanel1.add(reinit_button);
+
+        valider_button.setText("Valider");
+        jPanel1.add(valider_button);
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
+
+        jPanel2.setLayout(new java.awt.GridLayout(1, 3));
+
+        resume_mint.setLayout(new java.awt.GridLayout());
+        jPanel2.add(resume_mint);
+
+        javax.swing.GroupLayout pan_dis_fLayout = new javax.swing.GroupLayout(pan_dis_f);
+        pan_dis_f.setLayout(pan_dis_fLayout);
+        pan_dis_fLayout.setHorizontalGroup(
+            pan_dis_fLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 286, Short.MAX_VALUE)
         );
-        pan_disLayout.setVerticalGroup(
-            pan_disLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        pan_dis_fLayout.setVerticalGroup(
+            pan_dis_fLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 270, Short.MAX_VALUE)
         );
 
-        getContentPane().add(pan_dis);
+        jPanel2.add(pan_dis_f);
+
+        javax.swing.GroupLayout pan_dis_sLayout = new javax.swing.GroupLayout(pan_dis_s);
+        pan_dis_s.setLayout(pan_dis_sLayout);
+        pan_dis_sLayout.setHorizontalGroup(
+            pan_dis_sLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 286, Short.MAX_VALUE)
+        );
+        pan_dis_sLayout.setVerticalGroup(
+            pan_dis_sLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 270, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(pan_dis_s);
+
+        getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -137,6 +205,13 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel pan_dis;
+    private javax.swing.JButton annuler_button;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel pan_dis_f;
+    private javax.swing.JPanel pan_dis_s;
+    private javax.swing.JButton reinit_button;
+    private javax.swing.JPanel resume_mint;
+    private javax.swing.JButton valider_button;
     // End of variables declaration//GEN-END:variables
 }

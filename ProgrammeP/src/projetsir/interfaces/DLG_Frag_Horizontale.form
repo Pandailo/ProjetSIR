@@ -103,12 +103,12 @@
               <SubComponents>
                 <Component class="javax.swing.JButton" name="reinit_button">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Reinitialiser fragment"/>
+                    <Property name="text" type="java.lang.String" value="Reinitialiser minterme courant"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JButton" name="ajouter_button">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Ajouter condition dans fragment"/>
+                    <Property name="text" type="java.lang.String" value="Ajouter condition"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ajouter_buttonActionPerformed"/>
@@ -116,7 +116,7 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="Valider_frag_button">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Valider fragment"/>
+                    <Property name="text" type="java.lang.String" value="Valider"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Valider_frag_buttonActionPerformed"/>

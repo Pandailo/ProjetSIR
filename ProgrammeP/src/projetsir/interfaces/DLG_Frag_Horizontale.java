@@ -95,10 +95,10 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
 
         jPanel7.setLayout(new java.awt.GridLayout(1, 3));
 
-        reinit_button.setText("Reinitialiser fragment");
+        reinit_button.setText("Reinitialiser minterme courant");
         jPanel7.add(reinit_button);
 
-        ajouter_button.setText("Ajouter condition dans fragment");
+        ajouter_button.setText("Ajouter condition");
         ajouter_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ajouter_buttonActionPerformed(evt);
@@ -106,7 +106,7 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         });
         jPanel7.add(ajouter_button);
 
-        Valider_frag_button.setText("Valider fragment");
+        Valider_frag_button.setText("Valider");
         Valider_frag_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Valider_frag_buttonActionPerformed(evt);
@@ -300,7 +300,8 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
     }//GEN-LAST:event_ajouter_buttonActionPerformed
 
     private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valider_buttonActionPerformed
-        // TODO add your handling code here:
+        Verif_Frag_Horizontale v=new Verif_Frag_Horizontale(fragments,this.resume_frag_h);
+        v.setVisible(true);
     }//GEN-LAST:event_valider_buttonActionPerformed
 
     private void cb_comp_signeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_comp_signeActionPerformed
