@@ -5,6 +5,8 @@
  */
 package projetsir.fragmentation.horizontale;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author yv965015
@@ -12,12 +14,12 @@ package projetsir.fragmentation.horizontale;
 public class Frag_Horizontale 
 {
     private int nb_frag;
-    private String[][] liste_att;   //[x][y] = x -> numéro de fragments,y -> liste d'attributs concernés , de la forme att;<=;valeur
+    private ArrayList<String> liste_att=new ArrayList();   //[x][y] = x -> numéro de fragments,y -> liste d'attributs concernés , de la forme att;<=;valeur
 
-    public Frag_Horizontale(String[][] liste_att)
+    public Frag_Horizontale(ArrayList<String> liste_att)
     {
         this.liste_att = liste_att;
-        nb_frag=liste_att.length;
+        nb_frag=liste_att.size();
     }
 
     public int getNb_frag()
@@ -30,12 +32,12 @@ public class Frag_Horizontale
         this.nb_frag = nb_frag;
     }
 
-    public String[][] getListe_att()
+    public ArrayList<String> getListe_att()
     {
         return liste_att;
     }
 
-    public void setListe_att(String[][] liste_att)
+    public void setListe_att(ArrayList<String> liste_att)
     {
         this.liste_att = liste_att;
     }
