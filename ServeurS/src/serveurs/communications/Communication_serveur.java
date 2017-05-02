@@ -251,11 +251,8 @@ class Accepter_client implements Runnable {
         //Récupération des schémas du serveur   
         String chemin_schemas = this.parametres.getChemin_schemas();
         int num_local = this.parametres.getNum_serveur();
-        File source = new File(schemas_a_envoyer+"/global.json");
-        File dest = new File(chemin_schemas+"/global.json");
-        this.copier_fichier(source, dest);
-        source = new File(schemas_a_envoyer+"/local_"+num_local+".json");
-        dest = new File(chemin_schemas+"/local.json");
+        File source = new File(schemas_a_envoyer+"/local_"+num_local+".json");
+        File dest = new File(chemin_schemas+"/local.json");
         this.copier_fichier(source, dest);
         
         //Envoi des schémas aux autres serveurs
@@ -263,6 +260,11 @@ class Accepter_client implements Runnable {
         
         //Reconstruction de la BD
         this.construction_BD();
+        
+        //MAJ du schéma global
+        source = new File(schemas_a_envoyer+"/global.json");
+        dest = new File(chemin_schemas+"/global.json");
+        this.copier_fichier(source, dest);
     }
     
     private void reception_initialisation()

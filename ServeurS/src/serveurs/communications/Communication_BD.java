@@ -189,9 +189,9 @@ public class Communication_BD
                     crs_local.moveToInsertRow();
                 else
                     crs_local.absolute(indice+1);
-                for(i=1; i<=crs.getMetaData().getColumnCount(); i++)
+                for(i=1; i<=crs_local.getMetaData().getColumnCount(); i++)
                 {
-                    nom_colonne = crs.getMetaData().getColumnName(i);
+                    nom_colonne = crs_local.getMetaData().getColumnName(i);
                     System.out.println(nom_colonne+" : "+crs.getObject(i));
                     crs_local.updateObject(nom_colonne, crs.getObject(nom_colonne));  
                 }
