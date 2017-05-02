@@ -1,3 +1,5 @@
 *.class
 ProgrammeP/build/*
 ServeurS/build/*
+ProgrammeP/nbproject/*
+ServeurS/nbproject/*
