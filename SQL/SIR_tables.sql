@@ -4,8 +4,8 @@ DROP TABLE SIR_PROJET;
 DROP TABLE SIR_ASSIGN;
 
 CREATE TABLE SIR_SALAIRE
-(titre VARCHAR2(25) CONSTRAINT pk_titre PRIMARY KEY,
- id integer,
+(titre VARCHAR2(25),
+ id integer CONSTRAINT pk_salaire PRIMARY KEY,
  salaire integer
 );
 

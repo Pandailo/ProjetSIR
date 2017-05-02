@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import projetsir.Parametres;
 import projetsir.bd_globale;
 
 /**
@@ -57,6 +58,7 @@ public class Frag_Horizontale
         String[] pk = bd.get_cles_primaires(this.nom_table);
         String[] att = bd.get_liste_attributs_table(this.nom_table);
         String nom_attribut = "";
+        Parametres parametres = new Parametres();
         //Ecriture des attributs
         for(int i=0; i<att.length; i++)
         {
@@ -107,7 +109,7 @@ public class Frag_Horizontale
                         virgule = true;
                     s += "\n";
                     s += "\t\t\t\t\t\t{\n";
-                    s += "\t\t\t\t\t\t\t\"num_serveur\":"+serveurs[i][j]+"\n";
+                    s += "\t\t\t\t\t\t\t\"num_serveur\":"+parametres.get_num_serveur(j)+"\n";
                     s += "\t\t\t\t\t\t}";
                 }
             }

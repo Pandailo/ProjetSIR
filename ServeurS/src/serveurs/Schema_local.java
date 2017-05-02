@@ -90,7 +90,10 @@ public class Schema_local {
         for(int i=0; i<attributs.length; i++)
             if(this.is_primary_key(nom_table, attributs[i]))
                 cles_primaires.add(attributs[i]);
-        return (String[])cles_primaires.toArray();
+        String[] res = new String[cles_primaires.size()];
+        for(int i=0; i<res.length; i++)
+            res[i] = cles_primaires.get(i);
+        return res;
     }
     
     private int get_indice_attribut(String nom_table, String nom_attribut)

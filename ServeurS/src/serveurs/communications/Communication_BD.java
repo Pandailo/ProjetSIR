@@ -130,6 +130,7 @@ public class Communication_BD
             crs.setCommand("SELECT "+attributs+" FROM "+tables+" WHERE "+conditions);
             crs.execute(this.connect);
             crs = crs.createCopy();
+            System.out.println("Requête terminée.");
         }
         catch (SQLException ex) 
         {

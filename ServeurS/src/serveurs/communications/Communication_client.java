@@ -107,6 +107,7 @@ public class Communication_client extends Thread {
                     {
                         //Envoi de l'action à effectuer
                         this.dos.writeInt(5);
+                        this.dos.flush();
                     }
                     catch (IOException ex) 
                     {
@@ -138,7 +139,9 @@ public class Communication_client extends Thread {
             while((c=in.read())!=-1)
                 contenu += (char)c;
             this.dos.writeInt(contenu.length());
+            this.dos.flush();
             this.dos.writeObject((Object)contenu);
+            this.dos.flush();
             in.close();
         }
         catch (IOException e)
@@ -153,6 +156,7 @@ public class Communication_client extends Thread {
         {
             //Envoi de l'action à effectuer
             this.dos.writeInt(0);
+            this.dos.flush();
         }
         catch (IOException ex) 
         {
@@ -161,11 +165,11 @@ public class Communication_client extends Thread {
             
         //Envoi du schéma global
         this.envoi_fichier(this.parametres.getSchemas_a_envoyer()+"/global.json");
-        System.out.println("Scéma global envoyé.");
+        System.out.println("Schéma global envoyé.");
 
         //Envoi du schéma local
         this.envoi_fichier(this.parametres.getSchemas_a_envoyer()+"/local_"+this.serveur+".json");
-        System.out.println("Scéma local du serveur "+this.serveur+" envoyé.");
+        System.out.println("Schéma local du serveur "+this.serveur+" envoyé.");
     }
     
     private void envoi_initialisation()
@@ -174,6 +178,7 @@ public class Communication_client extends Thread {
         {
             //Envoi de l'action à effectuer
             this.dos.writeInt(4);
+            this.dos.flush();
         }
         catch (IOException ex) 
         {
@@ -182,7 +187,7 @@ public class Communication_client extends Thread {
         
         //Envoi du schéma d'initialisation
         this.envoi_fichier(this.parametres.getSchemas_a_envoyer()+"/global.json");
-        System.out.println("Scéma global envoyé.");
+        System.out.println("Schéma global envoyé.");
     }
     
     private void envoi_requete()
@@ -191,6 +196,7 @@ public class Communication_client extends Thread {
         {
             //Envoi de l'action à effectuer
             this.dos.writeInt(2);
+            this.dos.flush();
         }
         catch (IOException ex) 
         {
@@ -201,8 +207,11 @@ public class Communication_client extends Thread {
         try 
         {
             this.dos.writeUTF(this.tables);
+            this.dos.flush();
             this.dos.writeUTF(this.attributs);
+            this.dos.flush();
             this.dos.writeUTF(this.conditions);
+            this.dos.flush();
             
             crs = (CachedRowSet)this.dis.readObject();
         } 

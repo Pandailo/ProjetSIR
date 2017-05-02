@@ -6,6 +6,9 @@
 package serveurs.communications;
 
 import java.io.*;
+import static java.lang.Thread.sleep;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sql.rowset.CachedRowSet;
 import serveurs.Parametres;
 
@@ -80,9 +83,15 @@ public class Communication {
         {
             Communication_client cc = new Communication_client(ip, port, tables, attributs, conditions);
             cc.start();
-            while(!cc.is_requete_terminee())
+            boolean continuer = false;
+            while(!continuer)
             {
-
+                try {
+                    sleep(1);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Communication.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                continuer = cc.is_requete_terminee();
             }
             crs = cc.getRes_requete();
         }

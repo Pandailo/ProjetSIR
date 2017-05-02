@@ -8,6 +8,7 @@ package serveurs.communications;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.*;
 import serveurs.Parametres;
 import serveurs.Schema_global;
@@ -64,12 +65,15 @@ public class Communication_serveur extends Thread {
     {
         try 
         {
-            this.socket_serveur = new ServerSocket(this.port);
+            this.socket_serveur = new ServerSocket(this.port, 10);
             //On attend les connexions
+            List<Thread> threads = new ArrayList<>();
+            int i=0;
             while(this.continuer)
             {
-                Thread t = new Thread(new Accepter_client(this.socket_serveur.accept(), this));
-                t.start();
+                threads.add(new Thread(new Accepter_client(this.socket_serveur.accept(), this)));
+                threads.get(i).start();
+                i++;
             }
             this.socket_serveur.close();
         } 
@@ -325,9 +329,13 @@ class Accepter_client implements Runnable {
         //Récupération des éléments de la requête
         try 
         {
+            System.out.println("Réception des tables.");
             tables = this.dis.readUTF();
+            System.out.println("Réception des tables finie : "+tables);
             attributs = this.dis.readUTF();
+            System.out.println("Réception des attributs finie : "+attributs);
             conditions = this.dis.readUTF();
+            System.out.println("Réception des conditions finie : "+conditions);
         } 
         catch (IOException ex) 
         {
@@ -341,6 +349,8 @@ class Accepter_client implements Runnable {
         try 
         {
             this.dos.writeObject((Object)com_BD.requete(tables, attributs, conditions));
+            this.dos.flush();
+            System.out.println("Requête envoyée.");
         } 
         catch (IOException ex) 
         {
