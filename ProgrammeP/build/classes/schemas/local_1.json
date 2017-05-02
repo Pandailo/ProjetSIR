@@ -3,6 +3,56 @@
 	[
 
 		{
+			"nom":"SIR_PROJET",
+			"fragmentation":"horizontale",
+			"attributs":
+			[
+				{
+					"nom_attribut":"PNO",
+					"cle_primaire":"oui",
+					"type":"NUMBER(38)"
+				},
+				{
+					"nom_attribut":"NAME",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)"
+				},
+				{
+					"nom_attribut":"BUDGET",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)"
+				},
+				{
+					"nom_attribut":"LOCATION",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)"
+				},
+				{
+					"nom_attribut":"MOIS",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)"
+				},
+				{
+					"nom_attribut":"ANNEE",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)"
+				}
+			],
+			"fragments":
+			[
+				{
+					"attributs":
+					[
+						{
+							"attribut":"PNO",
+							"signe":">",
+							"valeur":"25"
+						}
+					]
+				}
+			]
+		},
+		{
 			"nom":"SIR_ASSIGN",
 			"fragmentation":"verticale",
 			"attributs":
@@ -21,17 +71,12 @@
 					"nom_attribut":"RESP",
 					"cle_primaire":"non",
 					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"DUR",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)"
 				}
 			]
 		},
 		{
 			"nom":"SIR_EMP",
-			"fragmentation":"verticale",
+			"fragmentation":"horizontale",
 			"attributs":
 			[
 				{
@@ -64,37 +109,18 @@
 					"cle_primaire":"non",
 					"type":"VARCHAR2(25)"
 				}
-			]
-		},
-		{
-			"nom":"SIR_PROJET",
-			"fragmentation":"verticale",
-			"attributs":
+			],
+			"fragments":
 			[
 				{
-					"nom_attribut":"PNO",
-					"cle_primaire":"oui",
-					"type":"NUMBER(38)"
-				},
-				{
-					"nom_attribut":"NAME",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"BUDGET",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)"
-				},
-				{
-					"nom_attribut":"LOCATION",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"DATEP",
-					"cle_primaire":"non",
-					"type":"DATE(0)"
+					"attributs":
+					[
+						{
+							"attribut":"ENO",
+							"signe":">",
+							"valeur":"25"
+						}
+					]
 				}
 			]
 		},
@@ -109,48 +135,9 @@
 					"type":"VARCHAR2(25)"
 				},
 				{
-					"nom_attribut":"SALAIRE",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)"
-				}
-			]
-		},
-		{
-			"nom":"SIR_TEST",
-			"fragmentation":"verticale",
-			"attributs":
-			[
-				{
 					"nom_attribut":"ID",
-					"cle_primaire":"oui",
-					"type":"NUMBER(38)"
-				},
-				{
-					"nom_attribut":"ATT_2",
 					"cle_primaire":"non",
-					"type":"VARCHAR2(30)"
-				}
-			]
-		},
-		{
-			"nom":"SIR_TEST2",
-			"fragmentation":"verticale",
-			"attributs":
-			[
-				{
-					"nom_attribut":"ID1",
-					"cle_primaire":"oui",
 					"type":"NUMBER(38)"
-				},
-				{
-					"nom_attribut":"ID2",
-					"cle_primaire":"oui",
-					"type":"NUMBER(38)"
-				},
-				{
-					"nom_attribut":"ATT",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(50)"
 				}
 			]
 		}

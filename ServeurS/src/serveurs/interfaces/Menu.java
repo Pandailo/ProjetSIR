@@ -5,6 +5,8 @@
  */
 package serveurs.interfaces;
 
+import serveurs.communications.Communication;
+
 /**
  *
  * @author yv965015
@@ -16,6 +18,8 @@ public class Menu extends javax.swing.JFrame {
      */
     public Menu() {
         initComponents();
+        Communication communication = new Communication();
+        communication.demarrer_serveur();
     }
 
     /**

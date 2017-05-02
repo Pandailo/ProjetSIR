@@ -18,6 +18,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import projetsir.Communication;
+import projetsir.Parametres;
+import projetsir.Transformation_global_local;
 import projetsir.bd_globale;
 
 /**
@@ -137,17 +140,18 @@ public class Fragmenter extends javax.swing.JFrame {
                ajoutF+=",";
         }
         ajoutF+=finFich;
-        this.EcrireFichier(new File("src/fragmentation_temporaire/globaltest.json"), ajoutF);
+        //this.EcrireFichier(new File("src/fragmentation_temporaire/globaltest.json"), ajoutF);
+        this.EcrireFichier(new File(new Parametres().get_chemin_schemas()+"/global.json"), ajoutF);
         this.setVisible(false);
         for(int i=0;i<files.length;i++)
         {
-            if(!files[i].getName().equals("globaltest.json"))
-            files[i].delete();
+            //if(!files[i].getName().equals("globaltest.json"))
+                //files[i].delete();
         }
         //TO DO : Enregistrer en new Parametres().get_chemin_schemas()+"/global.json"
-        //new Transformation_global_local();
-        //Communication c = new Communication(0);
-        //c.start();
+        new Transformation_global_local();
+        Communication c = new Communication(0);
+        c.start();
     }//GEN-LAST:event_ValiderActionPerformed
     private void EcrireFichier(File f,String s)
     {

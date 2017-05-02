@@ -76,11 +76,6 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
 
         cb_comp_signe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "=", "<", ">", "<=", ">=", "<>" }));
         cb_comp_signe.setSelectedIndex(-1);
-        cb_comp_signe.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_comp_signeActionPerformed(evt);
-            }
-        });
         jPanel4.add(cb_comp_signe);
 
         cb_comp_att2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "valeur" }));
@@ -116,7 +111,7 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
 
         jPanel5.add(jPanel7);
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         ta_resum_fragment_actuel.setColumns(20);
         ta_resum_fragment_actuel.setRows(5);
@@ -146,6 +141,11 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         jPanel8.setLayout(new java.awt.GridLayout(1, 0));
 
         annuler_button.setText("Annuler");
+        annuler_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                annuler_buttonActionPerformed(evt);
+            }
+        });
         jPanel8.add(annuler_button);
 
         valider_button.setText("Valider");
@@ -298,13 +298,15 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
     }//GEN-LAST:event_ajouter_buttonActionPerformed
 
     private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valider_buttonActionPerformed
+        //Vérifier s'il y a des mintermes
         Verif_Frag_Horizontale v=new Verif_Frag_Horizontale(fragments,this.resume_frag_h);
         v.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_valider_buttonActionPerformed
 
-    private void cb_comp_signeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_comp_signeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cb_comp_signeActionPerformed
+    private void annuler_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_annuler_buttonActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_annuler_buttonActionPerformed
 
     /**
      * @param args the command line arguments

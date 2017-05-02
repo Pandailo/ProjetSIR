@@ -1,3 +1,45 @@
 {
-    "programme_p":"local_2"
+	"tables":
+	[
+
+		{
+			"nom":"SIR_ASSIGN",
+			"fragmentation":"verticale",
+			"attributs":
+			[
+				{
+					"nom_attribut":"ENO",
+					"cle_primaire":"oui",
+					"type":"NUMBER(38)"
+				},
+				{
+					"nom_attribut":"PNO",
+					"cle_primaire":"oui",
+					"type":"NUMBER(38)"
+				},
+				{
+					"nom_attribut":"DUR",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)"
+				}
+			]
+		},
+		{
+			"nom":"SIR_SALAIRE",
+			"fragmentation":"verticale",
+			"attributs":
+			[
+				{
+					"nom_attribut":"TITRE",
+					"cle_primaire":"oui",
+					"type":"VARCHAR2(25)"
+				},
+				{
+					"nom_attribut":"SALAIRE",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)"
+				}
+			]
+		}
+	]
 }

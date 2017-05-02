@@ -352,8 +352,6 @@ class Accepter_client implements Runnable {
     {
         Schema_local bd_actuelle = new Schema_local(true);
         Schema_local bd_nouvelle = new Schema_local(false);
-        //TODO: automatisation pour savoir si la co se fait à la fac ou non
-        Communication_BD com_BD = new Communication_BD();
         
         //Construction des tables qui n'existent pas
         this.construction_tables(bd_actuelle, bd_nouvelle);
@@ -430,7 +428,7 @@ class Accepter_client implements Runnable {
                 creation_attributs += creation_pk+")";
                 System.out.println("Création de la table "+tables_nouvelles[i]+".");
                 System.out.println(creation_attributs);
-                new Communication_BD().ajoutTable(tables_nouvelles[i], null);
+                new Communication_BD().ajoutTable(tables_nouvelles[i], creation_attributs);
             }
         }
     }

@@ -164,8 +164,6 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         pan_dis_f = new javax.swing.JPanel();
         pan_dis_s = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
         jPanel1.setLayout(new java.awt.GridLayout(1, 3));
 
         annuler_button.setText("Annuler");
@@ -348,6 +346,7 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         if(valide)
         {
             new Frag_Horizontale(this.list_frag,distri,this.table).construction_fichier();
+            this.setVisible(false);
         }
         else
             System.out.println("Gg vous avez raté !");

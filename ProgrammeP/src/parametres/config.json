@@ -1,5 +1,5 @@
 {
-	"nb_serveurs": 4,
+	"nb_serveurs": 2,
 	"num_serveur_local": 1,
 	"port_serveur_local": 1201,
 	"BD_login": "ag092850",
@@ -12,12 +12,6 @@
 		},
 		{
 			"num": 2
-		},
-		{
-			"num": 3
-		},
-		{
-			"num": 4
 		}
 	]
 }

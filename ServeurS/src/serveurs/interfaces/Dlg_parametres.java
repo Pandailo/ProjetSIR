@@ -256,7 +256,7 @@ public class Dlg_parametres extends javax.swing.JFrame {
             this.parametres.setBD_mdp(mdp_bd);
             this.parametres.setServeurs(serveurs_temp);
             this.parametres.ecriture_parametres();
-            System.out.println("Paramètre changés.");
+            System.out.println("Paramètres changés.");
             this.setVisible(false);
         }
         else

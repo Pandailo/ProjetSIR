@@ -67,9 +67,10 @@ public class Frag_Horizontale
                 s += "\"oui\",\n";
             else
                 s += "\"non\",\n";
-            s += "\t\t\t\t\t\"type\":\""+bd.get_type_attribut(this.nom_table, nom_attribut)+"\",\n";
+            s += "\t\t\t\t\t\"type\":\""+bd.get_type_attribut(this.nom_table, nom_attribut)+"\"\n";
             s += "\t\t\t\t}";
-            if(i<att.length)
+            System.out.println(i+"/"+(att.length-1));
+            if(i<(att.length-1))
                 s += ",";
             s += "\n";
         }
