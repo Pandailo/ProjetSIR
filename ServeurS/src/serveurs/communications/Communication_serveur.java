@@ -66,7 +66,7 @@ public class Communication_serveur extends Thread {
     {
         try 
         {
-            this.socket_serveur = new ServerSocket(this.port, 10);
+            this.socket_serveur = new ServerSocket(this.port);
             //On attend les connexions
             List<Thread> threads = new ArrayList<>();
             int i=0;
@@ -353,7 +353,7 @@ class Accepter_client implements Runnable {
         {
             this.dos.writeObject((Object)com_BD.requete(tables, attributs, conditions));
             this.dos.flush();
-            System.out.println("Requête envoyée.");
+            com_BD.closeConnect();
         } 
         catch (IOException ex) 
         {
@@ -365,15 +365,16 @@ class Accepter_client implements Runnable {
     {
         Schema_local bd_actuelle = new Schema_local(true);
         Schema_local bd_nouvelle = new Schema_local(false);
+        Communication_BD com_BD = new Communication_BD();
         
         //Construction des tables qui n'existent pas
-        this.construction_tables(bd_actuelle, bd_nouvelle);
+        this.construction_tables(bd_actuelle, bd_nouvelle, com_BD);
         
         //Construction des colonnes qui n'existent pas
-        this.construction_colonnes(bd_actuelle, bd_nouvelle);
+        this.construction_colonnes(bd_actuelle, bd_nouvelle, com_BD);
         
         //Récupération des tuples manquants
-        this.recuperation_tuples(bd_nouvelle);
+        this.recuperation_tuples(bd_nouvelle, com_BD);
         
         //Attente de la confirmation des autres serveurs
         System.out.println("/***Attente des la confirmations des autres serveurs avant la suppression***/");
@@ -389,13 +390,13 @@ class Accepter_client implements Runnable {
         }
         
         //Suppression des tuples (pour la fragmentation horizontale ou hybride seulement)
-        this.suppression_tuples(bd_nouvelle);
+        this.suppression_tuples(bd_nouvelle, com_BD);
         
         //Suppression des colonnes
-        this.suppression_colonnes(bd_actuelle, bd_nouvelle);
+        this.suppression_colonnes(bd_actuelle, bd_nouvelle, com_BD);
         
         //Suppression des tables
-        this.suppression_tables(bd_actuelle, bd_nouvelle);
+        this.suppression_tables(bd_actuelle, bd_nouvelle, com_BD);
         
         //MAJ du fichier BD_actuelle.json
         File source = new File(this.parametres.getChemin_schemas()+"/local.json");
@@ -405,10 +406,13 @@ class Accepter_client implements Runnable {
         //Réinitialisation de la MAJ BD
         this.com_serveur.initialisation_MAJ_BD();
         
+        //Fermeture de la communication à la BD
+        com_BD.closeConnect();
+        
         System.out.println("Mise à jour de la BD terminée !");
     }
     
-    private void construction_tables(Schema_local bd_actuelle, Schema_local bd_nouvelle)
+    private void construction_tables(Schema_local bd_actuelle, Schema_local bd_nouvelle, Communication_BD com_BD)
     {
         //Construction des tables qui n'existent pas
         System.out.println("/***Construction des tables***/");
@@ -447,12 +451,12 @@ class Accepter_client implements Runnable {
                 creation_attributs += creation_pk+")";
                 System.out.println("Création de la table "+tables_nouvelles[i]+".");
                 System.out.println(creation_attributs);
-                new Communication_BD().ajoutTable(tables_nouvelles[i], creation_attributs);
+                com_BD.ajoutTable(tables_nouvelles[i], creation_attributs);
             }
         }
     }
     
-    private void construction_colonnes(Schema_local bd_actuelle, Schema_local bd_nouvelle)
+    private void construction_colonnes(Schema_local bd_actuelle, Schema_local bd_nouvelle, Communication_BD com_BD)
     {
         //Construction des colonnes qui n'existent pas
         System.out.println("/***Construction des colonnes***/");
@@ -487,14 +491,14 @@ class Accepter_client implements Runnable {
                     if(creation)
                     {
                         System.out.println("Ajout de la colonne "+attributs_nouveaux[j]+" type "+bd_nouvelle.get_type_attribut(tables_nouvelles[i], attributs_nouveaux[j])+" à la table "+tables_nouvelles[i]+".");
-                        new Communication_BD().ajoutColonne(tables_nouvelles[i], attributs_nouveaux[j], bd_nouvelle.get_type_attribut(tables_nouvelles[i], attributs_nouveaux[j]));
+                        com_BD.ajoutColonne(tables_nouvelles[i], attributs_nouveaux[j], bd_nouvelle.get_type_attribut(tables_nouvelles[i], attributs_nouveaux[j]));
                     }
                 }
             }
         }
     }
     
-    private void recuperation_tuples(Schema_local bd_nouvelle)
+    private void recuperation_tuples(Schema_local bd_nouvelle, Communication_BD com_BD)
     {
         //Récupération des tuples manquants
         System.out.println("/***Récupération des tuples***/");
@@ -563,7 +567,7 @@ class Accepter_client implements Runnable {
                     {
                         System.out.println("Requete au serveur "+liste_serveurs.get(j)+" : Table "+tables+", attributs : "+attributs);
                         System.out.println("Conditions : "+conditions);
-                        new Communication_BD().ajoutTuples(this.communication.envoi_requete(liste_serveurs.get(j), tables, attributs, conditions), 
+                        com_BD.ajoutTuples(this.communication.envoi_requete(liste_serveurs.get(j), tables, attributs, conditions), 
                                 tables, bd_nouvelle.get_cles_primaires(tables));
                     }
                 }
@@ -612,7 +616,7 @@ class Accepter_client implements Runnable {
                         {
                             System.out.println("Requete au serveur "+num_serveur_envoi_requete+" : Table "+tables+", attributs : "+attributs);
                             System.out.println("Conditions : "+conditions);
-                            new Communication_BD().ajoutTuples(this.communication.envoi_requete(num_serveur_envoi_requete, tables, attributs, conditions), 
+                            com_BD.ajoutTuples(this.communication.envoi_requete(num_serveur_envoi_requete, tables, attributs, conditions), 
                                     tables, bd_nouvelle.get_cles_primaires(tables));
                         }
                     }
@@ -621,7 +625,7 @@ class Accepter_client implements Runnable {
         }
     }
     
-    private void suppression_tuples(Schema_local bd_nouvelle)
+    private void suppression_tuples(Schema_local bd_nouvelle, Communication_BD com_BD)
     {
         //Suppression des tuples (pour la fragmentation horizontale ou hybride seulement)
         System.out.println("/***Suppression des tuples***/");
@@ -650,12 +654,12 @@ class Accepter_client implements Runnable {
                     
                 }
                 System.out.println("Table : "+tables+", suppression : "+conditions);
-                new Communication_BD().suppressionTuples(tables, conditions);
+                com_BD.suppressionTuples(tables, conditions);
             }
         }
     }
     
-    private void suppression_colonnes(Schema_local bd_actuelle, Schema_local bd_nouvelle)
+    private void suppression_colonnes(Schema_local bd_actuelle, Schema_local bd_nouvelle, Communication_BD com_BD)
     {
         //Suppression des colonnes
         System.out.println("/***Suppression des colonnes***/");
@@ -690,14 +694,14 @@ class Accepter_client implements Runnable {
                     if(suppression)
                     {
                         System.out.println("Suppression de la colonne "+attributs_actuels[j]+" de la table "+tables_nouvelles[i]+".");
-                        new Communication_BD().suppressionColonne(tables_nouvelles[i], attributs_actuels[j]);
+                        com_BD.suppressionColonne(tables_nouvelles[i], attributs_actuels[j]);
                     }
                 }
             }
         }
     }
     
-    private void suppression_tables(Schema_local bd_actuelle, Schema_local bd_nouvelle)
+    private void suppression_tables(Schema_local bd_actuelle, Schema_local bd_nouvelle, Communication_BD com_BD)
     {
         //Suppression des tables
         System.out.println("/***Suppression des tables***/");
@@ -717,7 +721,7 @@ class Accepter_client implements Runnable {
             if(suppression)
             {
                 System.out.println("Suppression de la table "+tables_actuelles[i]+".");
-                new Communication_BD().suppressionTable(tables_nouvelles[i]);
+                com_BD.suppressionTable(tables_nouvelles[i]);
             }
         }
     }

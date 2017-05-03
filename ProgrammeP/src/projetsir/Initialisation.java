@@ -52,6 +52,14 @@ public class Initialisation {
             Logger.getLogger(Initialisation.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.construction_schema_global(parametres.get_chemin_schemas());
+        try
+        {
+            this.connect.close();
+        } 
+        catch (SQLException ex)
+        {
+            Logger.getLogger(Initialisation.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void construction_schema_global(String chemin_schemas)
@@ -139,7 +147,7 @@ public class Initialisation {
         return liste_tables;
     }
     
-    public List<String> getPrimary_keys(String table)
+    private List<String> getPrimary_keys(String table)
     {
         List<String> pk = new ArrayList<>();
         try 
