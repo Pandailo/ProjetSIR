@@ -16,10 +16,10 @@ import projetsir.bd_globale;
  */
 public class DLG_Frag_Horizontale extends javax.swing.JFrame
 {
-    bd_globale bdg;
-    ArrayList<String> fragments;
-    String temp;
-    String table="";
+    private bd_globale bdg;
+    private ArrayList<String> fragments;
+    private String temp;
+    private String table;
     /**
      * Creates new form DLG_Frag_Horizontale
      */
@@ -31,12 +31,9 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         fragments=new ArrayList();
         temp="";
         String[] l_atts=bdg.get_liste_attributs_table(table);
-            this.cb_comp_att.removeAllItems();
-            for(String l_att : l_atts)
-            {
-                this.cb_comp_att.addItem(l_att);
-            }
-       
+        this.cb_comp_att.removeAllItems();
+        for(String l_att : l_atts)
+            this.cb_comp_att.addItem(l_att);  
     }
 
     /**
@@ -79,11 +76,6 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         jPanel4.add(cb_comp_signe);
 
         cb_comp_att2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "valeur" }));
-        cb_comp_att2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_comp_att2ActionPerformed(evt);
-            }
-        });
         jPanel4.add(cb_comp_att2);
 
         jPanel5.add(jPanel4);
@@ -163,11 +155,11 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
 
     private void Valider_frag_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Valider_frag_buttonActionPerformed
     {//GEN-HEADEREND:event_Valider_frag_buttonActionPerformed
-       if(temp!="")
-       {
-           this.fragments.add(temp);
-           temp="";
-       }
+       if(!temp.equals(""))
+        {
+            this.fragments.add(temp);
+            temp="";
+        }
         if(this.fragments.size()>0)
         {
             this.resume_frag_h.removeAll();
@@ -207,20 +199,14 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         this.setSize(this.getWidth()-1, this.getHeight()-1);
         this.ta_resum_fragment_actuel.setText("");
         }
-        
     }//GEN-LAST:event_Valider_frag_buttonActionPerformed
     
-    private void cb_comp_att2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cb_comp_att2ActionPerformed
-    {//GEN-HEADEREND:event_cb_comp_att2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cb_comp_att2ActionPerformed
-
     private void ajouter_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ajouter_buttonActionPerformed
     {//GEN-HEADEREND:event_ajouter_buttonActionPerformed
         int valInt=-1;
         String att="";
         String valS="";
-        
+        JOptionPane jop = new JOptionPane();
         if(this.cb_comp_att.getSelectedIndex()!=-1)
         {
             if(this.cb_comp_signe.getSelectedIndex()!=-1)
@@ -234,10 +220,9 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
                     String mes="Valeur (entier)?";
                     if(split[0].equals("NUMBER"))
                     {
-                        JOptionPane jop2 = new JOptionPane();
                         while(continuer&&valInt<0)
                         {
-                            val = jop2.showInputDialog(null,mes, JOptionPane.QUESTION_MESSAGE);
+                            val = jop.showInputDialog(null,mes, JOptionPane.QUESTION_MESSAGE);
                             if(val!=null)
                             {
                                 try{
@@ -247,31 +232,26 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
                                 {
                                     mes="Valeur ? Merci de mettre un entier positif !";
                                 }
-                                 mes="Valeur ? Merci de mettre un entier positif !";
+                                mes="Valeur ? Merci de mettre un entier positif !";
                             }
                             else
-                            {
-                                continuer=false;
-                            }
-                                
+                                continuer=false;                               
                         }
                     }
                     else
                     {
-                        JOptionPane jop2 = new JOptionPane();
-                         while(continuer)
+                        while(continuer)
                         {
-                            val = jop2.showInputDialog(null,mes, JOptionPane.QUESTION_MESSAGE);
+                            val = jop.showInputDialog(null,mes, JOptionPane.QUESTION_MESSAGE);
                             if(val!=null)
                             {
-                                valS = jop2.showInputDialog(null,"Valeur (chaine de caractère)?", JOptionPane.QUESTION_MESSAGE);
+                                valS = jop.showInputDialog(null,"Valeur (chaine de caractère)?", JOptionPane.QUESTION_MESSAGE);
                                 temp+=(table+";"+att+";"+this.cb_comp_signe.getSelectedItem().toString()+";"+valS+"@");
                                 continuer=false;
                             }
                             else
                                 mes="Valeurs ? Merci de mettre une chaine valable!";
-                        }
-                      
+                        }  
                     }
                     String[] split1;
                     String[] split2;
@@ -289,19 +269,45 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
                         }
                        le_temporaire+=("\n");
                     }
-                    this.ta_resum_fragment_actuel.setText(le_temporaire);
-                    
-                    
+                    this.ta_resum_fragment_actuel.setText(le_temporaire);              
                 }
             }
         }
     }//GEN-LAST:event_ajouter_buttonActionPerformed
 
     private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valider_buttonActionPerformed
-        //Vérifier s'il y a des mintermes
-        Verif_Frag_Horizontale v=new Verif_Frag_Horizontale(fragments,this.resume_frag_h);
-        v.setVisible(true);
-        this.setVisible(false);
+        if(this.resume_frag_h.getComponentCount()>0)
+        {
+            JOptionPane jop = new JOptionPane();
+            String nbFS="";
+            String message="Combien de fragments doivent être créés ?";
+            int nbF=0;
+            boolean continuer = true;
+            while(continuer && (!nbFS.matches("^\\d+$") || nbFS.matches("") || nbF<=1))
+            {    
+                nbFS = jop.showInputDialog(null, message, JOptionPane.QUESTION_MESSAGE);
+                if(nbFS==null)
+                    continuer = false;
+                else
+                {
+                    if(nbFS.matches("^\\d+$") && !nbFS.matches(""))
+                        nbF=Integer.parseInt(nbFS);
+                    else
+                        message="Le nombre de fragments doit être supérieur ou égal à 2.";
+                }
+            }
+            if(continuer)
+            {
+                Verif_Frag_Horizontale v=new Verif_Frag_Horizontale(fragments, this.resume_frag_h, nbF);
+                v.setVisible(true);
+                this.setVisible(false);
+            }
+        }
+        else
+        {
+            JOptionPane jop = new JOptionPane();
+            jop.showMessageDialog(null, "Veuillez ajouter des mintermes afin de poursuivre la fragmentation.", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
+        }
     }//GEN-LAST:event_valider_buttonActionPerformed
 
     private void annuler_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_annuler_buttonActionPerformed

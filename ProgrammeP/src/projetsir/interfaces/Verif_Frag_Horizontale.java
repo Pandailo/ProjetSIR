@@ -16,36 +16,22 @@ import projetsir.fragmentation.horizontale.Frag_Horizontale;
  * @author yann
  */
 public class Verif_Frag_Horizontale extends javax.swing.JFrame {
-    int nbS;
-    Parametres param;
-    int nbF;
-    ArrayList<String> list_select=new ArrayList();
-    int nbT;
-    ArrayList<String> list_frag=new ArrayList();
-    String table;
+    private int nbS;
+    private Parametres param;
+    private int nbF;
+    private ArrayList<String> list_select=new ArrayList();
+    private int nbT;
+    private ArrayList<String> list_frag=new ArrayList();
+    private String table;
     /**
      * Creates new form Verif_Frag_Horizontale
      */
-    public Verif_Frag_Horizontale(ArrayList<String> list_select,JPanel pan) {
+    public Verif_Frag_Horizontale(ArrayList<String> list_select, JPanel pan, int nbF) {
         initComponents();
         int cpt=0;
         param=new Parametres();
         this.list_select=list_select;
         nbS=param.get_nb_serveurs();
-        JOptionPane jop = new JOptionPane();
-        String nbFS="";
-        String message="Nombre de fragments ?";
-        nbF=0;
-        while(!nbFS.matches("^\\d+$") || nbFS.matches("") || nbF<=1)
-        {    
-            nbFS = jop.showInputDialog(null, message, JOptionPane.QUESTION_MESSAGE);
-            if(nbFS.matches("^\\d+$") && !nbFS.matches(""))
-            {
-                nbF=Integer.parseInt(nbFS);
-            }
-            else
-                message="Nombre de fragments doit être supérieur à 2.";
-        }
         this.resume_mint.add(pan);
         String splitA[];
         String splitB[];

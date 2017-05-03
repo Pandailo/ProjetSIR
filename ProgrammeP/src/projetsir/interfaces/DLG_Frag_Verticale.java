@@ -16,48 +16,33 @@ import projetsir.bd_globale;
  * @author yv965015
  */
 public class DLG_Frag_Verticale extends javax.swing.JFrame {
-    Parametres param;
-    int nbR;
-    int nbS;
-    int nbA;
-    String table;
-    String[] liste_att;
-    int[][] mat_dis=null;
-    int[][] mat_ut=null;
+    private Parametres param;
+    private int nbR;
+    private int nbS;
+    private int nbA;
+    private String table;
+    private String[] liste_att;
+    private int[][] mat_dis=null;
+    private int[][] mat_ut=null;
     /**
      * Creates new form DLG_Frag_Verticale
      */
-    public DLG_Frag_Verticale(String table) {
-        this.table=table;
-        JOptionPane jop = new JOptionPane();
-        String nbQ="";
-        String message="Nombre de requêtes ?";
-        nbR=0;
-        while(!nbQ.matches("^\\d+$")||nbQ.matches(""))
-        {    
-            nbQ = jop.showInputDialog(null, message, JOptionPane.QUESTION_MESSAGE);
-            if(nbQ.matches("^\\d+$"))
-            {
-                nbR=Integer.parseInt(nbQ);
-            }
-            else
-                message="Nombre de requêtes en nombre positif ? ";
-        }
-        param=new Parametres();
-        nbS=param.get_nb_serveurs();
-        bd_globale bdg=new bd_globale();
-        liste_att=bdg.get_attributs_non_primaires(table);
-        nbA=liste_att.length;
+    public DLG_Frag_Verticale(String table, int nbR) {
+        this.table = table;
+        this.nbR = nbR;
+        this.param = new Parametres();
+        this.nbS = this.param.get_nb_serveurs();
+        bd_globale bdg = new bd_globale();
+        this.liste_att  =bdg.get_attributs_non_primaires(table);
+        this.nbA = this.liste_att.length;
         initComponents();
-        nbR++;
-        nbS++;
-        nbA++;       
-        Pan_Dis.setLayout(new GridLayout(nbR,nbS));
-        Pan_Ut.setLayout(new GridLayout(nbR,nbA));
-        this.creationMatDis(nbR, nbS,liste_att);
-        this.creationMatUt(nbR, nbA,liste_att);
-        
-            
+        this.nbR++;
+        this.nbS++;
+        this.nbA++;       
+        this.Pan_Dis.setLayout(new GridLayout(this.nbR, this.nbS));
+        this.Pan_Ut.setLayout(new GridLayout(this.nbR, this.nbA));
+        this.creationMatDis(this.nbR, this.nbS, this.liste_att);
+        this.creationMatUt(this.nbR, this.nbA, this.liste_att);       
     }
 
     /**
@@ -151,64 +136,70 @@ public class DLG_Frag_Verticale extends javax.swing.JFrame {
 
     private void Lancer_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Lancer_buttonActionPerformed
     {//GEN-HEADEREND:event_Lancer_buttonActionPerformed
-        int[][] mat_ut=new int[nbR-1][nbA-1];
-        int[][] mat_dis=new int[nbR-1][nbS-1];
-        int nb_fragments=nbS-1;
+        int[][] mat_ut=new int[this.nbR-1][this.nbA-1];
+        int[][] mat_dis=new int[this.nbR-1][this.nbS-1];
         int u=0;
         int k=0;
         for(int i=nbA+2;i<nbR*nbA;i++)
         {
-               if(this.Pan_Ut.getComponent(i).getClass()==JCheckBox.class)
-               {
-                   JCheckBox jb=(JCheckBox)this.Pan_Ut.getComponent(i);
-                   if(jb.isSelected())
-                        mat_ut[u][k]=1;
-                   else
-                        mat_ut[u][k]=0;
-                   k++;
-                   if(k>=nbA-1)
-                   {
-                       u++;
-                       k=0;
-                   }
-               }
+            if(this.Pan_Ut.getComponent(i).getClass()==JCheckBox.class)
+            {
+                JCheckBox jb=(JCheckBox)this.Pan_Ut.getComponent(i);
+                if(jb.isSelected())
+                     mat_ut[u][k]=1;
+                else
+                     mat_ut[u][k]=0;
+                k++;
+                if(k>=nbA-1)
+                {
+                    u++;
+                    k=0;
+                }
+            }
         }  
         u=0;
         k=0;
         for(int i=6;i<nbR*nbS;i++)
         {
-               if(this.Pan_Dis.getComponent(i).getClass()==JSpinner.class)
-               {
-                   JSpinner js=(JSpinner)this.Pan_Dis.getComponent(i);
-                   mat_dis[u][k]=Integer.parseInt(js.getValue().toString());
-                   k++;
-                   if(k>=nbS-1)
-                   {
-                       u++;
-                       k=0;
-                   }
-               }
+            if(this.Pan_Dis.getComponent(i).getClass()==JSpinner.class)
+            {
+                JSpinner js=(JSpinner)this.Pan_Dis.getComponent(i);
+                mat_dis[u][k]=Integer.parseInt(js.getValue().toString());
+                k++;
+                if(k>=nbS-1)
+                {
+                    u++;
+                    k=0;
+                }
+            }
         } 
         
         JOptionPane jop = new JOptionPane();
         String nbFS="";
         String message="Nombre de fragments ?";
         int nbF=0;
-        while(!nbFS.matches("^\\d+$") || nbFS.matches("") || nbF>=nbA || nbF<=1)
+        boolean continuer = true;
+        while(continuer && (!nbFS.matches("^\\d+$") || nbFS.matches("") || nbF>nbA || nbF<=1))
         {    
             nbFS = jop.showInputDialog(null, message, JOptionPane.QUESTION_MESSAGE);
-            if(nbFS.matches("^\\d+$") && !nbFS.matches(""))
-            {
-                nbF=Integer.parseInt(nbFS);
-            }
+            if(nbFS==null)
+                continuer = false;
             else
-                message="Nombre de fragments doit être inférieur au nombre d'attributs.";
+            {
+                if(nbFS.matches("^\\d+$") && !nbFS.matches(""))
+                    nbF=Integer.parseInt(nbFS);
+                else
+                    message="Le nombre de fragments doit être inférieur au nombre d'attributs.";
+            }
         }
-        Frag_verticale frag=new Frag_verticale(table,liste_att,nbF, mat_dis,mat_ut); 
-        int[][] res_frag=frag.get_fragmentation();
-        Verif_Frag_Verticale verif=new Verif_Frag_Verticale(table,res_frag);
-        verif.setVisible(true);
-        this.setVisible(false);
+        if(continuer)
+        {
+            Frag_verticale frag = new Frag_verticale(table,liste_att, nbF, mat_dis,mat_ut); 
+            int[][] res_frag = frag.get_fragmentation();
+            Verif_Frag_Verticale verif = new Verif_Frag_Verticale(table, res_frag);
+            verif.setVisible(true);
+            this.setVisible(false);
+        }
     }//GEN-LAST:event_Lancer_buttonActionPerformed
 
     /**

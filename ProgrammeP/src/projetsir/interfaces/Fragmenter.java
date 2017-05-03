@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import projetsir.Communication;
 import projetsir.Parametres;
 import projetsir.Transformation_global_local;
@@ -34,11 +35,8 @@ public class Fragmenter extends javax.swing.JFrame {
         bd_globale bdg=new bd_globale();
         String[] l_tables=bdg.get_liste_nom_tables();
         Liste_tables.removeAllItems();
-        for(int i=0;i<l_tables.length;i++)
-        {
-            
+        for(int i=0;i<l_tables.length;i++)   
             Liste_tables.addItem(l_tables[i]);
-        }
     }
 
     /**
@@ -139,10 +137,7 @@ public class Fragmenter extends javax.swing.JFrame {
         this.EcrireFichier(new File(new Parametres().get_chemin_schemas()+"/global.json"), ajoutF);
         this.setVisible(false);
         for(int i=0;i<files.length;i++)
-        {
-            if(!files[i].getName().equals("globaltest.json"))
-                files[i].delete();
-        }
+            files[i].delete();
         new Transformation_global_local();
         Communication c = new Communication(0);
         c.start();
@@ -177,8 +172,29 @@ public class Fragmenter extends javax.swing.JFrame {
         return contenu;
     }
     private void f_verticaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_f_verticaleActionPerformed
-        DLG_Frag_Verticale dlgV=new DLG_Frag_Verticale((String) Liste_tables.getSelectedItem());
-        dlgV.setVisible(true);
+        JOptionPane jop = new JOptionPane();
+        String nbQ="";
+        String message="Combien de requêtes voulez-vous créer ?";
+        int nbR=0;
+        boolean continuer = true;
+        while(continuer && (!nbQ.matches("^\\d+$")||nbQ.matches("")))
+        {    
+            nbQ = jop.showInputDialog(null, message, JOptionPane.QUESTION_MESSAGE);
+            if(nbQ==null)
+                continuer = false;
+            else
+            {
+                if(nbQ.matches("^\\d+$"))
+                    nbR=Integer.parseInt(nbQ);
+                else
+                    message="Le nombre de requête doit être un entier positif.";
+            }
+        }
+        if(continuer)
+        {
+            DLG_Frag_Verticale dlgV=new DLG_Frag_Verticale((String)Liste_tables.getSelectedItem(), nbR);
+            dlgV.setVisible(true);
+        }
     }//GEN-LAST:event_f_verticaleActionPerformed
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
@@ -206,7 +222,6 @@ public class Fragmenter extends javax.swing.JFrame {
     {//GEN-HEADEREND:event_f_horizontaleActionPerformed
         if(this.Liste_tables.getSelectedIndex()!=-1)
         new DLG_Frag_Horizontale(this.Liste_tables.getSelectedItem().toString()).setVisible(true);
-        
     }//GEN-LAST:event_f_horizontaleActionPerformed
     
     /**
