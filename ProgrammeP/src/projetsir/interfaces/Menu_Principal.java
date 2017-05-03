@@ -10,6 +10,8 @@ import javax.swing.JOptionPane;
 import projetsir.Communication;
 import projetsir.Initialisation;
 import projetsir.Parametres;
+import projetsir.Reinitialisation;
+import projetsir.Transformation_global_local;
 
 /**
  *
@@ -31,8 +33,7 @@ public class Menu_Principal extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -41,6 +42,7 @@ public class Menu_Principal extends javax.swing.JFrame {
         Fragmenter = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         Initialiser = new javax.swing.JButton();
+        Reset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
@@ -54,20 +56,16 @@ public class Menu_Principal extends javax.swing.JFrame {
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
         Parametrer.setText("Paramétrer");
-        Parametrer.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        Parametrer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ParametrerActionPerformed(evt);
             }
         });
         jPanel2.add(Parametrer);
 
         Fragmenter.setText("Fragmenter");
-        Fragmenter.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        Fragmenter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 FragmenterActionPerformed(evt);
             }
         });
@@ -75,17 +73,23 @@ public class Menu_Principal extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
 
-        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
         Initialiser.setText("Initialiser");
-        Initialiser.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        Initialiser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 InitialiserActionPerformed(evt);
             }
         });
         jPanel3.add(Initialiser);
+
+        Reset.setText("Réinitialiser les bases de données");
+        Reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ResetActionPerformed(evt);
+            }
+        });
+        jPanel3.add(Reset);
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
@@ -115,7 +119,7 @@ public class Menu_Principal extends javax.swing.JFrame {
                 option = jop.showConfirmDialog(null, "Il semble qu'une initialisation ait déjà été faite, êtes-vous sûr de vouloir continuer ? (résultats non garantis)", "Lancement de l'initialisation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if(option==JOptionPane.OK_OPTION)
             {
-                Initialisation initialisation = new Initialisation();
+                new Initialisation();
                 System.out.println("Initialisation du schéma terminée.");
                 Communication communication = new Communication(1);
                 communication.start();
@@ -135,6 +139,13 @@ public class Menu_Principal extends javax.swing.JFrame {
         Dlg_parametres dlg = new Dlg_parametres();
         dlg.setVisible(true);
     }//GEN-LAST:event_ParametrerActionPerformed
+
+    private void ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetActionPerformed
+        new Reinitialisation();
+        new Transformation_global_local();
+        Communication c = new Communication(0);
+        c.start();
+    }//GEN-LAST:event_ResetActionPerformed
 
     /**
      * @param args the command line arguments
@@ -175,6 +186,7 @@ public class Menu_Principal extends javax.swing.JFrame {
     private javax.swing.JButton Fragmenter;
     private javax.swing.JButton Initialiser;
     private javax.swing.JButton Parametrer;
+    private javax.swing.JButton Reset;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

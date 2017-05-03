@@ -6,6 +6,7 @@
 package serveurs.communications;
 
 import java.io.*;
+import static java.lang.Thread.sleep;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class Communication_serveur extends Thread {
     public void initialisation_MAJ_BD()
     {
         Parametres p = new Parametres();
-        int nb_serveurs = p.getNb_serveurs()-1;
+        int nb_serveurs = p.getNb_serveurs();
         this.MAJ_BD = new boolean[nb_serveurs];
         for(int i=0; i<nb_serveurs; i++)
             this.MAJ_BD[i] = false;
@@ -205,11 +206,11 @@ class Accepter_client implements Runnable {
     private void reception_schemas()
     {
         //Réception du schéma local
-        this.reception_fichier(this.parametres.getChemin_schemas()+"/local.json");
+        this.reception_fichier(this.parametres.getChemin_schemas()+"/global_nouveau.json");
         System.out.println("Schéma local reçu.");
         
         //Réception du schéma global
-        this.reception_fichier(this.parametres.getChemin_schemas()+"/global_nouveau.json");
+        this.reception_fichier(this.parametres.getChemin_schemas()+"/local.json");
         System.out.println("Schéma global reçu.");
         
         //Mise à jour de la BD
@@ -378,9 +379,13 @@ class Accepter_client implements Runnable {
         System.out.println("/***Attente des la confirmations des autres serveurs avant la suppression***/");
         //Envoi de la fin de récupération des tuples aux autres serveurs
         this.communication.envoi_maj_bd();
-        while(this.com_serveur.bd_dispo())
+        while(!this.com_serveur.bd_dispo())
         {
-            
+            try {
+                sleep(1);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Accepter_client.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         //Suppression des tuples (pour la fragmentation horizontale ou hybride seulement)
@@ -399,6 +404,8 @@ class Accepter_client implements Runnable {
         
         //Réinitialisation de la MAJ BD
         this.com_serveur.initialisation_MAJ_BD();
+        
+        System.out.println("Mise à jour de la BD terminée !");
     }
     
     private void construction_tables(Schema_local bd_actuelle, Schema_local bd_nouvelle)
@@ -541,12 +548,16 @@ class Accepter_client implements Runnable {
                         attributs += attributs_nouveaux[j];
                     }
                     //Conditions
-                    for(int j=0; j<tab_conditions.length; j++)
+                    if(tab_conditions!=null)
                     {
-                        if(!conditions.equals(""))
-                            conditions += " AND ";
-                        conditions += tab_conditions[j][0]+""+tab_conditions[j][1]+""+tab_conditions[j][2];
+                        for(int j=0; j<tab_conditions.length; j++)
+                        {
+                            if(!conditions.equals(""))
+                                conditions += " AND ";
+                            conditions += tab_conditions[j][0]+""+tab_conditions[j][1]+""+tab_conditions[j][2];
+                        }
                     }
+                        
                     //Envoi de la requête aux serveurs
                     for(int j=0; j<liste_serveurs.size(); j++)
                     {
@@ -678,8 +689,8 @@ class Accepter_client implements Runnable {
                         }
                     if(suppression)
                     {
-                        System.out.println("Suppression de la colonne "+attributs_nouveaux[j]+" de la table "+tables_nouvelles[i]+".");
-                        new Communication_BD().suppressionColonne(tables_nouvelles[i], attributs_nouveaux[j]);
+                        System.out.println("Suppression de la colonne "+attributs_actuels[j]+" de la table "+tables_nouvelles[i]+".");
+                        new Communication_BD().suppressionColonne(tables_nouvelles[i], attributs_actuels[j]);
                     }
                 }
             }

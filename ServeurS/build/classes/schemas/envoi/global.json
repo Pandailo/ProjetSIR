@@ -1,52 +1,15 @@
 {
 	"tables":
-	[		{
+	[
+		{
 			"nom":"SIR_PROJET",
-			"fragmentation":"horizontale",
+			"fragmentation":"verticale",
 			"attributs":
 			[
 				{
 					"nom_attribut":"PNO",
 					"cle_primaire":"oui",
-					"type":"NUMBER(38)"
-				},
-				{
-					"nom_attribut":"NAME",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"BUDGET",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)"
-				},
-				{
-					"nom_attribut":"LOCATION",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"MOIS",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"ANNEE",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)"
-				}
-			],
-			"fragments":
-			[
-				{
-					"attributs":
-					[
-						{
-							"attribut":"PNO",
-							"signe":">",
-							"valeur":"25"
-						}
-					],
+					"type":"NUMBER(38)",
 					"serveurs":
 					[
 						{
@@ -55,23 +18,63 @@
 					]
 				},
 				{
-					"attributs":
-					[
-						{
-							"attribut":"PNO",
-							"signe":"<=",
-							"valeur":"25"
-						}
-					],
+					"nom_attribut":"NAME",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)",
 					"serveurs":
 					[
 						{
-							"num_serveur":2
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"BUDGET",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"LOCATION",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"MOIS",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"ANNEE",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
 						}
 					]
 				}
 			]
-		},		{
+		},
+		{
 			"nom":"SIR_ASSIGN",
 			"fragmentation":"verticale",
 			"attributs":
@@ -84,9 +87,6 @@
 					[
 						{
 							"num_serveur":1
-						},
-						{
-							"num_serveur":2
 						}
 					]
 				},
@@ -98,9 +98,6 @@
 					[
 						{
 							"num_serveur":1
-						},
-						{
-							"num_serveur":2
 						}
 					]
 				},
@@ -122,58 +119,21 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":2
+							"num_serveur":1
 						}
 					]
 				}
 			]
-		},		{
+		},
+		{
 			"nom":"SIR_EMP",
-			"fragmentation":"horizontale",
+			"fragmentation":"verticale",
 			"attributs":
 			[
 				{
 					"nom_attribut":"ENO",
 					"cle_primaire":"oui",
-					"type":"NUMBER(38)"
-				},
-				{
-					"nom_attribut":"NOM",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"PRENOM",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"AGE",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)"
-				},
-				{
-					"nom_attribut":"VILLE",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"TITRE",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				}
-			],
-			"fragments":
-			[
-				{
-					"attributs":
-					[
-						{
-							"attribut":"ENO",
-							"signe":">",
-							"valeur":"25"
-						}
-					],
+					"type":"NUMBER(38)",
 					"serveurs":
 					[
 						{
@@ -182,45 +142,82 @@
 					]
 				},
 				{
-					"attributs":
-					[
-						{
-							"attribut":"ENO",
-							"signe":"<=",
-							"valeur":"25"
-						}
-					],
-					"serveurs":
-					[
-						{
-							"num_serveur":2
-						}
-					]
-				}
-			]
-		},		{
-			"nom":"SIR_SALAIRE",
-			"fragmentation":"verticale",
-			"attributs":
-			[
-				{
-					"nom_attribut":"TITRE",
-					"cle_primaire":"oui",
+					"nom_attribut":"NOM",
+					"cle_primaire":"non",
 					"type":"VARCHAR2(25)",
 					"serveurs":
 					[
 						{
 							"num_serveur":1
-						},
-						{
-							"num_serveur":2
 						}
 					]
 				},
 				{
-					"nom_attribut":"ID",
+					"nom_attribut":"PRENOM",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"AGE",
 					"cle_primaire":"non",
 					"type":"NUMBER(38)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"VILLE",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"TITRE",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				}
+			]
+		},
+		{
+			"nom":"SIR_SALAIRE",
+			"fragmentation":"verticale",
+			"attributs":
+			[
+				{
+					"nom_attribut":"ID",
+					"cle_primaire":"oui",
+					"type":"NUMBER(38)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"TITRE",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)",
 					"serveurs":
 					[
 						{
@@ -235,10 +232,11 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":2
+							"num_serveur":1
 						}
 					]
 				}
 			]
-		}	]
+		}
+	]
 }

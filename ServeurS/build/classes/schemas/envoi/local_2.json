@@ -130,9 +130,9 @@
 			"attributs":
 			[
 				{
-					"nom_attribut":"TITRE",
+					"nom_attribut":"ID",
 					"cle_primaire":"oui",
-					"type":"VARCHAR2(25)"
+					"type":"NUMBER(38)"
 				},
 				{
 					"nom_attribut":"SALAIRE",

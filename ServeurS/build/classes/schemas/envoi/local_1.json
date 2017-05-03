@@ -130,14 +130,14 @@
 			"attributs":
 			[
 				{
-					"nom_attribut":"TITRE",
+					"nom_attribut":"ID",
 					"cle_primaire":"oui",
-					"type":"VARCHAR2(25)"
+					"type":"NUMBER(38)"
 				},
 				{
-					"nom_attribut":"ID",
+					"nom_attribut":"TITRE",
 					"cle_primaire":"non",
-					"type":"NUMBER(38)"
+					"type":"VARCHAR2(25)"
 				}
 			]
 		}

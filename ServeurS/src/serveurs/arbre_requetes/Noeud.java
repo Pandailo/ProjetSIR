@@ -199,7 +199,8 @@ public class Noeud
                                 j = attributs_recuperes.length+1;
                         }
                     }
-                    serveur_concerne = parametres.getNum_serveur_distant(cpt_serveur);
+                    if(cpt_serveur<nb_serveurs)
+                        serveur_concerne = parametres.getNum_serveur_distant(cpt_serveur);
                     cpt_serveur++;
                 }
             }

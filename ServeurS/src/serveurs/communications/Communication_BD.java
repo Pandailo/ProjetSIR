@@ -143,6 +143,9 @@ public class Communication_BD
     public void ajoutTuples(CachedRowSet crs, String table, String[] cles_primaires)
     {
         CachedRowSet crs_local = null;
+        String requete = "";
+        PreparedStatement stmt;
+        Object[] attributs_requete;
         try 
         {
             String nom_colonne = "";
@@ -186,24 +189,64 @@ public class Communication_BD
                     }
                 
                 if(indice==-1)
-                    crs_local.moveToInsertRow();
-                else
-                    crs_local.absolute(indice+1);
-                for(i=1; i<=crs_local.getMetaData().getColumnCount(); i++)
                 {
-                    nom_colonne = crs_local.getMetaData().getColumnName(i);
-                    System.out.println(nom_colonne+" : "+crs.getObject(i));
-                    crs_local.updateObject(nom_colonne, crs.getObject(nom_colonne));  
-                }
-                if(indice==-1)
-                {
-                    crs_local.insertRow();
-                    crs_local.moveToCurrentRow();
+                    //Insertion d'un nouveau tuple
+                    requete = "INSERT INTO "+table+" (";
+                    for(i=1; i<=crs.getMetaData().getColumnCount(); i++)
+                    {
+                        nom_colonne = crs.getMetaData().getColumnName(i);
+                        requete += nom_colonne;
+                        if(i<crs.getMetaData().getColumnCount())
+                            requete += ", ";
+                    }
+                    requete += ") VALUES(";
+                    attributs_requete = new Object[crs.getMetaData().getColumnCount()];
+                    for(i=1; i<=crs.getMetaData().getColumnCount(); i++)
+                    {
+                        nom_colonne = crs.getMetaData().getColumnName(i);
+                        System.out.println(nom_colonne+" : "+crs.getObject(nom_colonne));
+                        requete += "?";
+                        attributs_requete[i-1] = crs.getObject(nom_colonne);
+                        if(i<crs.getMetaData().getColumnCount())
+                            requete += ",";
+                    }
+                    requete += ")";
+                    System.out.println(requete);
+                    stmt = this.connect.prepareStatement(requete);
+                    for(i=0; i<attributs_requete.length; i++)
+                        stmt.setObject(i+1, attributs_requete[i]);           
                 }
                 else
-                    crs_local.updateRow();
+                {
+                    //Mise un jour d'un tuple existant
+                    requete = "UPDATE "+table+" SET ";
+                    attributs_requete = new Object[crs.getMetaData().getColumnCount()];
+                    for(i=1; i<=crs.getMetaData().getColumnCount(); i++)
+                    {
+                        nom_colonne = crs.getMetaData().getColumnName(i);
+                        System.out.println(nom_colonne+" : "+crs.getObject(nom_colonne));
+                        requete += nom_colonne+"=?";
+                        attributs_requete[i-1] = crs.getObject(nom_colonne);
+                        if(i<crs.getMetaData().getColumnCount())
+                            requete += ",";
+                        requete += " ";
+                    }
+                    requete += " WHERE ";
+                    for(i=0; i<cles_primaires.length; i++)
+                    {
+                        requete += cles_primaires[i]+"=?";
+                        if(i<cles_primaires.length-1)
+                            requete += " AND ";
+                    }
+                    System.out.println(requete);
+                    stmt = this.connect.prepareStatement(requete);
+                    for(i=0; i<attributs_requete.length; i++)
+                        stmt.setObject(1+i, attributs_requete[i]);
+                    for(i=0; i<cles_primaires.length; i++)
+                        stmt.setObject((1+i+attributs_requete.length), crs_local_pk[indice][i]);
+                }
+                stmt.execute();
             }
-            crs_local.acceptChanges(this.connect);
         }
         catch (SQLException ex) 
         {

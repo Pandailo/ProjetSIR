@@ -4,7 +4,7 @@
 
 		{
 			"nom":"SIR_PROJET",
-			"fragmentation":"horizontale",
+			"fragmentation":"verticale",
 			"attributs":
 			[
 				{
@@ -37,19 +37,6 @@
 					"cle_primaire":"non",
 					"type":"NUMBER(38)"
 				}
-			],
-			"fragments":
-			[
-				{
-					"attributs":
-					[
-						{
-							"attribut":"PNO",
-							"signe":">",
-							"valeur":"25"
-						}
-					]
-				}
 			]
 		},
 		{
@@ -71,12 +58,17 @@
 					"nom_attribut":"RESP",
 					"cle_primaire":"non",
 					"type":"VARCHAR2(25)"
+				},
+				{
+					"nom_attribut":"DUR",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)"
 				}
 			]
 		},
 		{
 			"nom":"SIR_EMP",
-			"fragmentation":"horizontale",
+			"fragmentation":"verticale",
 			"attributs":
 			[
 				{
@@ -109,19 +101,6 @@
 					"cle_primaire":"non",
 					"type":"VARCHAR2(25)"
 				}
-			],
-			"fragments":
-			[
-				{
-					"attributs":
-					[
-						{
-							"attribut":"ENO",
-							"signe":">",
-							"valeur":"25"
-						}
-					]
-				}
 			]
 		},
 		{
@@ -130,12 +109,17 @@
 			"attributs":
 			[
 				{
-					"nom_attribut":"TITRE",
+					"nom_attribut":"ID",
 					"cle_primaire":"oui",
+					"type":"NUMBER(38)"
+				},
+				{
+					"nom_attribut":"TITRE",
+					"cle_primaire":"non",
 					"type":"VARCHAR2(25)"
 				},
 				{
-					"nom_attribut":"ID",
+					"nom_attribut":"SALAIRE",
 					"cle_primaire":"non",
 					"type":"NUMBER(38)"
 				}

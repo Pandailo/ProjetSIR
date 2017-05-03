@@ -3,7 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/yann/Documents/M1/S2/SIR/ProjetSIR/ServeurS/src/serveurs/communications/Communication_serveur.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ServeurS/src/schemas/BD_actuelle.json</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ServeurS/src/serveurs/communications/Communication_client.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ServeurS/src/serveurs/Parametres.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ServeurS/src/serveurs/communications/Communication_BD.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ServeurS/src/serveurs/communications/Communication_serveur.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ServeurS/src/schemas/global.json</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ServeurS/src/serveurs/arbre_requetes/Arbre.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ServeurS/src/serveurs/arbre_requetes/Noeud.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ServeurS/src/serveurs/communications/Communication.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ServeurS/src/parametres/config.json</file>
         </group>
     </open-files>
 </project-private>
