@@ -184,39 +184,3 @@ public class Dlg_resultat_requete extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
-
-class MyAdjustmentListener implements AdjustmentListener 
-{
-    public void adjustmentValueChanged(AdjustmentEvent evt) 
-    {
-        Adjustable source = evt.getAdjustable();
-        if (evt.getValueIsAdjusting()) {
-          return;
-        }
-        int orient = source.getOrientation();
-        if (orient == Adjustable.HORIZONTAL) {
-          System.out.println("from horizontal scrollbar"); 
-        } else {
-          System.out.println("from vertical scrollbar");
-        }
-        int type = evt.getAdjustmentType();
-        switch (type) {
-        case AdjustmentEvent.UNIT_INCREMENT:
-          System.out.println("Scrollbar was increased by one unit");
-          break;
-        case AdjustmentEvent.UNIT_DECREMENT:
-          System.out.println("Scrollbar was decreased by one unit");
-          break;
-        case AdjustmentEvent.BLOCK_INCREMENT:
-          System.out.println("Scrollbar was increased by one block");
-          break;
-        case AdjustmentEvent.BLOCK_DECREMENT:
-          System.out.println("Scrollbar was decreased by one block");
-          break;
-        case AdjustmentEvent.TRACK:
-          System.out.println("The knob on the scrollbar was dragged");
-          break;
-        }
-        int value = evt.getValue();
-    }
-}

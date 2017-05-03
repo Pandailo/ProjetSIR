@@ -16,10 +16,10 @@ import serveurs.arbre_requetes.Arbre;
  * @author yv965015
  */
 public class DLG_Requete extends javax.swing.JFrame {
-    Schema_global Schemag;
-    ArrayList<String> l_tables;
-    ArrayList<String> l_attributs;
-    ArrayList<String> l_cond;
+    private Schema_global schemag;
+    private ArrayList<String> l_tables;
+    private ArrayList<String> l_attributs;
+    private ArrayList<String> l_cond;
     /**
      * Creates new form DLG_Requete
      */
@@ -32,8 +32,8 @@ public class DLG_Requete extends javax.swing.JFrame {
     }
     public void initialiserCB()
     {
-        Schemag=new Schema_global();
-        ArrayList<String> l_tab_temp=new ArrayList(Arrays.asList(Schemag.get_liste_nom_tables()));
+        schemag=new Schema_global();
+        ArrayList<String> l_tab_temp=new ArrayList(Arrays.asList(schemag.get_liste_nom_tables()));
         this.cb_tables.removeAllItems();
         this.cb_att1.removeAllItems();
         this.cb_att2.removeAllItems();
@@ -275,7 +275,7 @@ public class DLG_Requete extends javax.swing.JFrame {
         if(cb_tables.getSelectedIndex()!=-1)
         {
             String table=(String)cb_tables.getSelectedItem();
-            ArrayList<String> l_att_temp=new ArrayList(Arrays.asList(Schemag.get_liste_attributs_table(table)));
+            ArrayList<String> l_att_temp=new ArrayList(Arrays.asList(schemag.get_liste_attributs_table(table)));
             cb_tables.removeItem(table);
             l_tables.add(table);
             if(ta_from.getText().length()!=0)
@@ -288,13 +288,12 @@ public class DLG_Requete extends javax.swing.JFrame {
                 cb_attributs.addItem(table+"."+l_att_temp.get(i));
                 cb_att1.addItem(table+"."+l_att_temp.get(i));
                 cb_att2.addItem(table+"."+l_att_temp.get(i));
-            }
-            
+            }   
         }
         else
         {
             JOptionPane jop = new JOptionPane();    	
-            jop.showMessageDialog(null, "Vous n'avez rien sélectionné", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
+            jop.showMessageDialog(null, "Vous n'avez rien sélectionné.", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
         }
     }//GEN-LAST:event_ajouter_table_buttonActionPerformed
 
@@ -313,7 +312,7 @@ public class DLG_Requete extends javax.swing.JFrame {
         else
         {
             JOptionPane jop = new JOptionPane();    	
-            jop.showMessageDialog(null, "Vous n'avez rien sélectionné", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
+            jop.showMessageDialog(null, "Vous n'avez rien sélectionné.", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
         }
     }//GEN-LAST:event_ajouter_attribut_buttonActionPerformed
 
@@ -324,11 +323,15 @@ public class DLG_Requete extends javax.swing.JFrame {
             String att2=(String)cb_att2.getSelectedItem();
             String signe=(String)cb_condition.getSelectedItem();
             String cond="";
+            boolean continuer = true;
             if(att2.equals("valeur"))
             {
                 JOptionPane jop2 = new JOptionPane();
-                att2 = jop2.showInputDialog(null,"Valeur ?", JOptionPane.QUESTION_MESSAGE);
-                cond="C;"+att1+";"+signe+";"+att2;
+                att2 = jop2.showInputDialog(null,"Quelle valeur voulez-vous utiliser ?", JOptionPane.QUESTION_MESSAGE);
+                if(att2==null)
+                    continuer = false;
+                else
+                    cond="C;"+att1+";"+signe+";"+att2;
             }
             else
             {
@@ -337,19 +340,22 @@ public class DLG_Requete extends javax.swing.JFrame {
                 else
                     cond="C"+";"+att1+";"+signe+";"+att2;
             }
-            if(cond.split(";")[0].equals("J") && !signe.equals("="))
+            if(continuer)
             {
-                JOptionPane jop = new JOptionPane();    	
-                jop.showMessageDialog(null, "La jointure n'est disponible qu'avec le signe =", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
-            }
-            else
-            {
-                if(ta_where.getText().length()!=0)
+                if(cond.split(";")[0].equals("J") && !signe.equals("="))
                 {
-                    ta_where.append(" AND ");
+                    JOptionPane jop = new JOptionPane();    	
+                    jop.showMessageDialog(null, "La jointure n'est disponible qu'avec le signe =", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
                 }
-                ta_where.append(att1+signe+att2);
-                l_cond.add(cond);
+                else
+                {
+                    if(ta_where.getText().length()!=0)
+                    {
+                        ta_where.append(" AND ");
+                    }
+                    ta_where.append(att1+signe+att2);
+                    l_cond.add(cond);
+                }
             }
         }
         else
@@ -362,6 +368,7 @@ public class DLG_Requete extends javax.swing.JFrame {
     private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_valider_buttonActionPerformed
     {//GEN-HEADEREND:event_valider_buttonActionPerformed
         String table = "";
+        JOptionPane jop = new JOptionPane();
         if(this.l_cond.size()<=0 && this.l_tables.size()==1)
         {
             table = this.l_tables.get(0);
@@ -372,17 +379,21 @@ public class DLG_Requete extends javax.swing.JFrame {
         }
         else
         {
-            if(this.l_cond.size()>0)
-            {
-                Arbre arbre = new Arbre(l_attributs,l_cond, table);
-                Dlg_resultat_requete dlg = new Dlg_resultat_requete(arbre);
-                dlg.setVisible(true);
-                this.setVisible(false);
-            }
+            if(this.l_tables.isEmpty())
+                jop.showMessageDialog(null, "Vous n'avez pas sélectionné de table.", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
             else
             {
-                JOptionPane jop = new JOptionPane();    	
-                jop.showMessageDialog(null, "Vous avez sélectionné plusieurs tables sans faire de jointure.", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
+                if(this.l_cond.size()>0)
+                {
+                    Arbre arbre = new Arbre(l_attributs,l_cond, table);
+                    Dlg_resultat_requete dlg = new Dlg_resultat_requete(arbre);
+                    dlg.setVisible(true);
+                    this.setVisible(false);
+                }
+                else
+                {	
+                    jop.showMessageDialog(null, "Vous avez sélectionné plusieurs tables sans faire de jointure.", "Erreur", JOptionPane.INFORMATION_MESSAGE, null);
+                }
             }
         }
     }//GEN-LAST:event_valider_buttonActionPerformed
