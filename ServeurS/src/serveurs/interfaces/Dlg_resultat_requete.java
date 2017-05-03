@@ -5,7 +5,6 @@
  */
 package serveurs.interfaces;
 
-import java.awt.Adjustable;
 import java.awt.GridLayout;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;

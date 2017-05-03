@@ -5,7 +5,6 @@
  */
 package serveurs.arbre_requetes;
 
-import com.sun.rowset.CachedRowSetImpl;
 import com.sun.rowset.JoinRowSetImpl;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -104,6 +103,7 @@ public class Noeud
     public CachedRowSet lireNoeud()
     {
         CachedRowSet crs=null;
+        Communication_BD com_bd = new Communication_BD();
         Schema_global global=new Schema_global();
         Parametres parametres = new Parametres();
         int num_local = parametres.getNum_serveur();
@@ -122,7 +122,6 @@ public class Noeud
                     {
                         if(serveurs_fragment[j]==num_local)
                         {
-                            Communication_BD com_bd = new Communication_BD();
                             crs = this.ajout_tuples(crs, com_bd.requete(table, "*", "1=1"));
                             j = serveurs_fragment.length;
                             fragment_recupere = true;
@@ -178,10 +177,7 @@ public class Noeud
                                 requete_attributs += ", ";
                         }
                         if(parametres.getNum_serveur()==serveur_concerne)
-                        {
-                            Communication_BD com_bd = new Communication_BD();
                             crs = this.ajout_attributs(crs, com_bd.requete(table, requete_attributs, "1=1"));
-                        }
                         else
                         {
                             Communication communication = new Communication();
@@ -222,13 +218,13 @@ public class Noeud
             if(n==null)
             {
                 String table = split[0].split("\\.")[0];
-                Communication_BD com_bd = new Communication_BD();
                 crs_table = com_bd.requete(table, "*", "1=1");
             }
             else
                 crs_table = n.lireNoeud();
             crs = this.appliquer_condition(crs_table, split[0]+";"+split[1]+";"+split[2]);
         }
+        com_bd.closeConnect();
         return crs;
     }
     
