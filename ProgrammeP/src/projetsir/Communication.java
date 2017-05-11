@@ -42,7 +42,6 @@ public class Communication extends Thread {
         try 
         {  
             //Ouverture du socket
-            System.out.println(this.ip+" "+this.port);
             this.socket = new Socket(this.ip, this.port);
             //Mise en place des canaux de communication
             this.dis = new ObjectInputStream(this.socket.getInputStream());

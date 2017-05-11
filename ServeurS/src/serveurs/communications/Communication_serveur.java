@@ -205,13 +205,13 @@ class Accepter_client implements Runnable {
     
     private void reception_schemas()
     {
-        //Réception du schéma local
-        this.reception_fichier(this.parametres.getChemin_schemas()+"/global_nouveau.json");
-        System.out.println("Schéma local reçu.");
-        
         //Réception du schéma global
-        this.reception_fichier(this.parametres.getChemin_schemas()+"/local.json");
+        this.reception_fichier(this.parametres.getChemin_schemas()+"/global_nouveau.json");
         System.out.println("Schéma global reçu.");
+        
+        //Réception du schéma local
+        this.reception_fichier(this.parametres.getChemin_schemas()+"/local.json");
+        System.out.println("Schéma local reçu.");
         
         //Mise à jour de la BD
         this.construction_BD();
@@ -255,6 +255,9 @@ class Accepter_client implements Runnable {
         File source = new File(schemas_a_envoyer+"/local_"+num_local+".json");
         File dest = new File(chemin_schemas+"/local.json");
         this.copier_fichier(source, dest);
+        source = new File(schemas_a_envoyer+"/global.json");
+        dest = new File(chemin_schemas+"/global_nouveau.json");
+        this.copier_fichier(source, dest);
         
         //Envoi des schémas aux autres serveurs
         this.communication.envoi_schemas(0);   
@@ -263,7 +266,7 @@ class Accepter_client implements Runnable {
         this.construction_BD();
         
         //MAJ du schéma global
-        source = new File(schemas_a_envoyer+"/global.json");
+        source = new File(chemin_schemas+"/global_nouveau.json");
         dest = new File(chemin_schemas+"/global.json");
         this.copier_fichier(source, dest);
     }
@@ -315,9 +318,9 @@ class Accepter_client implements Runnable {
             out = new FileWriter(new File(chemin_schemas+"/local.json"));
             out.write(contenu);
             out.close();
-            out = new FileWriter(new File(chemin_schemas+"/BD_actuelle.json"));
-            out.write(contenu);
-            out.close();
+            source = new File(chemin_schemas+"/global.json");
+            dest = new File(chemin_schemas+"/BD_actuelle.json");
+            this.copier_fichier(source, dest);
             System.out.println("Schéma local créé.");
         }
         catch (IOException e)
@@ -727,7 +730,7 @@ class Accepter_client implements Runnable {
             if(suppression)
             {
                 System.out.println("Suppression de la table "+tables_actuelles[i]+".");
-                com_BD.suppressionTable(tables_nouvelles[i]);
+                com_BD.suppressionTable(tables_actuelles[i]);
             }
         }
     }
