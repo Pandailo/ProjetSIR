@@ -143,7 +143,7 @@ public class Communication_BD
     {
         CachedRowSet crs_local = null;
         String requete = "";
-        PreparedStatement stmt;
+        PreparedStatement stmt = null;
         Object[] attributs_requete;
         try 
         {
@@ -246,6 +246,8 @@ public class Communication_BD
                 }
                 stmt.execute();
             }
+            if(stmt!=null)
+                stmt.close();
         }
         catch (SQLException ex) 
         {

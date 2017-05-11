@@ -1,7 +1,6 @@
 {
 	"tables":
-	[
-		{
+	[		{
 			"nom":"SIR_PROJET",
 			"fragmentation":"verticale",
 			"attributs":
@@ -14,6 +13,15 @@
 					[
 						{
 							"num_serveur":1
+						},
+						{
+							"num_serveur":2
+						},
+						{
+							"num_serveur":3
+						},
+						{
+							"num_serveur":4
 						}
 					]
 				},
@@ -24,7 +32,7 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":1
+							"num_serveur":4
 						}
 					]
 				},
@@ -35,7 +43,7 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":1
+							"num_serveur":4
 						}
 					]
 				},
@@ -57,7 +65,7 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":1
+							"num_serveur":2
 						}
 					]
 				},
@@ -68,64 +76,79 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":1
+							"num_serveur":3
 						}
 					]
 				}
 			]
-		},
-		{
+		},		{
 			"nom":"SIR_ASSIGN",
-			"fragmentation":"verticale",
+			"fragmentation":"horizontale",
 			"attributs":
 			[
 				{
 					"nom_attribut":"ENO",
 					"cle_primaire":"oui",
-					"type":"NUMBER(38)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
+					"type":"NUMBER(38)"
 				},
 				{
 					"nom_attribut":"PNO",
 					"cle_primaire":"oui",
-					"type":"NUMBER(38)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
+					"type":"NUMBER(38)"
 				},
 				{
 					"nom_attribut":"RESP",
 					"cle_primaire":"non",
-					"type":"VARCHAR2(25)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
+					"type":"VARCHAR2(25)"
 				},
 				{
 					"nom_attribut":"DUR",
 					"cle_primaire":"non",
-					"type":"NUMBER(38)",
+					"type":"NUMBER(38)"
+				}
+			],
+			"fragments":
+			[
+				{
+					"attributs":
+					[
+						{
+							"attribut":"ENO",
+							"signe":">",
+							"valeur":"25"
+						}
+					],
 					"serveurs":
 					[
 						{
 							"num_serveur":1
+						},
+						{
+							"num_serveur":2
+						}
+					]
+				},
+				{
+					"attributs":
+					[
+						{
+							"attribut":"ENO",
+							"signe":"<=",
+							"valeur":"25"
+						}
+					],
+					"serveurs":
+					[
+						{
+							"num_serveur":3
+						},
+						{
+							"num_serveur":4
 						}
 					]
 				}
 			]
-		},
-		{
+		},		{
 			"nom":"SIR_EMP",
 			"fragmentation":"verticale",
 			"attributs":
@@ -138,6 +161,15 @@
 					[
 						{
 							"num_serveur":1
+						},
+						{
+							"num_serveur":2
+						},
+						{
+							"num_serveur":3
+						},
+						{
+							"num_serveur":4
 						}
 					]
 				},
@@ -148,7 +180,7 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":1
+							"num_serveur":4
 						}
 					]
 				},
@@ -159,7 +191,7 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":1
+							"num_serveur":4
 						}
 					]
 				},
@@ -181,7 +213,7 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":1
+							"num_serveur":2
 						}
 					]
 				},
@@ -192,32 +224,43 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":1
+							"num_serveur":3
 						}
 					]
 				}
 			]
-		},
-		{
+		},		{
 			"nom":"SIR_SALAIRE",
-			"fragmentation":"verticale",
+			"fragmentation":"horizontale",
 			"attributs":
 			[
 				{
 					"nom_attribut":"TITRE",
 					"cle_primaire":"non",
-					"type":"VARCHAR2(25)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
+					"type":"VARCHAR2(25)"
 				},
 				{
 					"nom_attribut":"ID",
 					"cle_primaire":"oui",
-					"type":"NUMBER(38)",
+					"type":"NUMBER(38)"
+				},
+				{
+					"nom_attribut":"SALAIRE",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)"
+				}
+			],
+			"fragments":
+			[
+				{
+					"attributs":
+					[
+						{
+							"attribut":"TITRE",
+							"signe":">",
+							"valeur":"'f'"
+						}
+					],
 					"serveurs":
 					[
 						{
@@ -226,17 +269,53 @@
 					]
 				},
 				{
-					"nom_attribut":"SALAIRE",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)",
+					"attributs":
+					[
+						{
+							"attribut":"TITRE",
+							"signe":"<=",
+							"valeur":"'f'"
+						}
+					],
 					"serveurs":
 					[
 						{
-							"num_serveur":1
+							"num_serveur":2
+						}
+					]
+				},
+				{
+					"attributs":
+					[
+						{
+							"attribut":"ID",
+							"signe":">",
+							"valeur":"25"
+						}
+					],
+					"serveurs":
+					[
+						{
+							"num_serveur":3
+						}
+					]
+				},
+				{
+					"attributs":
+					[
+						{
+							"attribut":"ID",
+							"signe":"<=",
+							"valeur":"25"
+						}
+					],
+					"serveurs":
+					[
+						{
+							"num_serveur":4
 						}
 					]
 				}
 			]
-		}
-	]
+		}	]
 }

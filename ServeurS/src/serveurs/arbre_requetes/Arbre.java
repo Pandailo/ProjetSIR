@@ -106,7 +106,7 @@ public class Arbre
             {
                 if(racine==null)
                 {
-                    Noeud fg = new Noeud(att1+";"+signe+";"+att2, this.racine, null, "condition");
+                    Noeud fg = new Noeud(att1.split("\\.")[0], null, null, "table");
                     this.racine = new Noeud(att1+";"+signe+";"+att2, fg, null, "condition");
                     this.l_con.remove(i);
                 }
