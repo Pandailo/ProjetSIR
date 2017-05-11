@@ -283,6 +283,9 @@ class Accepter_client implements Runnable {
             out = new FileWriter(new File(chemin_schemas+"/local.json"));
             out.write(contenu);
             out.close();
+            out = new FileWriter(new File(chemin_schemas+"/BD_actuelle.json"));
+            out.write(contenu);
+            out.close();
             System.out.println("Schéma local créé.");
         }
         catch (IOException e)
@@ -310,6 +313,9 @@ class Accepter_client implements Runnable {
         try
         {
             out = new FileWriter(new File(chemin_schemas+"/local.json"));
+            out.write(contenu);
+            out.close();
+            out = new FileWriter(new File(chemin_schemas+"/BD_actuelle.json"));
             out.write(contenu);
             out.close();
             System.out.println("Schéma local créé.");

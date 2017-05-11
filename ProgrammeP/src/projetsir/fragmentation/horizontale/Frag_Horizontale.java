@@ -71,7 +71,6 @@ public class Frag_Horizontale
                 s += "\"non\",\n";
             s += "\t\t\t\t\t\"type\":\""+bd.get_type_attribut(this.nom_table, nom_attribut)+"\"\n";
             s += "\t\t\t\t}";
-            System.out.println(i+"/"+(att.length-1));
             if(i<(att.length-1))
                 s += ",";
             s += "\n";

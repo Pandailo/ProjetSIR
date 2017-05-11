@@ -2,79 +2,6 @@
 	"tables":
 	[
 		{
-			"nom":"SIR_PROJET",
-			"fragmentation":"verticale",
-			"attributs":
-			[
-				{
-					"nom_attribut":"PNO",
-					"cle_primaire":"oui",
-					"type":"NUMBER(38)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
-				},
-				{
-					"nom_attribut":"NAME",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
-				},
-				{
-					"nom_attribut":"BUDGET",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
-				},
-				{
-					"nom_attribut":"LOCATION",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
-				},
-				{
-					"nom_attribut":"MOIS",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
-				},
-				{
-					"nom_attribut":"ANNEE",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)",
-					"serveurs":
-					[
-						{
-							"num_serveur":1
-						}
-					]
-				}
-			]
-		},
-		{
 			"nom":"SIR_ASSIGN",
 			"fragmentation":"verticale",
 			"attributs":
@@ -199,12 +126,12 @@
 			]
 		},
 		{
-			"nom":"SIR_SALAIRE",
+			"nom":"SIR_PROJET",
 			"fragmentation":"verticale",
 			"attributs":
 			[
 				{
-					"nom_attribut":"ID",
+					"nom_attribut":"PNO",
 					"cle_primaire":"oui",
 					"type":"NUMBER(38)",
 					"serveurs":
@@ -215,9 +142,82 @@
 					]
 				},
 				{
+					"nom_attribut":"NAME",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"BUDGET",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"LOCATION",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"MOIS",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"ANNEE",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				}
+			]
+		},
+		{
+			"nom":"SIR_SALAIRE",
+			"fragmentation":"verticale",
+			"attributs":
+			[
+				{
 					"nom_attribut":"TITRE",
 					"cle_primaire":"non",
 					"type":"VARCHAR2(25)",
+					"serveurs":
+					[
+						{
+							"num_serveur":1
+						}
+					]
+				},
+				{
+					"nom_attribut":"ID",
+					"cle_primaire":"oui",
+					"type":"NUMBER(38)",
 					"serveurs":
 					[
 						{
