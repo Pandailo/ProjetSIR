@@ -99,6 +99,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Reinitialiser minterme courant"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reinit_buttonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="ajouter_button">
                   <Properties>

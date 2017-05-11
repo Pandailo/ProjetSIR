@@ -83,6 +83,11 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         jPanel7.setLayout(new java.awt.GridLayout(1, 3));
 
         reinit_button.setText("Reinitialiser minterme courant");
+        reinit_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reinit_buttonActionPerformed(evt);
+            }
+        });
         jPanel7.add(reinit_button);
 
         ajouter_button.setText("Ajouter condition");
@@ -313,6 +318,11 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
     private void annuler_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_annuler_buttonActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_annuler_buttonActionPerformed
+
+    private void reinit_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reinit_buttonActionPerformed
+        this.temp = "";
+        this.ta_resum_fragment_actuel.setText("");
+    }//GEN-LAST:event_reinit_buttonActionPerformed
 
     /**
      * @param args the command line arguments

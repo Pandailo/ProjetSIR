@@ -2,6 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ProgrammeP/src/projetsir/interfaces/Verif_Frag_Verticale.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ProgrammeP/src/projetsir/interfaces/Menu_Principal.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ProgrammeP/src/projetsir/interfaces/Verif_Frag_Horizontale.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ProgrammeP/src/schemas/global.json</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ProgrammeP/src/projetsir/interfaces/DLG_Frag_Verticale.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ProgrammeP/src/projetsir/fragmentation/verticale/BEA.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ProgrammeP/src/projetsir/Communication.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ProgrammeP/src/projetsir/Reinitialisation.java</file>
+            <file>file:/home2/ag092850/Documents/M1/S2/SIR/Projet/ProjetSIR/ProgrammeP/src/projetsir/fragmentation/horizontale/Frag_Horizontale.java</file>
+        </group>
     </open-files>
 </project-private>
