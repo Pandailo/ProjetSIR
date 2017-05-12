@@ -212,6 +212,7 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
         String att="";
         String valS="";
         JOptionPane jop = new JOptionPane();
+        boolean valide = true;
         if(this.cb_comp_att.getSelectedIndex()!=-1)
         {
             if(this.cb_comp_signe.getSelectedIndex()!=-1)
@@ -222,9 +223,10 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
                     String[] split=bdg.get_type_attribut(table, att).split("\\(");
                     String val="";
                     boolean continuer=true;
-                    String mes="Valeur (entier)?";
+                    String mes="";
                     if(split[0].equals("NUMBER"))
                     {
+                        mes="Valeur (entier)?";
                         while(continuer&&valInt<0)
                         {
                             val = jop.showInputDialog(null,mes, JOptionPane.QUESTION_MESSAGE);
@@ -240,41 +242,50 @@ public class DLG_Frag_Horizontale extends javax.swing.JFrame
                                 mes="Valeur ? Merci de mettre un entier positif !";
                             }
                             else
-                                continuer=false;                               
+                            {
+                                continuer=false;
+                                valide = false;
+                            }
                         }
                     }
                     else
                     {
+                        mes="Valeur (chaine de caractère)?";
                         while(continuer)
                         {
                             val = jop.showInputDialog(null,mes, JOptionPane.QUESTION_MESSAGE);
                             if(val!=null)
                             {
-                                valS = jop.showInputDialog(null,"Valeur (chaine de caractère)?", JOptionPane.QUESTION_MESSAGE);
-                                temp+=(table+";"+att+";"+this.cb_comp_signe.getSelectedItem().toString()+";"+valS+"@");
+                                temp+=(table+";"+att+";"+this.cb_comp_signe.getSelectedItem().toString()+";"+val+"@");
                                 continuer=false;
                             }
                             else
-                                mes="Valeurs ? Merci de mettre une chaine valable!";
+                            {
+                                continuer=false;
+                                valide = false;
+                            }
                         }  
                     }
-                    String[] split1;
-                    String[] split2;
-                    split1=temp.split("@");
-                    String le_temporaire="";
-                    for(int j=0;j<split1.length;j++)
+                    if(valide)
                     {
-                        split2=split1[j].split(";");
-                        for(int i=0;i<split2.length;i++)
+                        String[] split1;
+                        String[] split2;
+                        split1=temp.split("@");
+                        String le_temporaire="";
+                        for(int j=0;j<split1.length;j++)
                         {
-                            if(i==0)
-                                le_temporaire+=split2[i]+".";
-                            else
-                                le_temporaire+=(split2[i]+" ");
+                            split2=split1[j].split(";");
+                            for(int i=0;i<split2.length;i++)
+                            {
+                                if(i==0)
+                                    le_temporaire+=split2[i]+".";
+                                else
+                                    le_temporaire+=(split2[i]+" ");
+                            }
+                           le_temporaire+=("\n");
                         }
-                       le_temporaire+=("\n");
+                        this.ta_resum_fragment_actuel.setText(le_temporaire);
                     }
-                    this.ta_resum_fragment_actuel.setText(le_temporaire);              
                 }
             }
         }

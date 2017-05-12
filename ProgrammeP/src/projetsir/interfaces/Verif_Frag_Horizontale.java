@@ -109,7 +109,8 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         annuler_button = new javax.swing.JButton();
@@ -118,29 +119,34 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         resume_mint = new javax.swing.JPanel();
         pan_dis_f = new javax.swing.JPanel();
-        pan_dis_s = new javax.swing.JPanel();
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 3));
 
         annuler_button.setText("Annuler");
-        annuler_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        annuler_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 annuler_buttonActionPerformed(evt);
             }
         });
         jPanel1.add(annuler_button);
 
         reinit_button.setText("Reinitialiser");
-        reinit_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        reinit_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 reinit_buttonActionPerformed(evt);
             }
         });
         jPanel1.add(reinit_button);
 
         valider_button.setText("Valider");
-        valider_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        valider_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 valider_buttonActionPerformed(evt);
             }
         });
@@ -148,7 +154,7 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
 
-        jPanel2.setLayout(new java.awt.GridLayout(1, 3));
+        jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
         resume_mint.setLayout(new java.awt.GridLayout(1, 0));
         jPanel2.add(resume_mint);
@@ -157,7 +163,7 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         pan_dis_f.setLayout(pan_dis_fLayout);
         pan_dis_fLayout.setHorizontalGroup(
             pan_dis_fLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 286, Short.MAX_VALUE)
+            .addGap(0, 429, Short.MAX_VALUE)
         );
         pan_dis_fLayout.setVerticalGroup(
             pan_dis_fLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,19 +171,6 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         );
 
         jPanel2.add(pan_dis_f);
-
-        javax.swing.GroupLayout pan_dis_sLayout = new javax.swing.GroupLayout(pan_dis_s);
-        pan_dis_s.setLayout(pan_dis_sLayout);
-        pan_dis_sLayout.setHorizontalGroup(
-            pan_dis_sLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 286, Short.MAX_VALUE)
-        );
-        pan_dis_sLayout.setVerticalGroup(
-            pan_dis_sLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 270, Short.MAX_VALUE)
-        );
-
-        jPanel2.add(pan_dis_s);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -340,7 +333,6 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel pan_dis_f;
-    private javax.swing.JPanel pan_dis_s;
     private javax.swing.JButton reinit_button;
     private javax.swing.JPanel resume_mint;
     private javax.swing.JButton valider_button;
