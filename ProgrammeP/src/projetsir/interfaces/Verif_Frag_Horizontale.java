@@ -23,6 +23,7 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
     private int nbT;
     private ArrayList<String> list_frag=new ArrayList();
     private String table;
+    private String mintermes;
     /**
      * Creates new form Verif_Frag_Horizontale
      */
@@ -38,6 +39,7 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         String splitB[];
         String signe;
         String signe2;
+        this.mintermes = "";
         for(int i=0;i<list_select.size();i++)
         {
             splitA=list_select.get(i).split("@");
@@ -67,10 +69,16 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
                     JLabel lab=new JLabel();
                     lab.setName(splitB[0]+";"+splitB[1]+";"+signe+";"+splitB[3]);
                     lab.setText(splitB[1]+signe+splitB[3]);
+                    if(this.mintermes.length()>0)
+                        this.mintermes += " ";
+                    this.mintermes += splitB[1]+"@"+signe+"@"+splitB[3];
                     this.pan_dis_f.add(lab);
                     JLabel lab2=new JLabel();
                     lab2.setName(splitB[0]+";"+splitB[1]+";"+signe2+";"+splitB[3]);
                     lab2.setText(splitB[1]+signe2+splitB[3]);
+                    if(this.mintermes.length()>0)
+                        this.mintermes += " ";
+                    this.mintermes += splitB[1]+"@"+signe2+"@"+splitB[3];
                     this.pan_dis_f.add(lab2);
                 }
             }
@@ -92,45 +100,6 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
             }
         }
         this.nbT=cpt;
-        GridLayout gd2=new GridLayout(this.nbF+1,nbS+1);
-        this.pan_dis_s.setLayout(gd2);
-        int cptS=1;
-        cptF=1;
-        for(int i=0;i<(nbS+1)*(this.nbF+1);i++)
-        {
-            if(i<nbS+1)
-            {
-                if(i==0)
-                {
-                    JLabel jl=new JLabel();
-                    jl.setText("");
-                    this.pan_dis_s.add(jl);
-                }
-                else
-                {
-                    JLabel jl=new JLabel();
-                    jl.setText("Site "+param.get_num_serveur(cptS-1));
-                    this.pan_dis_s.add(jl);
-                    cptS++;
-                }
-            }
-            else
-            {
-                if((i%(nbS+1))==0)
-                {
-                    JLabel jl=new JLabel();
-                    jl.setText("Fragment "+cptF);
-                    this.pan_dis_s.add(jl);
-                    cptF++;
-                
-                }
-                else
-                {
-                    JCheckBox osef=new JCheckBox();
-                    this.pan_dis_s.add(osef);
-                }
-            }
-        }
     }
 
     /**
@@ -228,48 +197,35 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
                    }
             }
         }
-        for(int i=0;i<(nbS+1)*(this.nbF+1);i++)
-        {
-            if(this.pan_dis_s.getComponent(i).getClass()==JCheckBox.class)
-            {
-                 JCheckBox jb=(JCheckBox)this.pan_dis_s.getComponent(i);
-                   if(jb.isSelected())
-                   {
-                        jb.setSelected(false);
-                        
-                   }
-            }
-        }
     }//GEN-LAST:event_reinit_buttonActionPerformed
 
     private void annuler_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_annuler_buttonActionPerformed
-            this.setVisible(false);
+        this.setVisible(false);
     }//GEN-LAST:event_annuler_buttonActionPerformed
 
     private void valider_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valider_buttonActionPerformed
         this.list_frag.clear();
         
-        int[][] distri=new int[this.nbF][nbS];
-        
         int u=0;
         int k=0;
-        for(int i=nbS+2;i<(nbS+1)*(this.nbF+1);i++)
+        int[][] fragmentation = new int[this.nbF][this.nbT];
+        for(int i=this.nbT+2;i<(this.nbT+1)*(this.nbF+1);i++)
         {
-               if(this.pan_dis_s.getComponent(i).getClass()==JCheckBox.class)
-               {
-                   JCheckBox jb=(JCheckBox)this.pan_dis_s.getComponent(i);
-                   if(jb.isSelected())
-                        distri[u][k]=1;
-                   else
-                        distri[u][k]=0;
-                   k++;
-                   if(k>=nbS)
-                   {
-                       u++;
-                       k=0;
-                   }
-               }
-        }  
+            if(this.pan_dis_f.getComponent(i).getClass()==JCheckBox.class)
+            {
+                JCheckBox jb=(JCheckBox)this.pan_dis_f.getComponent(i);
+                if(jb.isSelected())
+                    fragmentation[u][k]=1;
+                else
+                    fragmentation[u][k]=0;
+                k++;
+                if(k>=this.nbT)
+                {
+                    u++;
+                    k=0;
+                }
+            }
+        }
         //récup fragments prédicats
         boolean valide=true;
         String contenu="";
@@ -304,7 +260,7 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
             }
             else
             {
-               this.list_frag.add(contenu);
+                this.list_frag.add(contenu);
                 contenu=""; 
                 pair=!pair;
             }
@@ -331,7 +287,7 @@ public class Verif_Frag_Horizontale extends javax.swing.JFrame {
         contenu=""; 
         if(valide)
         {
-            new Frag_Horizontale(this.list_frag,distri,this.table).construction_fichier();
+            new Frag_Horizontale(fragmentation, this.table, this.mintermes).construction_fichier();
             this.setVisible(false);
         }
         else

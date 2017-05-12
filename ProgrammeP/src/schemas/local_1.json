@@ -3,45 +3,8 @@
 	[
 
 		{
-			"nom":"SIR_PROJET",
-			"fragmentation":"verticale",
-			"attributs":
-			[
-				{
-					"nom_attribut":"PNO",
-					"cle_primaire":"oui",
-					"type":"NUMBER(38)"
-				},
-				{
-					"nom_attribut":"NAME",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"BUDGET",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)"
-				},
-				{
-					"nom_attribut":"LOCATION",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"MOIS",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"ANNEE",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)"
-				}
-			]
-		},
-		{
 			"nom":"SIR_ASSIGN",
-			"fragmentation":"verticale",
+			"fragmentation":"horizontale",
 			"attributs":
 			[
 				{
@@ -63,6 +26,19 @@
 					"nom_attribut":"DUR",
 					"cle_primaire":"non",
 					"type":"NUMBER(38)"
+				}
+			],
+			"fragments":
+			[
+				{
+					"attributs":
+					[
+						{
+							"attribut":"ENO",
+							"signe":"<",
+							"valeur":"25"
+						}
+					]
 				}
 			]
 		},
@@ -87,11 +63,6 @@
 					"type":"VARCHAR2(25)"
 				},
 				{
-					"nom_attribut":"AGE",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)"
-				},
-				{
 					"nom_attribut":"VILLE",
 					"cle_primaire":"non",
 					"type":"VARCHAR2(25)"
@@ -100,28 +71,6 @@
 					"nom_attribut":"TITRE",
 					"cle_primaire":"non",
 					"type":"VARCHAR2(25)"
-				}
-			]
-		},
-		{
-			"nom":"SIR_SALAIRE",
-			"fragmentation":"verticale",
-			"attributs":
-			[
-				{
-					"nom_attribut":"TITRE",
-					"cle_primaire":"non",
-					"type":"VARCHAR2(25)"
-				},
-				{
-					"nom_attribut":"ID",
-					"cle_primaire":"oui",
-					"type":"NUMBER(38)"
-				},
-				{
-					"nom_attribut":"SALAIRE",
-					"cle_primaire":"non",
-					"type":"NUMBER(38)"
 				}
 			]
 		}

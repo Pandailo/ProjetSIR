@@ -2,5 +2,62 @@
 	"tables":
 	[
 
+		{
+			"nom":"SIR_ASSIGN",
+			"fragmentation":"horizontale",
+			"attributs":
+			[
+				{
+					"nom_attribut":"ENO",
+					"cle_primaire":"oui",
+					"type":"NUMBER(38)"
+				},
+				{
+					"nom_attribut":"PNO",
+					"cle_primaire":"oui",
+					"type":"NUMBER(38)"
+				},
+				{
+					"nom_attribut":"RESP",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)"
+				},
+				{
+					"nom_attribut":"DUR",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)"
+				}
+			],
+			"fragments":
+			[
+				{
+					"attributs":
+					[
+						{
+							"attribut":"ENO",
+							"signe":"<",
+							"valeur":"25"
+						}
+					]
+				}
+			]
+		},
+		{
+			"nom":"SIR_EMP",
+			"fragmentation":"verticale",
+			"attributs":
+			[
+				{
+					"nom_attribut":"ENO",
+					"cle_primaire":"oui",
+					"type":"NUMBER(38)"
+				},
+				{
+					"nom_attribut":"AGE",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)"
+				}
+			]
+		}
 	]
 }

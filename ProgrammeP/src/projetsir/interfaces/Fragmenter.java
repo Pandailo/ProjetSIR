@@ -5,20 +5,7 @@
  */
 package projetsir.interfaces;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import projetsir.Communication;
-import projetsir.Parametres;
-import projetsir.Transformation_global_local;
 import projetsir.bd_globale;
 
 /**
@@ -50,33 +37,22 @@ public class Fragmenter extends javax.swing.JFrame {
     {
 
         Titre = new javax.swing.JLabel();
-        Liste_tables = new javax.swing.JComboBox<>();
+        Liste_tables = new javax.swing.JComboBox<String>();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         f_verticale = new javax.swing.JButton();
         f_horizontale = new javax.swing.JButton();
-        Valider = new javax.swing.JButton();
 
-        addWindowFocusListener(new java.awt.event.WindowFocusListener()
-        {
-            public void windowGainedFocus(java.awt.event.WindowEvent evt)
-            {
-                formWindowGainedFocus(evt);
-            }
-            public void windowLostFocus(java.awt.event.WindowEvent evt)
-            {
-            }
-        });
         getContentPane().setLayout(new java.awt.BorderLayout(0, 2));
 
         Titre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Titre.setText("Fragmenter");
         getContentPane().add(Titre, java.awt.BorderLayout.NORTH);
 
-        Liste_tables.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Liste_tables.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         getContentPane().add(Liste_tables, java.awt.BorderLayout.CENTER);
 
-        jPanel1.setLayout(new java.awt.GridLayout(2, 1));
+        jPanel1.setLayout(new java.awt.GridLayout(1, 1));
 
         jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -102,75 +78,11 @@ public class Fragmenter extends javax.swing.JFrame {
 
         jPanel1.add(jPanel3);
 
-        Valider.setText("Valider");
-        Valider.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                ValiderActionPerformed(evt);
-            }
-        });
-        jPanel1.add(Valider);
-
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValiderActionPerformed
-        File repertoire = new File("src/fragmentation_temporaire");
-        File[] files=repertoire.listFiles();
-        String ajoutF="{\n\t\"tables\":\n\t[";
-        String finFich="\t]\n}";
-        FileOutputStream fos = null;
-        for(int i=0;i<files.length;i++)
-        {
-            try {
-                ajoutF+=this.lire_fichier(files[i]);
-            } catch (IOException ex) {
-                Logger.getLogger(Fragmenter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-           if(i!=files.length-1)
-               ajoutF+=",";
-        }
-        ajoutF+=finFich;
-        this.EcrireFichier(new File(new Parametres().get_chemin_schemas()+"/global.json"), ajoutF);
-        this.setVisible(false);
-        for(int i=0;i<files.length;i++)
-            files[i].delete();
-        new Transformation_global_local();
-        Communication c = new Communication(0);
-        c.start();
-    }//GEN-LAST:event_ValiderActionPerformed
-    private void EcrireFichier(File f,String s)
-    {
-        try{
-            FileWriter ffw=new FileWriter(f);
-            ffw.write(s);
-            ffw.close();
-            } catch (Exception e) {}
-
-    }
-    private String lire_fichier(File f) throws IOException
-    {
-        FileReader in = null;
-        String contenu="";
-        try
-        {
-            in = new FileReader(f);
-            //Envoi du fichier
-            int c;
-            contenu = "";
-            while((c=in.read())!=-1)
-                contenu += (char)c;
-            in.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return contenu;
-    }
     private void f_verticaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_f_verticaleActionPerformed
         JOptionPane jop = new JOptionPane();
         String nbQ="";
@@ -196,27 +108,6 @@ public class Fragmenter extends javax.swing.JFrame {
             dlgV.setVisible(true);
         }
     }//GEN-LAST:event_f_verticaleActionPerformed
-
-    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
-        File repertoire = new File("src/fragmentation_temporaire");
-        File[] files=repertoire.listFiles();
-        String nomfich="";
-        List<String> tables=new ArrayList<>();
-        for(int i=0;i<this.Liste_tables.getItemCount();i++)
-        {
-            tables.add(this.Liste_tables.getItemAt(i));
-        }
-        List<File> lfiles= Arrays.asList(files);
-        for(int i=0;i<lfiles.size();i++)
-        {
-            nomfich=lfiles.get(i).getName();
-            if(tables.contains(nomfich))
-            {
-                this.Liste_tables.setSelectedIndex(0);
-                this.Liste_tables.removeItem(nomfich);
-            }
-        }
-    }//GEN-LAST:event_formWindowGainedFocus
 
     private void f_horizontaleActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_f_horizontaleActionPerformed
     {//GEN-HEADEREND:event_f_horizontaleActionPerformed
@@ -262,7 +153,6 @@ public class Fragmenter extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> Liste_tables;
     private javax.swing.JLabel Titre;
-    private javax.swing.JButton Valider;
     private javax.swing.JButton f_horizontale;
     private javax.swing.JButton f_verticale;
     private javax.swing.JPanel jPanel1;
