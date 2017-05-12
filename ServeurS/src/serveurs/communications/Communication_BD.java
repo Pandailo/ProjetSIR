@@ -124,18 +124,20 @@ public class Communication_BD
     public CachedRowSet requete(String tables, String attributs, String conditions)
     {
         CachedRowSet crs = null;
+        CachedRowSet crs2 = null;
         try 
         {
             crs = new CachedRowSetImpl();
             crs.setCommand("SELECT "+attributs+" FROM "+tables+" WHERE "+conditions);
             crs.execute(this.connect);
-            crs = crs.createCopy();
+            crs2 = crs.createCopy();
+            crs.close();
         }
         catch (SQLException ex) 
         {
             Logger.getLogger(Communication_BD.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return crs;
+        return crs2;
     }
     
     //Ajout des tuples dans la BD

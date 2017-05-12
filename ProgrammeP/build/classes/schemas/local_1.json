@@ -13,15 +13,35 @@
 					"type":"NUMBER(38)"
 				},
 				{
+					"nom_attribut":"NAME",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)"
+				},
+				{
+					"nom_attribut":"BUDGET",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)"
+				},
+				{
 					"nom_attribut":"LOCATION",
 					"cle_primaire":"non",
 					"type":"VARCHAR2(25)"
+				},
+				{
+					"nom_attribut":"MOIS",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)"
+				},
+				{
+					"nom_attribut":"ANNEE",
+					"cle_primaire":"non",
+					"type":"NUMBER(38)"
 				}
 			]
 		},
 		{
 			"nom":"SIR_ASSIGN",
-			"fragmentation":"horizontale",
+			"fragmentation":"verticale",
 			"attributs":
 			[
 				{
@@ -44,19 +64,6 @@
 					"cle_primaire":"non",
 					"type":"NUMBER(38)"
 				}
-			],
-			"fragments":
-			[
-				{
-					"attributs":
-					[
-						{
-							"attribut":"ENO",
-							"signe":">",
-							"valeur":"25"
-						}
-					]
-				}
 			]
 		},
 		{
@@ -70,15 +77,35 @@
 					"type":"NUMBER(38)"
 				},
 				{
+					"nom_attribut":"NOM",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)"
+				},
+				{
+					"nom_attribut":"PRENOM",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)"
+				},
+				{
 					"nom_attribut":"AGE",
 					"cle_primaire":"non",
 					"type":"NUMBER(38)"
+				},
+				{
+					"nom_attribut":"VILLE",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)"
+				},
+				{
+					"nom_attribut":"TITRE",
+					"cle_primaire":"non",
+					"type":"VARCHAR2(25)"
 				}
 			]
 		},
 		{
 			"nom":"SIR_SALAIRE",
-			"fragmentation":"horizontale",
+			"fragmentation":"verticale",
 			"attributs":
 			[
 				{
@@ -95,19 +122,6 @@
 					"nom_attribut":"SALAIRE",
 					"cle_primaire":"non",
 					"type":"NUMBER(38)"
-				}
-			],
-			"fragments":
-			[
-				{
-					"attributs":
-					[
-						{
-							"attribut":"TITRE",
-							"signe":">",
-							"valeur":"'f'"
-						}
-					]
 				}
 			]
 		}

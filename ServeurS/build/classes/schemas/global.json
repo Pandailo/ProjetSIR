@@ -124,7 +124,7 @@
 							"num_serveur":1
 						},
 						{
-							"num_serveur":2
+							"num_serveur":3
 						}
 					]
 				},
@@ -140,7 +140,7 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":3
+							"num_serveur":2
 						},
 						{
 							"num_serveur":4
@@ -256,29 +256,16 @@
 					"attributs":
 					[
 						{
-							"attribut":"TITRE",
+							"attribut":"ID",
 							"signe":">",
-							"valeur":"'f'"
+							"valeur":"25"
 						}
 					],
 					"serveurs":
 					[
 						{
 							"num_serveur":1
-						}
-					]
-				},
-				{
-					"attributs":
-					[
-						{
-							"attribut":"TITRE",
-							"signe":"<=",
-							"valeur":"'f'"
-						}
-					],
-					"serveurs":
-					[
+						},
 						{
 							"num_serveur":2
 						}
@@ -289,7 +276,7 @@
 					[
 						{
 							"attribut":"ID",
-							"signe":">",
+							"signe":"<=",
 							"valeur":"25"
 						}
 					],
@@ -297,20 +284,7 @@
 					[
 						{
 							"num_serveur":3
-						}
-					]
-				},
-				{
-					"attributs":
-					[
-						{
-							"attribut":"ID",
-							"signe":"<=",
-							"valeur":"25"
-						}
-					],
-					"serveurs":
-					[
+						},
 						{
 							"num_serveur":4
 						}
