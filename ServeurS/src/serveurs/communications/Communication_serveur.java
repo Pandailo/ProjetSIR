@@ -594,39 +594,43 @@ class Accepter_client implements Runnable {
                         //On parcourt tous les attributs qui seront dans la BD mise à jour
                         for(int k=0; k<attributs_nouveaux.length; k++)
                         {
-                            num_serveurs = bd_globale.get_num_serveurs(tables_nouvelles[i], attributs_nouveaux[k]);
-                            //Si l'attribut est sur le serveur, on lui demande les tuples
-                            for(int l=0; l<num_serveurs.length; l++)
+                            //Parcours des fragments
+                            for(int f=0; f<bd_globale.get_nb_fragments(tables_nouvelles[i]); f++)
                             {
-                                if(num_serveur_envoi_requete==num_serveurs[l])
+                                num_serveurs = bd_globale.get_serveurs_fragment(tables_nouvelles[i], f);
+                                //Si l'attribut est sur le serveur, on lui demande les tuples
+                                for(int l=0; l<num_serveurs.length; l++)
                                 {
-                                    //MAJ attributs
-                                    if(!attributs.equals(""))
-                                        attributs += ", ";
-                                    attributs += attributs_nouveaux[k];
-                                    //MAJ conditions
-                                    if(tab_conditions!=null)
+                                    if(num_serveur_envoi_requete==num_serveurs[l])
                                     {
-                                        for(int m=0; m<tab_conditions.length; m++)
+                                        //MAJ attributs
+                                        if(!attributs.equals(""))
+                                            attributs += ", ";
+                                        attributs += attributs_nouveaux[k];
+                                        //MAJ conditions
+                                        if(tab_conditions!=null)
                                         {
-                                            if(tab_conditions[m][0].equals(attributs_nouveaux[k]))
+                                            for(int m=0; m<tab_conditions.length; m++)
                                             {
-                                                if(!conditions.equals(""))
-                                                    conditions += " AND ";
-                                                conditions += tab_conditions[m][0]+""+tab_conditions[m][1]+""+tab_conditions[m][2];
+                                                if(tab_conditions[m][0].equals(attributs_nouveaux[k]))
+                                                {
+                                                    if(!conditions.equals(""))
+                                                        conditions += " AND ";
+                                                    conditions += tab_conditions[m][0]+""+tab_conditions[m][1]+""+tab_conditions[m][2];
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
-                        //Si le serveur a des tuples concernés, on lui envoie une requête
-                        if(!attributs.equals(""))
-                        {
-                            System.out.println("Requete au serveur "+num_serveur_envoi_requete+" : Table "+tables+", attributs : "+attributs);
-                            System.out.println("Conditions : "+conditions);
-                            com_BD.ajoutTuples(this.communication.envoi_requete(num_serveur_envoi_requete, tables, attributs, conditions), 
-                                    tables, bd_nouvelle.get_cles_primaires(tables));
+                            //Si le serveur a des tuples concernés, on lui envoie une requête
+                            if(!attributs.equals(""))
+                            {
+                                System.out.println("Requete au serveur "+num_serveur_envoi_requete+" : Table "+tables+", attributs : "+attributs);
+                                System.out.println("Conditions : "+conditions);
+                                com_BD.ajoutTuples(this.communication.envoi_requete(num_serveur_envoi_requete, tables, attributs, conditions), 
+                                        tables, bd_nouvelle.get_cles_primaires(tables));
+                            }
                         }
                     }
                 }

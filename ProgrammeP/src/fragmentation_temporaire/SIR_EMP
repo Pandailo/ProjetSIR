@@ -10,9 +10,6 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":1
-						},
-						{
 							"num_serveur":4
 						},
 						{
@@ -20,6 +17,9 @@
 						},
 						{
 							"num_serveur":2
+						},
+						{
+							"num_serveur":1
 						}
 					]
 				},
@@ -63,9 +63,6 @@
 					"serveurs":
 					[
 						{
-							"num_serveur":1
-						},
-						{
 							"num_serveur":4
 						}
 					]
@@ -76,9 +73,6 @@
 					"type":"VARCHAR2(25)",
 					"serveurs":
 					[
-						{
-							"num_serveur":1
-						},
 						{
 							"num_serveur":3
 						}
