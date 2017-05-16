@@ -529,61 +529,48 @@ class Accepter_client implements Runnable {
             //Recherche des tuples souhaités
             tables = tables_nouvelles[i];
             attributs_nouveaux = bd_nouvelle.get_liste_attributs_table(tables);
-            //Définition des conditions
-            if(!bd_nouvelle.get_table_fragmentation(tables_nouvelles[i]).equals("verticale"))
-                tab_conditions = bd_nouvelle.get_attributs_fragment(tables);
-            else
-                conditions = "1=1";
             
-            if(bd_globale.get_table_fragmentation(tables_nouvelles[i]).equals("horizontale"))
+            if(bd_globale.get_table_fragmentation(tables_nouvelles[i]).equals("verticale"))
             {
-                //Fragmentation horizontale
-                //Récupération des serveurs sur lesquels il y a des fragments
-                ArrayList<Integer> liste_serveurs = new ArrayList<>();
-                liste_serveurs.clear();
-                int[] tab_serveurs_par_fragment;
-                int nb_fragments = bd_globale.get_nb_fragments(tables);
-                for(int j=0; j<nb_fragments; j++)
+                //Fragmentation verticale
+                for(int j=0; j<this.parametres.getNb_serveurs(); j++)
                 {
-                    tab_serveurs_par_fragment = bd_globale.get_serveurs_fragment(tables, j);
-                    for(int k=0; k<tab_serveurs_par_fragment.length; k++)
-                        if(tab_serveurs_par_fragment[k]!=this.parametres.getNum_serveur() && !liste_serveurs.contains(tab_serveurs_par_fragment[k]))
-                            liste_serveurs.add(tab_serveurs_par_fragment[k]);
-                }
-                //Construction de la requête
-                if(liste_serveurs.size()>0)
-                {
-                    //Attributs
-                    for(int j=0; j<attributs_nouveaux.length; j++)
+                    attributs = "";
+                    num_serveur_envoi_requete = this.parametres.getNum_serveur_distant(j);
+                    if(num_serveur_envoi_requete!=this.parametres.getNum_serveur())
                     {
-                        if(!attributs.equals(""))
-                            attributs += ", ";
-                        attributs += attributs_nouveaux[j];
-                    }
-                    //Conditions
-                    if(tab_conditions!=null)
-                    {
-                        for(int j=0; j<tab_conditions.length; j++)
+                        //On parcourt tous les attributs qui seront dans la BD mise à jour
+                        for(int k=0; k<attributs_nouveaux.length; k++)
                         {
-                            if(!conditions.equals(""))
-                                conditions += " AND ";
-                            conditions += tab_conditions[j][0]+""+tab_conditions[j][1]+""+tab_conditions[j][2];
+                            num_serveurs = bd_globale.get_num_serveurs(tables_nouvelles[i], attributs_nouveaux[k]);
+                            //Si l'attribut est sur le serveur, on lui demande les tuples
+                            for(int l=0; l<num_serveurs.length; l++)
+                            {
+                                if(num_serveur_envoi_requete==num_serveurs[l])
+                                {
+                                    //MAJ attributs
+                                    if(!attributs.equals(""))
+                                        attributs += ", ";
+                                    attributs += attributs_nouveaux[k];
+                                    //MAJ conditions
+                                    conditions = "1=1";
+                                }
+                            }
                         }
-                    }
-                        
-                    //Envoi de la requête aux serveurs
-                    for(int j=0; j<liste_serveurs.size(); j++)
-                    {
-                        System.out.println("Requete au serveur "+liste_serveurs.get(j)+" : Table "+tables+", attributs : "+attributs);
-                        System.out.println("Conditions : "+conditions);
-                        com_BD.ajoutTuples(this.communication.envoi_requete(liste_serveurs.get(j), tables, attributs, conditions), 
-                                tables, bd_nouvelle.get_cles_primaires(tables));
+                        //Si le serveur a des tuples concernés, on lui envoie une requête
+                        if(!attributs.equals(""))
+                        {
+                            System.out.println("Requete au serveur "+num_serveur_envoi_requete+" : Table "+tables+", attributs : "+attributs);
+                            System.out.println("Conditions : "+conditions);
+                            com_BD.ajoutTuples(this.communication.envoi_requete(num_serveur_envoi_requete, tables, attributs, conditions), 
+                                    tables, bd_nouvelle.get_cles_primaires(tables));
+                        }
                     }
                 }
             }
-            if(!bd_globale.get_table_fragmentation(tables_nouvelles[i]).equals("horizontale"))
+            if(bd_globale.get_table_fragmentation(tables_nouvelles[i]).equals("horizontale"))
             {
-                //Fragmentation verticale et hybride
+                //Fragmentation horizontale
                 //On vérifie tous les serveurs pour savoir auxquels demander des tuples
                 for(int j=0; j<this.parametres.getNb_serveurs(); j++)
                 {
@@ -592,6 +579,7 @@ class Accepter_client implements Runnable {
                     if(num_serveur_envoi_requete!=this.parametres.getNum_serveur())
                     {
                         //Parcours des fragments
+                        System.out.println(tables_nouvelles[i]+"Nombre fragments :"+bd_globale.get_nb_fragments(tables_nouvelles[i]));
                         for(int f=0; f<bd_globale.get_nb_fragments(tables_nouvelles[i]); f++)
                         {
                             num_serveurs = bd_globale.get_serveurs_fragment(tables_nouvelles[i], f);
