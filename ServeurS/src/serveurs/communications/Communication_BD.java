@@ -247,9 +247,10 @@ public class Communication_BD
                         stmt.setObject((1+i+attributs_requete.length), crs_local_pk[indice][i]);
                 }
                 stmt.execute();
-            }
-            if(stmt!=null)
                 stmt.close();
+            }
+            crs.close();
+            crs_local.close();
         }
         catch (SQLException ex) 
         {

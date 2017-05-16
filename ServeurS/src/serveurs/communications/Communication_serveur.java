@@ -598,9 +598,9 @@ class Accepter_client implements Runnable {
                                                 conditions += " AND ";
                                             conditions += tab_conditions[m][0]+""+tab_conditions[m][1]+""+tab_conditions[m][2];
                                         }
-                                        System.out.println("Requete au serveur "+num_serveur_envoi_requete+" : Table "+tables+", attributs : "+attributs);
+                                        System.out.println("Requete au serveur "+num_serveur_envoi_requete+" : Table "+tables+", attributs : *");
                                         System.out.println("Conditions : "+conditions);
-                                        com_BD.ajoutTuples(this.communication.envoi_requete(num_serveur_envoi_requete, tables, attributs, conditions), 
+                                        com_BD.ajoutTuples(this.communication.envoi_requete(num_serveur_envoi_requete, tables, "*", conditions), 
                                                 tables, bd_nouvelle.get_cles_primaires(tables));
                                     }
                                 }
