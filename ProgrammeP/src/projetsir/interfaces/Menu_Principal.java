@@ -189,6 +189,23 @@ public class Menu_Principal extends javax.swing.JFrame {
                 option = jop.showConfirmDialog(null, "Il semble qu'une initialisation ait déjà été faite, êtes-vous sûr de vouloir continuer ? (résultats non garantis)", "Lancement de l'initialisation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if(option==JOptionPane.OK_OPTION)
             {
+                //Suppression des fichiers temporaires
+                File repertoire = new File("src/fragments");
+                File[] fichiers;
+                if(repertoire.exists())
+                {
+                    fichiers = repertoire.listFiles();
+                    for(int i=0; i<fichiers.length; i++)
+                        fichiers[i].delete();
+                }
+                repertoire = new File("src/fragmentation_temporaire");
+                if(repertoire.exists())
+                {
+                    fichiers = repertoire.listFiles();
+                    for(int i=0; i<fichiers.length; i++)
+                        fichiers[i].delete();
+                }
+                //Lancement de l'initialisation
                 new Initialisation();
                 System.out.println("Initialisation du schéma terminée.");
                 Communication communication = new Communication(1);
